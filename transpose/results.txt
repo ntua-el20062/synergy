@@ -1,0 +1,33 @@
+mode: explicit
+iters=10 N=4096 (128.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.080 ms, effective bandwidth: 3343.27 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 10.304 ms (13.03 GB/s logical)
+D2H memcpy: 0.487 ms (275.63 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+---
+mode: um_migrate
+iters=10 N=4096 (128.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.080 ms, effective bandwidth: 3351.69 GB/s
+UM prefetch-to-CPU: 3.928 ms (34.17 GB/s logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.307 ms (13.02 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+---
+mode: gh_hbm_shared
+iters=10 N=4096 (128.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.080 ms, effective bandwidth: 3341.41 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 15.609 ms (8.60 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+---
+mode: gh_cpu_shared
+iters=10 N=4096 (128.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 0.698 ms, effective bandwidth: 384.67 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.328 ms (12.99 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+---
+mode: gh_hmm_pageable
+iters=10 N=4096 (128.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 3.798 ms, effective bandwidth: 70.67 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.312 ms (13.02 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+---

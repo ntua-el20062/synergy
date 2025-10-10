@@ -1,0 +1,40 @@
+=========
+
+CUDA version:   v12010
+CUDA Devices: 
+
+0: Tesla V100-SXM2-32GB: 7.0
+  Global memory:   32494mb
+  Shared memory:   48kb
+  Constant memory: 64kb
+  Block registers: 65536
+
+  Max threads per Multiprocessor: 2048
+  Max threads per Block: 1024
+  Number of Multiprocessors: 80
+
+  Warp size:         32
+  Threads per block: 1024
+  Max block dimensions: [ 1024, 1024, 64 ]
+  Max grid dimensions:  [ 2147483647, 65535, 65535 ]
+
+=========
+
+CUDA version:   v12010
+CUDA Devices: 
+
+0: NVIDIA GeForce GTX 1060 6GB: 6.1
+  Global memory:   6065mb
+  Shared memory:   48kb
+  Constant memory: 64kb
+  Block registers: 65536
+
+  Max threads per Multiprocessor: 2048
+  Max threads per Block: 1024
+  Number of Multiprocessors: 10
+
+  Warp size:         32
+  Threads per block: 1024
+  Max block dimensions: [ 1024, 1024, 64 ]
+  Max grid dimensions:  [ 2147483647, 65535, 65535 ]
+

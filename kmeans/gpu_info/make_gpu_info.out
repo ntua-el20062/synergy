@@ -1,0 +1,1 @@
+/usr/local/cuda-12.1/bin/nvcc -arch=sm_60  -o gpu_info gpu_info.cu
