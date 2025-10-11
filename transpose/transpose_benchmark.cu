@@ -1,5 +1,4 @@
 //modes: explicit, um_migrate, gh_hbm_shared, gh_cpu_shared, gh_hmm_pageable
-//random initialization + correctness check on CPU (max |B - A^T|).
 
 #include <cuda_runtime.h>
 #include <cstdio>
@@ -12,7 +11,8 @@
 #include <random>
 #include <algorithm>
 #include <cmath>
-#include <unistd.h>   // getopt
+#include <unistd.h>   
+#include <sys/time.h>
 
 #ifndef CHECK_CUDA
 #define CHECK_CUDA(call) do { \
@@ -24,7 +24,21 @@
 } while (0)
 #endif
 
-// ===== Kernel: bank-conflict-free tiled transpose =====
+double wtime(void) 
+{
+    double now_time;
+    struct timeval  etstart;
+    struct timezone tzp;
+
+    if (gettimeofday(&etstart, &tzp) == -1)
+        perror("Error: calling gettimeofday() not successful.\n");
+
+    now_time = ((double)etstart.tv_sec) +              // in seconds
+               ((double)etstart.tv_usec) / 1000000.0;  // in microseconds
+    return now_time;
+}
+
+//bank-conflict-free tiled transpose
 template <typename T, int TILE=32, int BLOCK_ROWS=8>
 __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int N) {
   __shared__ T tile[TILE][TILE+1]; // +1 to avoid bank conflicts on column reads
@@ -32,7 +46,7 @@ __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int 
   int x = blockIdx.x * TILE + threadIdx.x; // column in A
   int y = blockIdx.y * TILE + threadIdx.y; // row in A
 
-  // Load A -> shared tile (coalesced)
+  //load A -> shared tile (coalesced)
   #pragma unroll
   for (int i = 0; i < TILE; i += BLOCK_ROWS) {
     int yy = y + i;
@@ -41,7 +55,7 @@ __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int 
   }
   __syncthreads();
 
-  // Write shared^T -> B (coalesced)
+  //write shared^T -> B (coalesced)
   int xt = blockIdx.y * TILE + threadIdx.x; // column in B
   int yt = blockIdx.x * TILE + threadIdx.y; // row in B
   #pragma unroll
@@ -52,13 +66,13 @@ __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int 
   }
 }
 
-// ===== Modes =====
+
 enum class Mode {
-  EXPLICIT,        // device malloc + memcpy on pinned host
-  UM_MIGRATE,      // managed + prefetch to GPU; prefetch result back to CPU
-  GH_HBM_SHARED,   // managed preferred on GPU; CPU reads GPU HBM coherently (no post-prefetch)
-  GH_CPU_SHARED,   // pinned host + device pointer (zero-copy: GPU accesses host)
-  GH_HMM_PAGEABLE  // plain malloc() pageable host; GPU accesses via HMM/page faulting
+  EXPLICIT,        //device malloc + memcpy on pinned host
+  UM_MIGRATE,      //managed + prefetch to GPU; prefetch result back to CPU
+  GH_HBM_SHARED,   //managed preferred on GPU; CPU reads GPU HBM coherently (no post-prefetch)
+  GH_CPU_SHARED,   //pinned host + device pointer (zero-copy: GPU accesses host)
+  GH_HMM_PAGEABLE  //plain malloc() pageable host; GPU accesses via HMM/page faulting
 };
 
 static Mode parse_mode_str(const std::string& s) {
@@ -71,7 +85,7 @@ static Mode parse_mode_str(const std::string& s) {
   std::exit(EXIT_FAILURE);
 }
 
-// ===== CLI =====
+
 struct Args {
   int iters = 10;
   int N = 4096;
@@ -112,7 +126,7 @@ static Args parse(int argc, char** argv) {
   return a;
 }
 
-// ===== Validation helpers =====
+//validation helpers
 static double max_abs_diff_transpose(const double* A, const double* B, int N) {
   // max |B[i,j] - A[j,i]|
   double m = 0.0;
@@ -133,7 +147,7 @@ static double checksum(const T* p, size_t n) {
   return s;
 }
 
-// ===== main =====
+
 int main(int argc, char** argv) {
   Args args = parse(argc, argv);
   Mode mode = parse_mode_str(args.mode);
@@ -141,7 +155,7 @@ int main(int argc, char** argv) {
   int dev = 0;
   CHECK_CUDA(cudaGetDevice(&dev));
 
-  // HMM capability queried for pageable mode
+  //HMM capability queried for pageable mode
   int pageable = 0, uses_host_pt = 0;
   CHECK_CUDA(cudaDeviceGetAttribute(&pageable, cudaDevAttrPageableMemoryAccess, dev));
   CHECK_CUDA(cudaDeviceGetAttribute(&uses_host_pt, cudaDevAttrPageableMemoryAccessUsesHostPageTables, dev));
@@ -154,11 +168,11 @@ int main(int argc, char** argv) {
          args.iters, N, double(bytes)/(1024.0*1024.0),
          args.mode.c_str(), args.prefetch, (unsigned long long)args.seed);
 
-  // Host and device-visible pointers
+  //Host and device-visible pointers
   double *hA = nullptr, *hB = nullptr;
   double *dA = nullptr, *dB = nullptr;
 
-  // ---- Allocate by mode ----
+  //allocation by mode
   switch (mode) {
     case Mode::EXPLICIT:
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
@@ -197,7 +211,7 @@ int main(int argc, char** argv) {
       break;
   }
 
-  // ---- Random init on CPU ----
+  //random init on cpu
   {
     std::mt19937_64 rng(args.seed);
     std::uniform_real_distribution<double> dist(-1.0, 1.0);
@@ -205,7 +219,7 @@ int main(int argc, char** argv) {
     std::fill(hB, hB + elems, 0.0);
   }
 
-  // ---- Prefetch / copies before kernel ----
+  //prefetch / copies before kernel
   if (mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED) {
     if (args.prefetch) {
       CHECK_CUDA(cudaMemPrefetchAsync(dA, bytes, dev));
@@ -217,18 +231,18 @@ int main(int argc, char** argv) {
     CHECK_CUDA(cudaMemset(dB, 0, bytes));
   }
 
-  // ---- Launch config ----
+  
   constexpr int TILE = 32;
   constexpr int BLOCK_ROWS = 8;
   dim3 block(TILE, BLOCK_ROWS);
   dim3 grid((N + TILE - 1) / TILE, (N + TILE - 1) / TILE);
 
-  // ---- Warm-up ----
+  //warm-up
   transpose_tiled<double, TILE, BLOCK_ROWS><<<grid, block>>>(dA, dB, N);
   CHECK_CUDA(cudaGetLastError());
   CHECK_CUDA(cudaDeviceSynchronize());
 
-  // ---- Timed loop ----
+  //timed loop
   std::vector<float> times(args.iters);
   for (int it = 0; it < args.iters; ++it) {
     cudaEvent_t s, e;
@@ -251,29 +265,29 @@ int main(int argc, char** argv) {
   const double gbps = bytes_moved / (1.0e6 * avg_ms);
   printf("Kernel avg: %.3f ms, effective bandwidth: %.2f GB/s\n", avg_ms, gbps);
 
-  // ---- UM migrate: prefetch back to CPU to time migration ----
+  //UM migrate: prefetch back to CPU to time migration
   if (mode == Mode::UM_MIGRATE) {
-    auto t0 = std::chrono::high_resolution_clock::now();
+    auto t0 = wtime();
     CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, cudaCpuDeviceId));
     CHECK_CUDA(cudaDeviceSynchronize());
-    auto t1 = std::chrono::high_resolution_clock::now();
-    double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+    auto t1 = wtime();
+    double ms = (t1 - t0)*1e3;
     printf("UM prefetch-to-CPU: %.3f ms (%.2f GB/s logical)\n", ms, bytes / 1e6 / ms);
   }
 
-  // ---- CPU checksum + validation ----
-  auto r0 = std::chrono::high_resolution_clock::now();
+  
+  auto r0 = wtime();
   double sumB = checksum(hB, elems);
-  auto r1 = std::chrono::high_resolution_clock::now();
-  double read_ms = std::chrono::duration<double, std::milli>(r1 - r0).count();
+  auto r1 = wtime();
+  double read_ms = (r1 - r0) * 1e3;
   printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms (%.2f GB/s logical)\n",
          sumB, read_ms, bytes / 1e6 / read_ms);
 
   if (mode == Mode::EXPLICIT) {
-    auto t0 = std::chrono::high_resolution_clock::now();
+    double t0 = wtime();
     CHECK_CUDA(cudaMemcpy(hB, dB, bytes, cudaMemcpyDeviceToHost));
-    auto t1 = std::chrono::high_resolution_clock::now();
-    double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+    double t1 = wtime();
+    double ms = (t1 - t0) * 1e3;
     printf("D2H memcpy: %.3f ms (%.2f GB/s)\n", ms, bytes / 1e6 / ms);
   }
 
