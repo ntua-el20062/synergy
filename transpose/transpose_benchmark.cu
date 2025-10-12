@@ -38,11 +38,46 @@ double wtime(void)
     return now_time;
 }
 
+//  ****************FOR HMM_PAGEABLE (SYSTEM ALLOCATED) MODE: GPU INITS THE RANDOM MATRIX ON SYSTEM MEMORY AFTER THE MATRIXES IS MALLOC()-ED BY CPU ************************************
+
+// 64-bit SplitMix: small, fast, repeatable per index
+__device__ inline uint64_t splitmix64(uint64_t x) {
+  x += 0x9e3779b97f4a7c15ULL;
+  x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+  x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+  return x ^ (x >> 31);
+}
+
+// Convert 64-bit to uniform [0,1) as double using top 53 bits
+__device__ inline double u01_from_u64(uint64_t x) {
+  const double inv2_53 = 1.0 / 9007199254740992.0; // 2^53
+  return double(x >> 11) * inv2_53;
+}
+
+// Fill array with random doubles in [-1, 1]
+__global__ void init_random_double(double* a, size_t n, uint64_t seed) {
+  size_t i = blockIdx.x * size_t(blockDim.x) + threadIdx.x;
+  if (i < n) {
+    uint64_t r = splitmix64(seed + i);
+    double u = u01_from_u64(r);   // [0,1)
+    a[i] = 2.0 * u - 1.0;         // [-1,1)
+  }
+}
+
+// Set array to zero
+__global__ void set_zero_double(double* a, size_t n) {
+  size_t i = blockIdx.x * size_t(blockDim.x) + threadIdx.x;
+  if (i < n) a[i] = 0.0;
+}
+
+//  ********************************************************************************************************************************************************************************
+
 //bank-conflict-free tiled transpose
 template <typename T, int TILE=32, int BLOCK_ROWS=8>
 __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int N) {
   __shared__ T tile[TILE][TILE+1]; // +1 to avoid bank conflicts on column reads
 
+  //for each thread
   int x = blockIdx.x * TILE + threadIdx.x; // column in A
   int y = blockIdx.y * TILE + threadIdx.y; // row in A
 
@@ -51,13 +86,15 @@ __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int 
   for (int i = 0; i < TILE; i += BLOCK_ROWS) {
     int yy = y + i;
     if (x < N && yy < N)
-      tile[threadIdx.y + i][threadIdx.x] = A[yy * (size_t)N + x];
+      tile[threadIdx.y + i][threadIdx.x] = A[yy * (size_t)N + x]; //during the same loop iteration, all threads have the same yy and consecutive x's(row major)
   }
   __syncthreads();
 
-  //write shared^T -> B (coalesced)
+  //write (shared)^T -> B (coalesced)
+  //first we find the transposed position of each tile inside the matrix B
   int xt = blockIdx.y * TILE + threadIdx.x; // column in B
   int yt = blockIdx.x * TILE + threadIdx.y; // row in B
+  //then, we compute the new transposed posistion of each element inside the tile
   #pragma unroll
   for (int i = 0; i < TILE; i += BLOCK_ROWS) {
     int yy = yt + i;
@@ -72,7 +109,10 @@ enum class Mode {
   UM_MIGRATE,      //managed + prefetch to GPU; prefetch result back to CPU
   GH_HBM_SHARED,   //managed preferred on GPU; CPU reads GPU HBM coherently (no post-prefetch)
   GH_CPU_SHARED,   //pinned host + device pointer (zero-copy: GPU accesses host)
-  GH_HMM_PAGEABLE  //plain malloc() pageable host; GPU accesses via HMM/page faulting
+  GH_HMM_PAGEABLE,  //plain malloc() pageable host; GPU accesses via HMM/page faulting
+  GH_HMM_PAGEABLE_CUDA_INIT, //same as above, but now the matrix gets initialized by the gpu on system memory
+  GH_HBM_SHARED_NO_PREFETCH,
+  UM_MIGRATE_NO_PREFETCH
 };
 
 static Mode parse_mode_str(const std::string& s) {
@@ -81,6 +121,9 @@ static Mode parse_mode_str(const std::string& s) {
   if (s == "gh_hbm_shared")   return Mode::GH_HBM_SHARED;
   if (s == "gh_cpu_shared")   return Mode::GH_CPU_SHARED;
   if (s == "gh_hmm_pageable") return Mode::GH_HMM_PAGEABLE;
+  if (s == "gh_hmm_pageable_cuda_init") return Mode::GH_HMM_PAGEABLE_CUDA_INIT;
+  if (s == "gh_hbm_shared_no_prefetch") return Mode::GH_HBM_SHARED_NO_PREFETCH;
+  if (s == "um_migrate_no_prefetch") return Mode::UM_MIGRATE_NO_PREFETCH;
   fprintf(stderr, "Unknown --mode=%s\n", s.c_str());
   std::exit(EXIT_FAILURE);
 }
@@ -174,31 +217,38 @@ int main(int argc, char** argv) {
 
   //allocation by mode
   switch (mode) {
-    case Mode::EXPLICIT:
+    case Mode::EXPLICIT: //allocate pinned(not pageable) memory on host , they will communicate through async copies(cudaMemcpy)
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
       CHECK_CUDA(cudaMalloc(&dA, bytes));
       CHECK_CUDA(cudaMalloc(&dB, bytes));
       break;
-    case Mode::UM_MIGRATE:
+
+    case Mode::UM_MIGRATE: // the same allocation style with GH_HBM_SHARED(managed memory)
+    case Mode::UM_MIGRATE_NO_PREFETCH:
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:  
     case Mode::GH_HBM_SHARED:
       CHECK_CUDA(cudaMallocManaged(&dA, bytes));
       CHECK_CUDA(cudaMallocManaged(&dB, bytes));
-      hA = dA; hB = dB; // same pointer usable on CPU
-      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetPreferredLocation, dev));
+      hA = dA; hB = dB; //same pointer for CPU and GPU
+      /*
+      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetPreferredLocation, dev)); //hint to UM pager:If you have a choice, keep these pages resident on GPU dev,it’s a policy hint, 
+                                                                                    //not a hard pin. If the CPU (or another GPU) starts accessing those pages a lot, the runtime may 
+                                                                                    //still migrate or replicate them. But with this hint, after GPU use, the pager will try to keep or return the pages 
+                                                                                    //to GPU memory (HBM) rather than drifting back to system RAM.
       CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetPreferredLocation, dev));
-      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId));
-      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId));
+      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId)); //This can reduce first-touch penalties when the CPU later reads managed memory.
+      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId)); //  --//--
+      */
       break;
-    case Mode::GH_CPU_SHARED:
+    case Mode::GH_CPU_SHARED:       //GPU will access host memory directly over PCIe/NVLink (zero-copy), this will be probably one of the slower ones due to limited bandwidth
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
-      CHECK_CUDA(cudaHostGetDevicePointer(&dA, hA, 0));
+      CHECK_CUDA(cudaHostGetDevicePointer(&dA, hA, 0)); 
       CHECK_CUDA(cudaHostGetDevicePointer(&dB, hB, 0));
-      //CHECK_CUDA(cudaMemAdvise(hA, bytes, cudaMemAdviseSetAccessedBy, dev));
-      //CHECK_CUDA(cudaMemAdvise(hB, bytes, cudaMemAdviseSetAccessedBy, dev));
       break;
-    case Mode::GH_HMM_PAGEABLE:
+    case Mode::GH_HMM_PAGEABLE_CUDA_INIT: //same alocated with malloc by the host, the initialization differs
+    case Mode::GH_HMM_PAGEABLE: //plain malloc(I think this falls into the category of system allocated memory), the GPU touches CPU pages on demand(first touch overhead maybe)
       if (!pageable) {
         fprintf(stderr, "ERROR: Device lacks cudaDevAttrPageableMemoryAccess; HMM pageable not supported.\n");
         return 1;
@@ -206,17 +256,30 @@ int main(int argc, char** argv) {
       hA = (double*)std::malloc(bytes);
       hB = (double*)std::malloc(bytes);
       if (!hA || !hB) { fprintf(stderr, "malloc failed\n"); return 1; }
-      dA = hA; dB = hB; // same raw pointer
+      dA = hA; dB = hB; //same raw pointer, GPU will fault pages from CPU on demand
       printf("HMM pageable supported (uses_host_page_tables=%d)\n", uses_host_pt);
       break;
   }
 
   //random init on cpu
+  if(mode != Mode::GH_HMM_PAGEABLE_CUDA_INIT)
   {
     std::mt19937_64 rng(args.seed);
     std::uniform_real_distribution<double> dist(-1.0, 1.0);
     for (size_t i = 0; i < elems; ++i) hA[i] = dist(rng);
     std::fill(hB, hB + elems, 0.0);
+  }
+  else {
+	// GPU init into pageable host memory via HMM
+  	const int threads = 256;
+  	const int blocksA = int((elems + threads - 1) / threads);
+  	const int blocksB = blocksA;
+
+  	init_random_double<<<blocksA, threads>>>(dA, elems, args.seed);
+  	set_zero_double<<<blocksB, threads>>>(dB, elems);
+  	CHECK_CUDA(cudaGetLastError());
+  	CHECK_CUDA(cudaDeviceSynchronize());
+  
   }
 
   //prefetch / copies before kernel
@@ -226,21 +289,28 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, dev));
       CHECK_CUDA(cudaDeviceSynchronize());
     }
-  } else if (mode == Mode::EXPLICIT) {
+  } else if (mode == Mode::EXPLICIT ) {
     CHECK_CUDA(cudaMemcpy(dA, hA, bytes, cudaMemcpyHostToDevice));
     CHECK_CUDA(cudaMemset(dB, 0, bytes));
   }
+  else if (mode == Mode::UM_MIGRATE_NO_PREFETCH || mode == Mode::GH_HBM_SHARED_NO_PREFETCH) {
+    // nothing: managed pages will fault/migrate on first touch
+  }	
 
-  
   constexpr int TILE = 32;
   constexpr int BLOCK_ROWS = 8;
   dim3 block(TILE, BLOCK_ROWS);
   dim3 grid((N + TILE - 1) / TILE, (N + TILE - 1) / TILE);
 
+
+  /*
   //warm-up
+  
   transpose_tiled<double, TILE, BLOCK_ROWS><<<grid, block>>>(dA, dB, N);
   CHECK_CUDA(cudaGetLastError());
   CHECK_CUDA(cudaDeviceSynchronize());
+  */
+
 
   //timed loop
   std::vector<float> times(args.iters);
@@ -304,6 +374,8 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaFreeHost(hB));
       break;
     case Mode::UM_MIGRATE:
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:
+    case Mode::UM_MIGRATE_NO_PREFETCH:
     case Mode::GH_HBM_SHARED:
       CHECK_CUDA(cudaFree(dA));
       CHECK_CUDA(cudaFree(dB));
@@ -312,6 +384,7 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaFreeHost(hA));
       CHECK_CUDA(cudaFreeHost(hB));
       break;
+    case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
     case Mode::GH_HMM_PAGEABLE:
       std::free(hA);
       std::free(hB);
