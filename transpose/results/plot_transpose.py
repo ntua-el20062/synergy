@@ -70,7 +70,7 @@ def _all_pairs(df, cols=("N","iters")):
         return []
     pairs = (
         df.drop_duplicates(list(cols))[list(cols)]
-        .sort_values(list(cols))
+        #.sort_values(list(cols))
         .itertuples(index=False, name=None)
     )
     return list(pairs)
@@ -82,8 +82,7 @@ def _pick_pair(sweep_df: pd.DataFrame, n: int = None, iters: int = None):
         return None, None
     # pick the largest (N, iters) pair present
     largest_pair = (
-        sweep_df.sort_values(["N", "iters"])
-        .drop_duplicates(["N", "iters"], keep="last")[["N", "iters"]]
+        sweep_df.drop_duplicates(["N", "iters"], keep="last")[["N", "iters"]]
         .iloc[-1]
     )
     return int(largest_pair["N"]), int(largest_pair["iters"])
@@ -92,7 +91,7 @@ def _pick_pair(sweep_df: pd.DataFrame, n: int = None, iters: int = None):
 def _bar_by_mode(sub: pd.DataFrame, value_col: str, title: str, ylabel: str, outpath: Path, show: bool):
     if sub.empty:
         return None
-    sub = sub.sort_values(value_col, ascending=False)
+    #sub = sub.sort_values(value_col, ascending=False)
     plt.figure()
     plt.bar(sub["mode"], sub[value_col])
     plt.title(title)
