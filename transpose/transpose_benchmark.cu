@@ -1,4 +1,4 @@
-//modes: explicit, um_migrate, gh_hbm_shared, gh_cpu_shared, gh_hmm_pageable
+//modes: explicit, explicit_async, um_migrate, gh_hbm_shared, gh_cpu_shared, gh_hmm_pageable
 
 #include <cuda_runtime.h>
 #include <cstdio>
@@ -106,6 +106,7 @@ __global__ void transpose_tiled(const T* __restrict__ A, T* __restrict__ B, int 
 
 enum class Mode {
   EXPLICIT,        //device malloc + memcpy on pinned host
+  EXPLICIT_ASYNC,  //same as above but with cuda malloc async
   UM_MIGRATE,      //managed + prefetch to GPU; prefetch result back to CPU
   GH_HBM_SHARED,   //managed preferred on GPU; CPU reads GPU HBM coherently (no post-prefetch)
   GH_CPU_SHARED,   //pinned host + device pointer (zero-copy: GPU accesses host)
@@ -117,6 +118,7 @@ enum class Mode {
 
 static Mode parse_mode_str(const std::string& s) {
   if (s == "explicit")        return Mode::EXPLICIT;
+  if (s == "explicit_async")        return Mode::EXPLICIT_ASYNC;
   if (s == "um_migrate")      return Mode::UM_MIGRATE;
   if (s == "gh_hbm_shared")   return Mode::GH_HBM_SHARED;
   if (s == "gh_cpu_shared")   return Mode::GH_CPU_SHARED;
@@ -214,6 +216,7 @@ int main(int argc, char** argv) {
   //Host and device-visible pointers
   double *hA = nullptr, *hB = nullptr;
   double *dA = nullptr, *dB = nullptr;
+  cudaStream_t stream = 0;
 
   //allocation by mode
   switch (mode) {
@@ -222,6 +225,13 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
       CHECK_CUDA(cudaMalloc(&dA, bytes));
       CHECK_CUDA(cudaMalloc(&dB, bytes));
+      break;
+
+    case Mode::EXPLICIT_ASYNC:
+      CHECK_CUDA(cudaMallocAsync((void**)&dA, bytes, stream));
+      CHECK_CUDA(cudaMallocAsync((void**)&dB, bytes, stream));
+      CHECK_CUDA(cudaMallocHost(&hA, bytes));
+      CHECK_CUDA(cudaMallocHost(&hB, bytes));
       break;
 
     case Mode::UM_MIGRATE: // the same allocation style with GH_HBM_SHARED(managed memory)
@@ -289,7 +299,7 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, dev));
       CHECK_CUDA(cudaDeviceSynchronize());
     }
-  } else if (mode == Mode::EXPLICIT ) {
+  } else if (mode == Mode::EXPLICIT || mode == Mode::EXPLICIT_ASYNC) {
     CHECK_CUDA(cudaMemcpy(dA, hA, bytes, cudaMemcpyHostToDevice));
     CHECK_CUDA(cudaMemset(dB, 0, bytes));
   }
@@ -353,7 +363,7 @@ int main(int argc, char** argv) {
   printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms (%.2f GB/s logical)\n",
          sumB, read_ms, bytes / 1e6 / read_ms);
 
-  if (mode == Mode::EXPLICIT) {
+  if (mode == Mode::EXPLICIT || mode == Mode::EXPLICIT_ASYNC) {
     double t0 = wtime();
     CHECK_CUDA(cudaMemcpy(hB, dB, bytes, cudaMemcpyDeviceToHost));
     double t1 = wtime();
@@ -370,6 +380,12 @@ int main(int argc, char** argv) {
     case Mode::EXPLICIT:
       CHECK_CUDA(cudaFree(dA));
       CHECK_CUDA(cudaFree(dB));
+      CHECK_CUDA(cudaFreeHost(hA));
+      CHECK_CUDA(cudaFreeHost(hB));
+      break;
+    case Mode::EXPLICIT_ASYNC:
+      CHECK_CUDA(cudaFreeAsync(dA, stream));
+      CHECK_CUDA(cudaFreeAsync(dB, stream));
       CHECK_CUDA(cudaFreeHost(hA));
       CHECK_CUDA(cudaFreeHost(hB));
       break;

@@ -1,0 +1,22 @@
+impl,block_size,t_loop_avg_ms,t_gpu_ms
+GPU KMeans (explicit),32,9.976602,9.958148
+GPU KMeans (explicit),48,7.994723,7.975864
+GPU KMeans (explicit),64,7.72841,7.710123
+GPU KMeans (explicit),128,10.312104,10.293579
+GPU KMeans (explicit),238,13.231802,13.213372
+GPU KMeans (explicit),512,13.479781,13.46221
+GPU KMeans (explicit),1024,10.080004,10.062075
+GPU KMeans (managed),32,0.08069,0.267855
+GPU KMeans (managed),48,0.079539,0.253981
+GPU KMeans (managed),64,0.077184,0.231533
+GPU KMeans (managed),128,0.077243,0.238278
+GPU KMeans (managed),238,0.081162,0.273685
+GPU KMeans (managed),512,0.080403,0.268455
+GPU KMeans (managed),1024,0.083342,0.291846
+GPU KMeans (system alloc),32,0.095967,0.442627
+GPU KMeans (system alloc),48,0.095972,0.428858
+GPU KMeans (system alloc),64,0.09417,0.417253
+GPU KMeans (system alloc),128,0.09564,0.438271
+GPU KMeans (system alloc),238,0.115182,0.634356
+GPU KMeans (system alloc),512,0.117144,0.647412
+GPU KMeans (system alloc),1024,0.104805,0.529599
