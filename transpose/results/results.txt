@@ -1,0 +1,2145 @@
+[1m[34mTRANSPOSE SWEEP (./transpose_bench)(B[m
+[36mN=2048  iters=5(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.036 ms, effective bandwidth: 1850.97 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 2.572 ms (13.05 GB/s logical)
+D2H memcpy: 0.184 ms (182.30 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.037 ms, effective bandwidth: 1821.08 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 2.607 ms (12.87 GB/s logical)
+D2H memcpy: 0.190 ms (176.58 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.037 ms, effective bandwidth: 1795.51 GB/s
+UM prefetch-to-CPU: 0.361 ms (92.96 GB/s logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.566 ms (13.08 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 2.012 ms, effective bandwidth: 33.36 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 4.356 ms (7.70 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.058 ms, effective bandwidth: 1165.34 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.472 ms (9.66 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 0.171 ms, effective bandwidth: 393.59 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.471 ms (9.67 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 0.242 ms, effective bandwidth: 277.39 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.572 ms (13.05 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 1.906 ms, effective bandwidth: 35.22 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.742 ms (12.24 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1(B[m
+iters=5 N=2048 (32.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.029 ms, effective bandwidth: 2336.92 GB/s
+CPU checksum(B)=-7.134131e+02, CPU read time: 3.495 ms (9.60 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.028 ms, effective bandwidth: 2419.70 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 2.572 ms (13.05 GB/s logical)
+D2H memcpy: 0.186 ms (180.43 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.029 ms, effective bandwidth: 2297.75 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 2.603 ms (12.89 GB/s logical)
+D2H memcpy: 0.187 ms (179.51 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.029 ms, effective bandwidth: 2318.06 GB/s
+UM prefetch-to-CPU: 0.376 ms (89.24 GB/s logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.566 ms (13.08 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 1.005 ms, effective bandwidth: 66.80 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 4.363 ms (7.69 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.037 ms, effective bandwidth: 1801.83 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.475 ms (9.66 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 0.103 ms, effective bandwidth: 650.18 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.448 ms (9.73 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 0.214 ms, effective bandwidth: 312.90 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.562 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.870 ms, effective bandwidth: 77.12 GB/s
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.602 ms (12.90 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1(B[m
+iters=10 N=2048 (32.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.048 ms, effective bandwidth: 1400.44 GB/s
+CPU checksum(B)=-7.134131e+02, CPU read time: 3.512 ms (9.55 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.094 ms, effective bandwidth: 2843.98 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 10.256 ms (13.09 GB/s logical)
+D2H memcpy: 0.467 ms (287.37 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.094 ms, effective bandwidth: 2849.97 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 10.246 ms (13.10 GB/s logical)
+D2H memcpy: 0.531 ms (252.78 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.103 ms, effective bandwidth: 2612.79 GB/s
+UM prefetch-to-CPU: 1.212 ms (110.73 GB/s logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.250 ms (13.09 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 6.559 ms, effective bandwidth: 40.92 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 17.308 ms (7.75 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.115 ms, effective bandwidth: 2330.43 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 15.632 ms (8.59 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 0.894 ms, effective bandwidth: 300.11 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 15.556 ms (8.63 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 0.831 ms, effective bandwidth: 322.89 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.249 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 5.588 ms, effective bandwidth: 48.04 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.262 ms (13.08 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1(B[m
+iters=5 N=4096 (128.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.109 ms, effective bandwidth: 2470.73 GB/s
+CPU checksum(B)=-1.275941e+03, CPU read time: 15.542 ms (8.64 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.088 ms, effective bandwidth: 3065.68 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 10.263 ms (13.08 GB/s logical)
+D2H memcpy: 0.465 ms (288.54 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.089 ms, effective bandwidth: 3013.69 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 10.259 ms (13.08 GB/s logical)
+D2H memcpy: 0.478 ms (280.77 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.091 ms, effective bandwidth: 2945.85 GB/s
+UM prefetch-to-CPU: 1.199 ms (111.94 GB/s logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.245 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 3.305 ms, effective bandwidth: 81.22 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 17.336 ms (7.74 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.099 ms, effective bandwidth: 2716.78 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 15.494 ms (8.66 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 0.379 ms, effective bandwidth: 707.53 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 15.567 ms (8.62 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 0.798 ms, effective bandwidth: 336.43 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.253 ms (13.09 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 3.086 ms, effective bandwidth: 86.99 GB/s
+CPU checksum(B)=1.479393e+03, CPU read time: 10.249 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1(B[m
+iters=10 N=4096 (128.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.106 ms, effective bandwidth: 2530.58 GB/s
+CPU checksum(B)=-1.275941e+03, CPU read time: 15.576 ms (8.62 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.315 ms, effective bandwidth: 3408.27 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 40.973 ms (13.10 GB/s logical)
+D2H memcpy: 1.818 ms (295.32 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.319 ms, effective bandwidth: 3361.63 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 40.981 ms (13.10 GB/s logical)
+D2H memcpy: 1.823 ms (294.51 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.340 ms, effective bandwidth: 3159.25 GB/s
+UM prefetch-to-CPU: 4.486 ms (119.67 GB/s logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 40.967 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 25.364 ms, effective bandwidth: 42.33 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 68.864 ms (7.80 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.354 ms, effective bandwidth: 3033.64 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 63.617 ms (8.44 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 1.785 ms, effective bandwidth: 601.38 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 63.823 ms (8.41 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 3.053 ms, effective bandwidth: 351.71 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 40.962 ms (13.11 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 32.741 ms, effective bandwidth: 32.80 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 41.022 ms (13.09 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1(B[m
+iters=5 N=8192 (512.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.442 ms, effective bandwidth: 2428.45 GB/s
+CPU checksum(B)=-3.091414e+03, CPU read time: 64.281 ms (8.35 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=explicit prefetch=1 seed=12345
+Kernel avg: 0.314 ms, effective bandwidth: 3416.53 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 40.990 ms (13.10 GB/s logical)
+D2H memcpy: 1.820 ms (294.97 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=explicit_async N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=explicit_async prefetch=1 seed=12345
+Kernel avg: 0.317 ms, effective bandwidth: 3392.52 GB/s
+CPU checksum(B)=0.000000e+00, CPU read time: 40.993 ms (13.10 GB/s logical)
+D2H memcpy: 1.823 ms (294.47 GB/s)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=um_migrate prefetch=1 seed=12345
+Kernel avg: 0.326 ms, effective bandwidth: 3292.20 GB/s
+UM prefetch-to-CPU: 4.496 ms (119.41 GB/s logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 40.959 ms (13.11 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=um_migrate_no_prefetch prefetch=1 seed=12345
+Kernel avg: 12.899 ms, effective bandwidth: 83.24 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 68.671 ms (7.82 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=gh_hbm_shared prefetch=1 seed=12345
+Kernel avg: 0.334 ms, effective bandwidth: 3216.98 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 63.438 ms (8.46 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=gh_hbm_shared_no_prefetch prefetch=1 seed=12345
+Kernel avg: 1.043 ms, effective bandwidth: 1029.34 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 63.941 ms (8.40 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=gh_cpu_shared prefetch=1 seed=12345
+Kernel avg: 2.992 ms, effective bandwidth: 358.92 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 40.983 ms (13.10 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=gh_hmm_pageable prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 12.710 ms, effective bandwidth: 84.48 GB/s
+CPU checksum(B)=6.092790e+03, CPU read time: 41.026 ms (13.09 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1(B[m
+iters=10 N=8192 (512.000 MiB) mode=gh_hmm_pageable_cuda_init prefetch=1 seed=12345
+HMM pageable supported (uses_host_page_tables=1)
+Kernel avg: 0.439 ms, effective bandwidth: 2447.66 GB/s
+CPU checksum(B)=-3.091414e+03, CPU read time: 63.702 ms (8.43 GB/s logical)
+Max |B - A^T| = 0.000e+00  => OK
+
+--------------------------------------------------------------------------------
+
+[1m[34mHYBRID SWEEP (./transpose_bench_hybrid)(B[m
+[36mN=2048  iters=5  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 3.635 ms, effective bandwidth: 18.46 GB/s (logical)
+UM prefetch-to-CPU: 0.330 ms (101.69 GB/s logical)
+CPU checksum(B)=-8.281107e+01, CPU read time: 2.569 ms (13.06 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 3.238 ms, effective bandwidth: 20.73 GB/s (logical)
+CPU checksum(B)=-7.797932e+01, CPU read time: 4.171 ms (8.04 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.077 ms, effective bandwidth: 872.21 GB/s (logical)
+CPU checksum(B)=-2.003344e+01, CPU read time: 3.545 ms (9.47 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.080 ms, effective bandwidth: 838.66 GB/s (logical)
+CPU checksum(B)=-2.034149e+01, CPU read time: 3.542 ms (9.47 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 1.410 ms, effective bandwidth: 47.61 GB/s (logical)
+CPU checksum(B)=-2.144442e+02, CPU read time: 2.602 ms (12.90 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 2.840 ms, effective bandwidth: 23.63 GB/s (logical)
+CPU checksum(B)=-1.290314e+02, CPU read time: 3.406 ms (9.85 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.086 ms, effective bandwidth: 778.80 GB/s (logical)
+CPU checksum(B)=-6.239993e+02, CPU read time: 3.523 ms (9.52 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 3.343 ms, effective bandwidth: 20.08 GB/s (logical)
+UM prefetch-to-CPU: 0.304 ms (110.38 GB/s logical)
+CPU checksum(B)=7.180838e+01, CPU read time: 2.659 ms (12.62 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 3.490 ms, effective bandwidth: 19.23 GB/s (logical)
+CPU checksum(B)=1.643807e+00, CPU read time: 4.047 ms (8.29 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.074 ms, effective bandwidth: 911.88 GB/s (logical)
+CPU checksum(B)=1.001535e+01, CPU read time: 3.498 ms (9.59 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.072 ms, effective bandwidth: 926.71 GB/s (logical)
+CPU checksum(B)=-1.675032e+02, CPU read time: 3.481 ms (9.64 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 1.386 ms, effective bandwidth: 48.42 GB/s (logical)
+CPU checksum(B)=1.002052e+02, CPU read time: 2.597 ms (12.92 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 2.426 ms, effective bandwidth: 27.67 GB/s (logical)
+CPU checksum(B)=2.864914e+01, CPU read time: 3.322 ms (10.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.072 ms, effective bandwidth: 927.53 GB/s (logical)
+CPU checksum(B)=-6.366632e+02, CPU read time: 3.540 ms (9.48 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 3.956 ms, effective bandwidth: 16.96 GB/s (logical)
+UM prefetch-to-CPU: 0.269 ms (124.66 GB/s logical)
+CPU checksum(B)=-5.431801e+01, CPU read time: 2.694 ms (12.46 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 2.566 ms, effective bandwidth: 26.16 GB/s (logical)
+CPU checksum(B)=-3.642684e+01, CPU read time: 3.916 ms (8.57 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.065 ms, effective bandwidth: 1032.47 GB/s (logical)
+CPU checksum(B)=-1.771344e+02, CPU read time: 3.328 ms (10.08 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.066 ms, effective bandwidth: 1014.00 GB/s (logical)
+CPU checksum(B)=-2.025209e+01, CPU read time: 3.331 ms (10.07 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 1.259 ms, effective bandwidth: 53.32 GB/s (logical)
+CPU checksum(B)=-7.349895e+01, CPU read time: 2.609 ms (12.86 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 1.993 ms, effective bandwidth: 33.67 GB/s (logical)
+CPU checksum(B)=-8.374092e+01, CPU read time: 3.145 ms (10.67 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.065 ms, effective bandwidth: 1032.27 GB/s (logical)
+CPU checksum(B)=-6.849025e+02, CPU read time: 3.182 ms (10.55 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 4.237 ms, effective bandwidth: 15.84 GB/s (logical)
+UM prefetch-to-CPU: 0.245 ms (136.90 GB/s logical)
+CPU checksum(B)=-4.297284e+01, CPU read time: 2.641 ms (12.71 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 2.241 ms, effective bandwidth: 29.95 GB/s (logical)
+CPU checksum(B)=-9.513592e+01, CPU read time: 3.737 ms (8.98 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.060 ms, effective bandwidth: 1125.93 GB/s (logical)
+CPU checksum(B)=-1.374582e+02, CPU read time: 3.110 ms (10.79 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.061 ms, effective bandwidth: 1103.30 GB/s (logical)
+CPU checksum(B)=-1.068926e+02, CPU read time: 3.605 ms (9.31 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.948 ms, effective bandwidth: 70.82 GB/s (logical)
+CPU checksum(B)=-7.011545e+01, CPU read time: 2.577 ms (13.02 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 2.254 ms, effective bandwidth: 29.77 GB/s (logical)
+CPU checksum(B)=-9.560242e+01, CPU read time: 3.001 ms (11.18 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.057 ms, effective bandwidth: 1171.46 GB/s (logical)
+CPU checksum(B)=-7.416748e+02, CPU read time: 3.152 ms (10.64 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 2.896 ms, effective bandwidth: 23.17 GB/s (logical)
+UM prefetch-to-CPU: 0.204 ms (164.61 GB/s logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.685 ms (12.50 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 1.942 ms, effective bandwidth: 34.55 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.585 ms (9.36 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.053 ms, effective bandwidth: 1275.02 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.027 ms (11.09 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.052 ms, effective bandwidth: 1291.51 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.232 ms (10.38 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.830 ms, effective bandwidth: 80.88 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.601 ms (12.90 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.808 ms, effective bandwidth: 83.01 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.895 ms (11.59 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.052 ms, effective bandwidth: 1286.75 GB/s (logical)
+CPU checksum(B)=-7.134131e+02, CPU read time: 3.008 ms (11.16 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 5.824 ms, effective bandwidth: 11.52 GB/s (logical)
+UM prefetch-to-CPU: 0.154 ms (217.86 GB/s logical)
+CPU checksum(B)=-4.013224e+01, CPU read time: 2.620 ms (12.81 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 2.399 ms, effective bandwidth: 27.98 GB/s (logical)
+CPU checksum(B)=-5.591222e+01, CPU read time: 3.178 ms (10.56 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.043 ms, effective bandwidth: 1560.61 GB/s (logical)
+CPU checksum(B)=1.468668e+00, CPU read time: 2.892 ms (11.60 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.042 ms, effective bandwidth: 1610.47 GB/s (logical)
+CPU checksum(B)=-2.129087e+01, CPU read time: 2.891 ms (11.61 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.448 ms, effective bandwidth: 149.72 GB/s (logical)
+CPU checksum(B)=2.059066e+01, CPU read time: 2.602 ms (12.90 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.602 ms, effective bandwidth: 111.44 GB/s (logical)
+CPU checksum(B)=-5.078456e+01, CPU read time: 2.767 ms (12.13 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.040 ms, effective bandwidth: 1679.06 GB/s (logical)
+CPU checksum(B)=-7.288717e+02, CPU read time: 2.852 ms (11.77 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=5  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 5.454 ms, effective bandwidth: 12.30 GB/s (logical)
+UM prefetch-to-CPU: 0.105 ms (319.13 GB/s logical)
+CPU checksum(B)=-1.514981e+02, CPU read time: 2.656 ms (12.63 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 3.816 ms, effective bandwidth: 17.59 GB/s (logical)
+CPU checksum(B)=-1.561974e+02, CPU read time: 3.071 ms (10.93 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.035 ms, effective bandwidth: 1929.66 GB/s (logical)
+CPU checksum(B)=-1.000892e+02, CPU read time: 2.880 ms (11.65 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.036 ms, effective bandwidth: 1878.50 GB/s (logical)
+CPU checksum(B)=-1.225068e+02, CPU read time: 3.128 ms (10.73 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.320 ms, effective bandwidth: 209.44 GB/s (logical)
+CPU checksum(B)=-1.546438e+02, CPU read time: 2.583 ms (12.99 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.409 ms, effective bandwidth: 163.99 GB/s (logical)
+CPU checksum(B)=-1.130995e+02, CPU read time: 2.721 ms (12.33 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.035 ms, effective bandwidth: 1922.93 GB/s (logical)
+CPU checksum(B)=-6.722202e+02, CPU read time: 2.849 ms (11.78 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 2.914 ms, effective bandwidth: 23.03 GB/s (logical)
+UM prefetch-to-CPU: 0.307 ms (109.27 GB/s logical)
+CPU checksum(B)=-4.416887e+00, CPU read time: 2.576 ms (13.03 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 2.968 ms, effective bandwidth: 22.61 GB/s (logical)
+CPU checksum(B)=-1.278057e+02, CPU read time: 4.153 ms (8.08 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.078 ms, effective bandwidth: 860.44 GB/s (logical)
+CPU checksum(B)=-2.029566e+02, CPU read time: 3.499 ms (9.59 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.077 ms, effective bandwidth: 868.96 GB/s (logical)
+CPU checksum(B)=-7.935330e+01, CPU read time: 3.492 ms (9.61 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 1.480 ms, effective bandwidth: 45.33 GB/s (logical)
+CPU checksum(B)=1.063017e+01, CPU read time: 2.610 ms (12.86 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 1.477 ms, effective bandwidth: 45.44 GB/s (logical)
+CPU checksum(B)=7.414208e+01, CPU read time: 3.434 ms (9.77 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 205), GPU columns [205, 2048)
+Hybrid Kernel avg: 0.081 ms, effective bandwidth: 825.39 GB/s (logical)
+CPU checksum(B)=-7.402739e+02, CPU read time: 3.513 ms (9.55 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 3.174 ms, effective bandwidth: 21.14 GB/s (logical)
+UM prefetch-to-CPU: 0.320 ms (104.87 GB/s logical)
+CPU checksum(B)=-5.043177e+01, CPU read time: 2.625 ms (12.78 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 2.840 ms, effective bandwidth: 23.63 GB/s (logical)
+CPU checksum(B)=-3.225225e+01, CPU read time: 4.023 ms (8.34 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.071 ms, effective bandwidth: 948.55 GB/s (logical)
+CPU checksum(B)=3.066083e+01, CPU read time: 3.462 ms (9.69 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.071 ms, effective bandwidth: 942.29 GB/s (logical)
+CPU checksum(B)=2.858610e+01, CPU read time: 3.389 ms (9.90 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 1.320 ms, effective bandwidth: 50.85 GB/s (logical)
+CPU checksum(B)=1.224699e+01, CPU read time: 2.649 ms (12.67 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 1.245 ms, effective bandwidth: 53.89 GB/s (logical)
+CPU checksum(B)=-2.093372e+02, CPU read time: 3.307 ms (10.15 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 2048)
+Hybrid Kernel avg: 0.071 ms, effective bandwidth: 942.50 GB/s (logical)
+CPU checksum(B)=-7.439532e+02, CPU read time: 3.303 ms (10.16 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 3.647 ms, effective bandwidth: 18.40 GB/s (logical)
+UM prefetch-to-CPU: 0.271 ms (123.78 GB/s logical)
+CPU checksum(B)=-7.245654e+00, CPU read time: 2.682 ms (12.51 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 2.922 ms, effective bandwidth: 22.96 GB/s (logical)
+CPU checksum(B)=-1.798640e+01, CPU read time: 3.888 ms (8.63 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.063 ms, effective bandwidth: 1067.80 GB/s (logical)
+CPU checksum(B)=-7.351704e+01, CPU read time: 3.269 ms (10.26 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.064 ms, effective bandwidth: 1054.69 GB/s (logical)
+CPU checksum(B)=-1.096170e+02, CPU read time: 3.458 ms (9.70 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 1.123 ms, effective bandwidth: 59.76 GB/s (logical)
+CPU checksum(B)=-4.332883e+01, CPU read time: 2.670 ms (12.57 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 1.086 ms, effective bandwidth: 61.80 GB/s (logical)
+CPU checksum(B)=-1.373504e+02, CPU read time: 3.148 ms (10.66 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 614), GPU columns [614, 2048)
+Hybrid Kernel avg: 0.064 ms, effective bandwidth: 1046.59 GB/s (logical)
+CPU checksum(B)=-6.368891e+02, CPU read time: 3.383 ms (9.92 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 3.360 ms, effective bandwidth: 19.97 GB/s (logical)
+UM prefetch-to-CPU: 0.226 ms (148.46 GB/s logical)
+CPU checksum(B)=-6.313506e+01, CPU read time: 2.659 ms (12.62 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 2.784 ms, effective bandwidth: 24.11 GB/s (logical)
+CPU checksum(B)=-1.019319e+02, CPU read time: 3.727 ms (9.00 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.058 ms, effective bandwidth: 1160.89 GB/s (logical)
+CPU checksum(B)=-1.376500e+02, CPU read time: 3.579 ms (9.37 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.057 ms, effective bandwidth: 1173.04 GB/s (logical)
+CPU checksum(B)=-1.439386e+02, CPU read time: 3.346 ms (10.03 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 1.003 ms, effective bandwidth: 66.91 GB/s (logical)
+CPU checksum(B)=-1.107878e+02, CPU read time: 2.657 ms (12.63 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 1.203 ms, effective bandwidth: 55.78 GB/s (logical)
+CPU checksum(B)=-8.443786e+01, CPU read time: 3.002 ms (11.18 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
+Hybrid Kernel avg: 0.057 ms, effective bandwidth: 1186.98 GB/s (logical)
+CPU checksum(B)=-6.970018e+02, CPU read time: 3.219 ms (10.42 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 2.576 ms, effective bandwidth: 26.05 GB/s (logical)
+UM prefetch-to-CPU: 0.215 ms (156.20 GB/s logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.709 ms (12.39 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 1.574 ms, effective bandwidth: 42.64 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.611 ms (9.29 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.050 ms, effective bandwidth: 1352.04 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.474 ms (9.66 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.051 ms, effective bandwidth: 1323.79 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 3.521 ms (9.53 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.867 ms, effective bandwidth: 77.36 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.596 ms (12.92 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.056 ms, effective bandwidth: 1187.92 GB/s (logical)
+CPU checksum(B)=-8.160198e+01, CPU read time: 2.977 ms (11.27 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
+Hybrid Kernel avg: 0.050 ms, effective bandwidth: 1340.20 GB/s (logical)
+CPU checksum(B)=-7.134131e+02, CPU read time: 3.154 ms (10.64 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 3.979 ms, effective bandwidth: 16.87 GB/s (logical)
+UM prefetch-to-CPU: 0.153 ms (219.56 GB/s logical)
+CPU checksum(B)=3.947048e+01, CPU read time: 2.674 ms (12.55 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 3.378 ms, effective bandwidth: 19.87 GB/s (logical)
+CPU checksum(B)=9.063129e+00, CPU read time: 3.277 ms (10.24 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.039 ms, effective bandwidth: 1706.53 GB/s (logical)
+CPU checksum(B)=-7.428065e+01, CPU read time: 3.953 ms (8.49 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.040 ms, effective bandwidth: 1667.98 GB/s (logical)
+CPU checksum(B)=-5.968826e+01, CPU read time: 4.002 ms (8.38 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.488 ms, effective bandwidth: 137.50 GB/s (logical)
+CPU checksum(B)=6.248934e+01, CPU read time: 2.636 ms (12.73 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.337 ms, effective bandwidth: 198.99 GB/s (logical)
+CPU checksum(B)=-4.110671e+01, CPU read time: 2.807 ms (11.95 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1434), GPU columns [1434, 2048)
+Hybrid Kernel avg: 0.039 ms, effective bandwidth: 1699.75 GB/s (logical)
+CPU checksum(B)=-6.570944e+02, CPU read time: 2.917 ms (11.50 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=10  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=2048 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 4.566 ms, effective bandwidth: 14.70 GB/s (logical)
+UM prefetch-to-CPU: 0.114 ms (294.43 GB/s logical)
+CPU checksum(B)=-1.607398e+02, CPU read time: 2.791 ms (12.02 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 3.505 ms, effective bandwidth: 19.14 GB/s (logical)
+CPU checksum(B)=-1.622179e+02, CPU read time: 3.184 ms (10.54 GB/s logical)
+
+[2mmode=gh_hbm_shared N=2048 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.033 ms, effective bandwidth: 2042.02 GB/s (logical)
+CPU checksum(B)=-2.092593e+02, CPU read time: 3.230 ms (10.39 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=2048 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.033 ms, effective bandwidth: 2059.26 GB/s (logical)
+CPU checksum(B)=-1.493326e+02, CPU read time: 3.889 ms (8.63 GB/s logical)
+
+[2mmode=gh_cpu_shared N=2048 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.300 ms, effective bandwidth: 223.80 GB/s (logical)
+CPU checksum(B)=-1.892132e+02, CPU read time: 2.597 ms (12.92 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=2048 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.237 ms, effective bandwidth: 282.64 GB/s (logical)
+CPU checksum(B)=-1.514145e+02, CPU read time: 2.720 ms (12.34 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
+Hybrid Kernel avg: 0.032 ms, effective bandwidth: 2094.22 GB/s (logical)
+CPU checksum(B)=-7.424043e+02, CPU read time: 2.813 ms (11.93 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 8.121 ms, effective bandwidth: 33.05 GB/s (logical)
+UM prefetch-to-CPU: 1.104 ms (121.56 GB/s logical)
+CPU checksum(B)=1.385306e+03, CPU read time: 10.311 ms (13.02 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 6.170 ms, effective bandwidth: 43.51 GB/s (logical)
+CPU checksum(B)=1.417039e+03, CPU read time: 16.609 ms (8.08 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.255 ms, effective bandwidth: 1053.45 GB/s (logical)
+CPU checksum(B)=1.364897e+03, CPU read time: 15.251 ms (8.80 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.254 ms, effective bandwidth: 1055.57 GB/s (logical)
+CPU checksum(B)=1.475310e+03, CPU read time: 15.218 ms (8.82 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 5.922 ms, effective bandwidth: 45.33 GB/s (logical)
+CPU checksum(B)=1.446700e+03, CPU read time: 10.289 ms (13.04 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 4.944 ms, effective bandwidth: 54.29 GB/s (logical)
+CPU checksum(B)=1.396124e+03, CPU read time: 11.493 ms (11.68 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.273 ms, effective bandwidth: 983.12 GB/s (logical)
+CPU checksum(B)=-1.153102e+03, CPU read time: 15.132 ms (8.87 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 8.430 ms, effective bandwidth: 31.84 GB/s (logical)
+UM prefetch-to-CPU: 1.013 ms (132.49 GB/s logical)
+CPU checksum(B)=1.455423e+03, CPU read time: 10.487 ms (12.80 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 6.448 ms, effective bandwidth: 41.63 GB/s (logical)
+CPU checksum(B)=1.679896e+03, CPU read time: 16.077 ms (8.35 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.234 ms, effective bandwidth: 1146.77 GB/s (logical)
+CPU checksum(B)=1.417569e+03, CPU read time: 15.222 ms (8.82 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.239 ms, effective bandwidth: 1125.26 GB/s (logical)
+CPU checksum(B)=1.385200e+03, CPU read time: 15.099 ms (8.89 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 5.274 ms, effective bandwidth: 50.89 GB/s (logical)
+CPU checksum(B)=1.527513e+03, CPU read time: 10.276 ms (13.06 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 5.196 ms, effective bandwidth: 51.67 GB/s (logical)
+CPU checksum(B)=1.566451e+03, CPU read time: 10.336 ms (12.99 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.258 ms, effective bandwidth: 1041.73 GB/s (logical)
+CPU checksum(B)=-1.270157e+03, CPU read time: 14.860 ms (9.03 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 8.558 ms, effective bandwidth: 31.37 GB/s (logical)
+UM prefetch-to-CPU: 0.921 ms (145.73 GB/s logical)
+CPU checksum(B)=1.458032e+03, CPU read time: 10.561 ms (12.71 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 6.695 ms, effective bandwidth: 40.10 GB/s (logical)
+CPU checksum(B)=1.469868e+03, CPU read time: 15.307 ms (8.77 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.211 ms, effective bandwidth: 1273.74 GB/s (logical)
+CPU checksum(B)=1.589996e+03, CPU read time: 15.030 ms (8.93 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.208 ms, effective bandwidth: 1287.82 GB/s (logical)
+CPU checksum(B)=1.541783e+03, CPU read time: 15.081 ms (8.90 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 4.606 ms, effective bandwidth: 58.28 GB/s (logical)
+CPU checksum(B)=1.786752e+03, CPU read time: 10.254 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 5.354 ms, effective bandwidth: 50.14 GB/s (logical)
+CPU checksum(B)=1.539060e+03, CPU read time: 10.469 ms (12.82 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.230 ms, effective bandwidth: 1166.80 GB/s (logical)
+CPU checksum(B)=-1.144817e+03, CPU read time: 14.796 ms (9.07 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 8.848 ms, effective bandwidth: 30.34 GB/s (logical)
+UM prefetch-to-CPU: 0.790 ms (169.92 GB/s logical)
+CPU checksum(B)=1.464279e+03, CPU read time: 10.256 ms (13.09 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 6.730 ms, effective bandwidth: 39.89 GB/s (logical)
+CPU checksum(B)=1.351676e+03, CPU read time: 14.503 ms (9.25 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.191 ms, effective bandwidth: 1404.75 GB/s (logical)
+CPU checksum(B)=1.388721e+03, CPU read time: 15.149 ms (8.86 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.194 ms, effective bandwidth: 1383.89 GB/s (logical)
+CPU checksum(B)=1.396651e+03, CPU read time: 15.030 ms (8.93 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 4.176 ms, effective bandwidth: 64.28 GB/s (logical)
+CPU checksum(B)=1.318021e+03, CPU read time: 10.262 ms (13.08 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 4.545 ms, effective bandwidth: 59.06 GB/s (logical)
+CPU checksum(B)=1.433619e+03, CPU read time: 10.260 ms (13.08 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.211 ms, effective bandwidth: 1269.35 GB/s (logical)
+CPU checksum(B)=-1.160327e+03, CPU read time: 14.903 ms (9.01 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 6.321 ms, effective bandwidth: 42.47 GB/s (logical)
+UM prefetch-to-CPU: 0.724 ms (185.36 GB/s logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.262 ms (13.08 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 5.589 ms, effective bandwidth: 48.03 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 13.840 ms (9.70 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.162 ms, effective bandwidth: 1656.85 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 15.264 ms (8.79 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.162 ms, effective bandwidth: 1660.98 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 15.223 ms (8.82 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 3.292 ms, effective bandwidth: 81.54 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.252 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 4.158 ms, effective bandwidth: 64.56 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.585 ms (12.68 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.179 ms, effective bandwidth: 1498.82 GB/s (logical)
+CPU checksum(B)=-1.275941e+03, CPU read time: 15.112 ms (8.88 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 11.157 ms, effective bandwidth: 24.06 GB/s (logical)
+UM prefetch-to-CPU: 0.533 ms (251.77 GB/s logical)
+CPU checksum(B)=1.513787e+03, CPU read time: 10.264 ms (13.08 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 10.165 ms, effective bandwidth: 26.41 GB/s (logical)
+CPU checksum(B)=1.403519e+03, CPU read time: 12.214 ms (10.99 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.111 ms, effective bandwidth: 2424.59 GB/s (logical)
+CPU checksum(B)=1.470559e+03, CPU read time: 15.347 ms (8.75 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.112 ms, effective bandwidth: 2402.37 GB/s (logical)
+CPU checksum(B)=1.383586e+03, CPU read time: 15.342 ms (8.75 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 2.005 ms, effective bandwidth: 133.90 GB/s (logical)
+CPU checksum(B)=1.535775e+03, CPU read time: 10.255 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 2.066 ms, effective bandwidth: 129.94 GB/s (logical)
+CPU checksum(B)=1.684109e+03, CPU read time: 11.182 ms (12.00 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.119 ms, effective bandwidth: 2258.04 GB/s (logical)
+CPU checksum(B)=-1.121216e+03, CPU read time: 15.257 ms (8.80 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=5  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 13.197 ms, effective bandwidth: 20.34 GB/s (logical)
+UM prefetch-to-CPU: 0.372 ms (360.87 GB/s logical)
+CPU checksum(B)=1.422383e+03, CPU read time: 10.309 ms (13.02 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 9.823 ms, effective bandwidth: 27.33 GB/s (logical)
+CPU checksum(B)=1.424964e+03, CPU read time: 11.693 ms (11.48 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.085 ms, effective bandwidth: 3166.47 GB/s (logical)
+CPU checksum(B)=1.532164e+03, CPU read time: 15.351 ms (8.74 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.084 ms, effective bandwidth: 3179.91 GB/s (logical)
+CPU checksum(B)=1.511833e+03, CPU read time: 15.296 ms (8.77 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 1.331 ms, effective bandwidth: 201.74 GB/s (logical)
+CPU checksum(B)=1.444431e+03, CPU read time: 10.261 ms (13.08 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.945 ms, effective bandwidth: 284.09 GB/s (logical)
+CPU checksum(B)=1.384554e+03, CPU read time: 10.776 ms (12.46 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.087 ms, effective bandwidth: 3077.71 GB/s (logical)
+CPU checksum(B)=-1.056927e+03, CPU read time: 15.329 ms (8.76 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 7.925 ms, effective bandwidth: 33.87 GB/s (logical)
+UM prefetch-to-CPU: 1.090 ms (123.13 GB/s logical)
+CPU checksum(B)=1.339672e+03, CPU read time: 10.364 ms (12.95 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 7.345 ms, effective bandwidth: 36.55 GB/s (logical)
+CPU checksum(B)=1.538557e+03, CPU read time: 16.627 ms (8.07 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.253 ms, effective bandwidth: 1059.72 GB/s (logical)
+CPU checksum(B)=1.577348e+03, CPU read time: 15.310 ms (8.77 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.255 ms, effective bandwidth: 1051.61 GB/s (logical)
+CPU checksum(B)=1.408159e+03, CPU read time: 15.189 ms (8.84 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 6.557 ms, effective bandwidth: 40.94 GB/s (logical)
+CPU checksum(B)=1.457574e+03, CPU read time: 10.308 ms (13.02 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 6.336 ms, effective bandwidth: 42.37 GB/s (logical)
+CPU checksum(B)=1.415184e+03, CPU read time: 10.602 ms (12.66 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 410), GPU columns [410, 4096)
+Hybrid Kernel avg: 0.287 ms, effective bandwidth: 936.21 GB/s (logical)
+CPU checksum(B)=-1.284800e+03, CPU read time: 15.108 ms (8.88 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 9.227 ms, effective bandwidth: 29.09 GB/s (logical)
+UM prefetch-to-CPU: 1.028 ms (130.55 GB/s logical)
+CPU checksum(B)=1.427186e+03, CPU read time: 10.512 ms (12.77 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 10.479 ms, effective bandwidth: 25.62 GB/s (logical)
+CPU checksum(B)=1.350304e+03, CPU read time: 15.477 ms (8.67 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.232 ms, effective bandwidth: 1158.44 GB/s (logical)
+CPU checksum(B)=1.387669e+03, CPU read time: 15.145 ms (8.86 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.229 ms, effective bandwidth: 1174.35 GB/s (logical)
+CPU checksum(B)=1.521008e+03, CPU read time: 15.138 ms (8.87 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 5.504 ms, effective bandwidth: 48.77 GB/s (logical)
+CPU checksum(B)=1.685182e+03, CPU read time: 10.277 ms (13.06 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 5.351 ms, effective bandwidth: 50.17 GB/s (logical)
+CPU checksum(B)=1.539957e+03, CPU read time: 10.368 ms (12.95 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
+Hybrid Kernel avg: 0.252 ms, effective bandwidth: 1065.18 GB/s (logical)
+CPU checksum(B)=-1.200062e+03, CPU read time: 14.849 ms (9.04 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 8.388 ms, effective bandwidth: 32.00 GB/s (logical)
+UM prefetch-to-CPU: 0.883 ms (151.98 GB/s logical)
+CPU checksum(B)=1.382043e+03, CPU read time: 10.418 ms (12.88 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 6.911 ms, effective bandwidth: 38.84 GB/s (logical)
+CPU checksum(B)=1.370660e+03, CPU read time: 15.401 ms (8.71 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.207 ms, effective bandwidth: 1295.62 GB/s (logical)
+CPU checksum(B)=1.417253e+03, CPU read time: 15.224 ms (8.82 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.205 ms, effective bandwidth: 1307.63 GB/s (logical)
+CPU checksum(B)=1.628253e+03, CPU read time: 15.226 ms (8.82 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 4.850 ms, effective bandwidth: 55.35 GB/s (logical)
+CPU checksum(B)=1.413985e+03, CPU read time: 10.254 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 4.764 ms, effective bandwidth: 56.34 GB/s (logical)
+CPU checksum(B)=1.451876e+03, CPU read time: 10.316 ms (13.01 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1229), GPU columns [1229, 4096)
+Hybrid Kernel avg: 0.233 ms, effective bandwidth: 1149.68 GB/s (logical)
+CPU checksum(B)=-1.202024e+03, CPU read time: 14.692 ms (9.14 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 9.507 ms, effective bandwidth: 28.23 GB/s (logical)
+UM prefetch-to-CPU: 0.800 ms (167.74 GB/s logical)
+CPU checksum(B)=1.519543e+03, CPU read time: 10.252 ms (13.09 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 7.939 ms, effective bandwidth: 33.81 GB/s (logical)
+CPU checksum(B)=1.404419e+03, CPU read time: 14.468 ms (9.28 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.186 ms, effective bandwidth: 1443.67 GB/s (logical)
+CPU checksum(B)=1.429660e+03, CPU read time: 15.280 ms (8.78 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.187 ms, effective bandwidth: 1432.92 GB/s (logical)
+CPU checksum(B)=1.340549e+03, CPU read time: 15.259 ms (8.80 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 4.097 ms, effective bandwidth: 65.52 GB/s (logical)
+CPU checksum(B)=1.425400e+03, CPU read time: 10.258 ms (13.08 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 4.224 ms, effective bandwidth: 63.55 GB/s (logical)
+CPU checksum(B)=1.386712e+03, CPU read time: 10.382 ms (12.93 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+Hybrid Kernel avg: 0.202 ms, effective bandwidth: 1326.07 GB/s (logical)
+CPU checksum(B)=-1.145733e+03, CPU read time: 14.709 ms (9.12 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 7.249 ms, effective bandwidth: 37.03 GB/s (logical)
+UM prefetch-to-CPU: 0.709 ms (189.29 GB/s logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.266 ms (13.07 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 6.176 ms, effective bandwidth: 43.46 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 13.882 ms (9.67 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.161 ms, effective bandwidth: 1670.67 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 15.275 ms (8.79 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.160 ms, effective bandwidth: 1678.70 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 15.061 ms (8.91 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 3.331 ms, effective bandwidth: 80.58 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 10.253 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 5.158 ms, effective bandwidth: 52.04 GB/s (logical)
+CPU checksum(B)=1.479393e+03, CPU read time: 12.662 ms (10.60 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
+Hybrid Kernel avg: 0.176 ms, effective bandwidth: 1525.06 GB/s (logical)
+CPU checksum(B)=-1.275941e+03, CPU read time: 15.023 ms (8.93 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 9.699 ms, effective bandwidth: 27.68 GB/s (logical)
+UM prefetch-to-CPU: 0.483 ms (277.86 GB/s logical)
+CPU checksum(B)=1.511422e+03, CPU read time: 10.261 ms (13.08 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 8.899 ms, effective bandwidth: 30.16 GB/s (logical)
+CPU checksum(B)=1.545400e+03, CPU read time: 12.437 ms (10.79 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.113 ms, effective bandwidth: 2380.56 GB/s (logical)
+CPU checksum(B)=1.370116e+03, CPU read time: 15.285 ms (8.78 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.113 ms, effective bandwidth: 2371.94 GB/s (logical)
+CPU checksum(B)=1.513234e+03, CPU read time: 15.383 ms (8.73 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 2.025 ms, effective bandwidth: 132.57 GB/s (logical)
+CPU checksum(B)=1.609728e+03, CPU read time: 10.256 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.958 ms, effective bandwidth: 280.16 GB/s (logical)
+CPU checksum(B)=1.615470e+03, CPU read time: 11.206 ms (11.98 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2867), GPU columns [2867, 4096)
+Hybrid Kernel avg: 0.120 ms, effective bandwidth: 2231.55 GB/s (logical)
+CPU checksum(B)=-1.023020e+03, CPU read time: 15.411 ms (8.71 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=10  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=4096 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 11.733 ms, effective bandwidth: 22.88 GB/s (logical)
+UM prefetch-to-CPU: 0.368 ms (364.84 GB/s logical)
+CPU checksum(B)=1.508991e+03, CPU read time: 10.260 ms (13.08 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 11.090 ms, effective bandwidth: 24.20 GB/s (logical)
+CPU checksum(B)=1.464260e+03, CPU read time: 11.678 ms (11.49 GB/s logical)
+
+[2mmode=gh_hbm_shared N=4096 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.080 ms, effective bandwidth: 3353.70 GB/s (logical)
+CPU checksum(B)=1.512721e+03, CPU read time: 15.310 ms (8.77 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=4096 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.079 ms, effective bandwidth: 3405.85 GB/s (logical)
+CPU checksum(B)=1.608539e+03, CPU read time: 15.398 ms (8.72 GB/s logical)
+
+[2mmode=gh_cpu_shared N=4096 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 1.371 ms, effective bandwidth: 195.82 GB/s (logical)
+CPU checksum(B)=1.565151e+03, CPU read time: 10.277 ms (13.06 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=4096 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.545 ms, effective bandwidth: 492.99 GB/s (logical)
+CPU checksum(B)=1.533854e+03, CPU read time: 10.795 ms (12.43 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 4096)
+Hybrid Kernel avg: 0.083 ms, effective bandwidth: 3252.53 GB/s (logical)
+CPU checksum(B)=-1.297047e+03, CPU read time: 15.543 ms (8.64 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 28.405 ms, effective bandwidth: 37.80 GB/s (logical)
+UM prefetch-to-CPU: 4.078 ms (131.65 GB/s logical)
+CPU checksum(B)=6.027285e+03, CPU read time: 41.041 ms (13.08 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 23.390 ms, effective bandwidth: 45.91 GB/s (logical)
+CPU checksum(B)=6.241151e+03, CPU read time: 66.236 ms (8.11 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 0.981 ms, effective bandwidth: 1093.98 GB/s (logical)
+CPU checksum(B)=6.160533e+03, CPU read time: 63.439 ms (8.46 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 0.989 ms, effective bandwidth: 1086.12 GB/s (logical)
+CPU checksum(B)=6.207424e+03, CPU read time: 63.417 ms (8.47 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 25.032 ms, effective bandwidth: 42.90 GB/s (logical)
+CPU checksum(B)=6.158060e+03, CPU read time: 40.995 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 28.088 ms, effective bandwidth: 38.23 GB/s (logical)
+CPU checksum(B)=6.216032e+03, CPU read time: 40.989 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 1.083 ms, effective bandwidth: 991.50 GB/s (logical)
+CPU checksum(B)=-3.101822e+03, CPU read time: 63.276 ms (8.48 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 29.735 ms, effective bandwidth: 36.11 GB/s (logical)
+UM prefetch-to-CPU: 3.829 ms (140.21 GB/s logical)
+CPU checksum(B)=5.606565e+03, CPU read time: 40.964 ms (13.11 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 24.202 ms, effective bandwidth: 44.37 GB/s (logical)
+CPU checksum(B)=5.967419e+03, CPU read time: 63.685 ms (8.43 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.888 ms, effective bandwidth: 1209.81 GB/s (logical)
+CPU checksum(B)=5.739202e+03, CPU read time: 63.439 ms (8.46 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.883 ms, effective bandwidth: 1215.38 GB/s (logical)
+CPU checksum(B)=5.723440e+03, CPU read time: 63.528 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 22.303 ms, effective bandwidth: 48.14 GB/s (logical)
+CPU checksum(B)=5.877264e+03, CPU read time: 40.990 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 23.205 ms, effective bandwidth: 46.27 GB/s (logical)
+CPU checksum(B)=5.835319e+03, CPU read time: 41.009 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.978 ms, effective bandwidth: 1098.01 GB/s (logical)
+CPU checksum(B)=-3.293808e+03, CPU read time: 63.963 ms (8.39 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 28.800 ms, effective bandwidth: 37.28 GB/s (logical)
+UM prefetch-to-CPU: 3.428 ms (156.61 GB/s logical)
+CPU checksum(B)=6.052004e+03, CPU read time: 40.986 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 23.013 ms, effective bandwidth: 46.66 GB/s (logical)
+CPU checksum(B)=5.710179e+03, CPU read time: 60.791 ms (8.83 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.789 ms, effective bandwidth: 1361.47 GB/s (logical)
+CPU checksum(B)=5.917202e+03, CPU read time: 64.094 ms (8.38 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.793 ms, effective bandwidth: 1354.52 GB/s (logical)
+CPU checksum(B)=6.110102e+03, CPU read time: 63.797 ms (8.42 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 20.380 ms, effective bandwidth: 52.69 GB/s (logical)
+CPU checksum(B)=5.861695e+03, CPU read time: 40.996 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 19.945 ms, effective bandwidth: 53.84 GB/s (logical)
+CPU checksum(B)=5.991398e+03, CPU read time: 41.006 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.867 ms, effective bandwidth: 1238.70 GB/s (logical)
+CPU checksum(B)=-3.156011e+03, CPU read time: 63.312 ms (8.48 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 27.148 ms, effective bandwidth: 39.55 GB/s (logical)
+UM prefetch-to-CPU: 2.987 ms (179.74 GB/s logical)
+CPU checksum(B)=5.941857e+03, CPU read time: 40.997 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 24.015 ms, effective bandwidth: 44.71 GB/s (logical)
+CPU checksum(B)=5.919643e+03, CPU read time: 57.875 ms (9.28 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.692 ms, effective bandwidth: 1552.50 GB/s (logical)
+CPU checksum(B)=5.863403e+03, CPU read time: 63.803 ms (8.41 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.686 ms, effective bandwidth: 1565.01 GB/s (logical)
+CPU checksum(B)=5.971359e+03, CPU read time: 63.814 ms (8.41 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 17.486 ms, effective bandwidth: 61.41 GB/s (logical)
+CPU checksum(B)=5.908196e+03, CPU read time: 40.992 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 17.032 ms, effective bandwidth: 63.04 GB/s (logical)
+CPU checksum(B)=6.071868e+03, CPU read time: 41.005 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.732 ms, effective bandwidth: 1466.60 GB/s (logical)
+CPU checksum(B)=-3.121231e+03, CPU read time: 63.779 ms (8.42 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 23.457 ms, effective bandwidth: 45.77 GB/s (logical)
+UM prefetch-to-CPU: 2.535 ms (211.79 GB/s logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 40.983 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 23.402 ms, effective bandwidth: 45.88 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 55.221 ms (9.72 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.556 ms, effective bandwidth: 1929.46 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 63.557 ms (8.45 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.575 ms, effective bandwidth: 1865.84 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 63.727 ms (8.42 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 14.816 ms, effective bandwidth: 72.47 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 41.002 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 14.073 ms, effective bandwidth: 76.30 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 41.002 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.634 ms, effective bandwidth: 1694.65 GB/s (logical)
+CPU checksum(B)=-3.091414e+03, CPU read time: 63.438 ms (8.46 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 28.431 ms, effective bandwidth: 37.77 GB/s (logical)
+UM prefetch-to-CPU: 1.797 ms (298.77 GB/s logical)
+CPU checksum(B)=5.908327e+03, CPU read time: 40.965 ms (13.11 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 27.600 ms, effective bandwidth: 38.90 GB/s (logical)
+CPU checksum(B)=5.818714e+03, CPU read time: 49.503 ms (10.85 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.356 ms, effective bandwidth: 3013.26 GB/s (logical)
+CPU checksum(B)=5.831054e+03, CPU read time: 63.901 ms (8.40 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.365 ms, effective bandwidth: 2942.29 GB/s (logical)
+CPU checksum(B)=5.838390e+03, CPU read time: 63.503 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 8.552 ms, effective bandwidth: 125.56 GB/s (logical)
+CPU checksum(B)=5.771232e+03, CPU read time: 41.006 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 9.326 ms, effective bandwidth: 115.13 GB/s (logical)
+CPU checksum(B)=5.990205e+03, CPU read time: 41.001 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.401 ms, effective bandwidth: 2679.25 GB/s (logical)
+CPU checksum(B)=-3.148257e+03, CPU read time: 63.493 ms (8.46 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=5  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 28.215 ms, effective bandwidth: 38.06 GB/s (logical)
+UM prefetch-to-CPU: 1.266 ms (424.07 GB/s logical)
+CPU checksum(B)=5.786084e+03, CPU read time: 40.997 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 27.467 ms, effective bandwidth: 39.09 GB/s (logical)
+CPU checksum(B)=6.104878e+03, CPU read time: 46.737 ms (11.49 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.255 ms, effective bandwidth: 4213.79 GB/s (logical)
+CPU checksum(B)=6.081174e+03, CPU read time: 63.585 ms (8.44 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.255 ms, effective bandwidth: 4204.39 GB/s (logical)
+CPU checksum(B)=6.276081e+03, CPU read time: 63.989 ms (8.39 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=5 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 5.737 ms, effective bandwidth: 187.15 GB/s (logical)
+CPU checksum(B)=6.063289e+03, CPU read time: 40.980 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 6.635 ms, effective bandwidth: 161.83 GB/s (logical)
+CPU checksum(B)=6.102382e+03, CPU read time: 40.988 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=5 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.278 ms, effective bandwidth: 3866.97 GB/s (logical)
+CPU checksum(B)=-2.987125e+03, CPU read time: 63.572 ms (8.45 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.1(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 28.840 ms, effective bandwidth: 37.23 GB/s (logical)
+UM prefetch-to-CPU: 4.065 ms (132.07 GB/s logical)
+CPU checksum(B)=6.054233e+03, CPU read time: 41.109 ms (13.06 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 25.835 ms, effective bandwidth: 41.56 GB/s (logical)
+CPU checksum(B)=6.224757e+03, CPU read time: 66.189 ms (8.11 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 0.976 ms, effective bandwidth: 1100.45 GB/s (logical)
+CPU checksum(B)=6.002303e+03, CPU read time: 63.485 ms (8.46 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 0.984 ms, effective bandwidth: 1090.97 GB/s (logical)
+CPU checksum(B)=5.952182e+03, CPU read time: 63.813 ms (8.41 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.1(B[m
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 24.989 ms, effective bandwidth: 42.97 GB/s (logical)
+CPU checksum(B)=6.015428e+03, CPU read time: 40.981 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 24.640 ms, effective bandwidth: 43.58 GB/s (logical)
+CPU checksum(B)=5.956254e+03, CPU read time: 40.993 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.1(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
+Hybrid Kernel avg: 1.094 ms, effective bandwidth: 981.90 GB/s (logical)
+CPU checksum(B)=-3.015722e+03, CPU read time: 63.256 ms (8.49 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.2(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 30.000 ms, effective bandwidth: 35.79 GB/s (logical)
+UM prefetch-to-CPU: 3.778 ms (142.11 GB/s logical)
+CPU checksum(B)=5.752039e+03, CPU read time: 40.974 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 26.734 ms, effective bandwidth: 40.16 GB/s (logical)
+CPU checksum(B)=5.612522e+03, CPU read time: 63.542 ms (8.45 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.886 ms, effective bandwidth: 1212.42 GB/s (logical)
+CPU checksum(B)=5.846090e+03, CPU read time: 63.416 ms (8.47 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.894 ms, effective bandwidth: 1200.89 GB/s (logical)
+CPU checksum(B)=5.939144e+03, CPU read time: 63.413 ms (8.47 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.2(B[m
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 22.780 ms, effective bandwidth: 47.14 GB/s (logical)
+CPU checksum(B)=5.911261e+03, CPU read time: 40.989 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 22.376 ms, effective bandwidth: 47.99 GB/s (logical)
+CPU checksum(B)=5.830001e+03, CPU read time: 40.993 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.2(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
+Hybrid Kernel avg: 0.974 ms, effective bandwidth: 1101.92 GB/s (logical)
+CPU checksum(B)=-3.094734e+03, CPU read time: 63.384 ms (8.47 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.3(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 27.789 ms, effective bandwidth: 38.64 GB/s (logical)
+UM prefetch-to-CPU: 3.399 ms (157.94 GB/s logical)
+CPU checksum(B)=6.253250e+03, CPU read time: 40.975 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 25.547 ms, effective bandwidth: 42.03 GB/s (logical)
+CPU checksum(B)=5.684634e+03, CPU read time: 60.729 ms (8.84 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.778 ms, effective bandwidth: 1379.81 GB/s (logical)
+CPU checksum(B)=5.954495e+03, CPU read time: 63.494 ms (8.46 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.773 ms, effective bandwidth: 1388.86 GB/s (logical)
+CPU checksum(B)=6.060251e+03, CPU read time: 63.505 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.3(B[m
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 19.962 ms, effective bandwidth: 53.79 GB/s (logical)
+CPU checksum(B)=5.972550e+03, CPU read time: 40.983 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 19.440 ms, effective bandwidth: 55.23 GB/s (logical)
+CPU checksum(B)=6.092019e+03, CPU read time: 41.005 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.3(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 2458), GPU columns [2458, 8192)
+Hybrid Kernel avg: 0.865 ms, effective bandwidth: 1241.33 GB/s (logical)
+CPU checksum(B)=-3.068850e+03, CPU read time: 63.583 ms (8.44 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.4(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 27.775 ms, effective bandwidth: 38.66 GB/s (logical)
+UM prefetch-to-CPU: 2.951 ms (181.93 GB/s logical)
+CPU checksum(B)=6.311822e+03, CPU read time: 40.967 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 26.433 ms, effective bandwidth: 40.62 GB/s (logical)
+CPU checksum(B)=6.131354e+03, CPU read time: 57.975 ms (9.26 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.666 ms, effective bandwidth: 1611.61 GB/s (logical)
+CPU checksum(B)=6.061698e+03, CPU read time: 63.713 ms (8.43 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.676 ms, effective bandwidth: 1589.50 GB/s (logical)
+CPU checksum(B)=6.038396e+03, CPU read time: 63.485 ms (8.46 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.4(B[m
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 16.858 ms, effective bandwidth: 63.69 GB/s (logical)
+CPU checksum(B)=6.006813e+03, CPU read time: 40.997 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 16.808 ms, effective bandwidth: 63.88 GB/s (logical)
+CPU checksum(B)=6.022186e+03, CPU read time: 41.001 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.4(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 3277), GPU columns [3277, 8192)
+Hybrid Kernel avg: 0.717 ms, effective bandwidth: 1496.89 GB/s (logical)
+CPU checksum(B)=-3.281439e+03, CPU read time: 63.839 ms (8.41 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.5(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 23.988 ms, effective bandwidth: 44.76 GB/s (logical)
+UM prefetch-to-CPU: 2.633 ms (203.89 GB/s logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 40.989 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 23.717 ms, effective bandwidth: 45.27 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 55.116 ms (9.74 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.562 ms, effective bandwidth: 1909.08 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 63.625 ms (8.44 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.562 ms, effective bandwidth: 1909.09 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 63.561 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.5(B[m
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 14.902 ms, effective bandwidth: 72.05 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 41.014 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 14.192 ms, effective bandwidth: 75.66 GB/s (logical)
+CPU checksum(B)=6.092790e+03, CPU read time: 41.058 ms (13.08 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.5(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
+Hybrid Kernel avg: 0.618 ms, effective bandwidth: 1736.36 GB/s (logical)
+CPU checksum(B)=-3.091414e+03, CPU read time: 63.476 ms (8.46 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.7(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 28.714 ms, effective bandwidth: 37.39 GB/s (logical)
+UM prefetch-to-CPU: 1.762 ms (304.67 GB/s logical)
+CPU checksum(B)=5.836699e+03, CPU read time: 40.997 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 27.683 ms, effective bandwidth: 38.79 GB/s (logical)
+CPU checksum(B)=5.926660e+03, CPU read time: 49.472 ms (10.85 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.356 ms, effective bandwidth: 3018.03 GB/s (logical)
+CPU checksum(B)=5.863959e+03, CPU read time: 63.528 ms (8.45 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.354 ms, effective bandwidth: 3036.41 GB/s (logical)
+CPU checksum(B)=5.909606e+03, CPU read time: 63.553 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.7(B[m
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 8.311 ms, effective bandwidth: 129.19 GB/s (logical)
+CPU checksum(B)=5.769575e+03, CPU read time: 41.002 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 8.646 ms, effective bandwidth: 124.19 GB/s (logical)
+CPU checksum(B)=5.765512e+03, CPU read time: 40.991 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.7(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 5734), GPU columns [5734, 8192)
+Hybrid Kernel avg: 0.388 ms, effective bandwidth: 2767.03 GB/s (logical)
+CPU checksum(B)=-3.263403e+03, CPU read time: 63.552 ms (8.45 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=10  frac=0.8(B[m
+--------------------------------------------------------------------------------
+[2mmode=um_migrate N=8192 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 28.529 ms, effective bandwidth: 37.64 GB/s (logical)
+UM prefetch-to-CPU: 1.335 ms (402.11 GB/s logical)
+CPU checksum(B)=6.096023e+03, CPU read time: 40.967 ms (13.10 GB/s logical)
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 31.648 ms, effective bandwidth: 33.93 GB/s (logical)
+CPU checksum(B)=6.014343e+03, CPU read time: 46.699 ms (11.50 GB/s logical)
+
+[2mmode=gh_hbm_shared N=8192 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.247 ms, effective bandwidth: 4355.80 GB/s (logical)
+CPU checksum(B)=6.030830e+03, CPU read time: 63.539 ms (8.45 GB/s logical)
+
+[2mmode=gh_hbm_shared_no_prefetch N=8192 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.249 ms, effective bandwidth: 4314.24 GB/s (logical)
+CPU checksum(B)=6.018959e+03, CPU read time: 63.560 ms (8.45 GB/s logical)
+
+[2mmode=gh_cpu_shared N=8192 iters=10 prefetch=1 frac=0.8(B[m
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 5.856 ms, effective bandwidth: 183.36 GB/s (logical)
+CPU checksum(B)=5.941358e+03, CPU read time: 40.996 ms (13.10 GB/s logical)
+
+[2mmode=gh_hmm_pageable N=8192 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 6.476 ms, effective bandwidth: 165.81 GB/s (logical)
+CPU checksum(B)=6.207514e+03, CPU read time: 41.003 ms (13.09 GB/s logical)
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=10 prefetch=1 frac=0.8(B[m
+HMM pageable supported (uses_host_page_tables=1)
+Hybrid split: CPU columns [0, 6554), GPU columns [6554, 8192)
+Hybrid Kernel avg: 0.266 ms, effective bandwidth: 4042.17 GB/s (logical)
+CPU checksum(B)=-3.108371e+03, CPU read time: 63.646 ms (8.44 GB/s logical)
+
+--------------------------------------------------------------------------------
+
+[32m[1mDone.(B[m

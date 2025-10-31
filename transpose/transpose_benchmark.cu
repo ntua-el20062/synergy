@@ -198,8 +198,9 @@ int main(int argc, char** argv) {
   Mode mode = parse_mode_str(args.mode);
 
   int dev = 0;
-  CHECK_CUDA(cudaGetDevice(&dev));
-
+  CHECK_CUDA(cudaGetDevice(&dev));  
+  
+  
   //HMM capability queried for pageable mode
   int pageable = 0, uses_host_pt = 0;
   CHECK_CUDA(cudaDeviceGetAttribute(&pageable, cudaDevAttrPageableMemoryAccess, dev));
@@ -220,45 +221,56 @@ int main(int argc, char** argv) {
 
   //allocation by mode
   switch (mode) {
-    case Mode::EXPLICIT: //allocate pinned(not pageable) memory on host , they will communicate through async copies(cudaMemcpy)
+    case Mode::EXPLICIT: { //allocate pinned(not pageable) memory on host
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
       CHECK_CUDA(cudaMalloc(&dA, bytes));
       CHECK_CUDA(cudaMalloc(&dB, bytes));
       break;
-
-    case Mode::EXPLICIT_ASYNC:
+			 }
+    case Mode::EXPLICIT_ASYNC: {
       CHECK_CUDA(cudaMallocAsync((void**)&dA, bytes, stream));
       CHECK_CUDA(cudaMallocAsync((void**)&dB, bytes, stream));
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
       break;
-
+			       }
     case Mode::UM_MIGRATE: // the same allocation style with GH_HBM_SHARED(managed memory)
-    case Mode::UM_MIGRATE_NO_PREFETCH:
-    case Mode::GH_HBM_SHARED_NO_PREFETCH:  
-    case Mode::GH_HBM_SHARED:
+    case Mode::UM_MIGRATE_NO_PREFETCH: {
       CHECK_CUDA(cudaMallocManaged(&dA, bytes));
       CHECK_CUDA(cudaMallocManaged(&dB, bytes));
       hA = dA; hB = dB; //same pointer for CPU and GPU
-      /*
-      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetPreferredLocation, dev)); //hint to UM pager:If you have a choice, keep these pages resident on GPU dev,it’s a policy hint, 
+      break;
+				       }
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:  
+    case Mode::GH_HBM_SHARED: {
+      CHECK_CUDA(cudaMallocManaged(&dA, bytes));
+      CHECK_CUDA(cudaMallocManaged(&dB, bytes));
+      hA = dA; hB = dB; //same pointer for CPU and GPU
+
+      cudaMemLocation loc_dev{}; loc_dev.type = cudaMemLocationTypeDevice; loc_dev.id = dev;
+
+      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetPreferredLocation, loc_dev)); //hint to UM pager:If you have a choice, keep these pages resident on GPU dev,it’s a policy hint, 
                                                                                     //not a hard pin. If the CPU (or another GPU) starts accessing those pages a lot, the runtime may 
                                                                                     //still migrate or replicate them. But with this hint, after GPU use, the pager will try to keep or return the pages 
                                                                                     //to GPU memory (HBM) rather than drifting back to system RAM.
-      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetPreferredLocation, dev));
-      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId)); //This can reduce first-touch penalties when the CPU later reads managed memory.
-      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetAccessedBy, cudaCpuDeviceId)); //  --//--
-      */
+      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetPreferredLocation, loc_dev));
+      cudaMemLocation loc_cpu{}; loc_cpu.type = cudaMemLocationTypeHost; loc_cpu.id = 0;
+
+      CHECK_CUDA(cudaMemAdvise(dA, bytes, cudaMemAdviseSetAccessedBy, loc_cpu)); //This can reduce first-touch penalties when the CPU later reads managed memory.
+      CHECK_CUDA(cudaMemAdvise(dB, bytes, cudaMemAdviseSetAccessedBy, loc_cpu)); //  --//--
+
       break;
-    case Mode::GH_CPU_SHARED:       //GPU will access host memory directly over PCIe/NVLink (zero-copy), this will be probably one of the slower ones due to limited bandwidth
+			      }
+    case Mode::GH_CPU_SHARED:  {     //GPU will access host memory directly over PCIe/NVLink (zero-copy), this will be probably one of the slower ones due to limited bandwidth
       CHECK_CUDA(cudaMallocHost(&hA, bytes));
       CHECK_CUDA(cudaMallocHost(&hB, bytes));
       CHECK_CUDA(cudaHostGetDevicePointer(&dA, hA, 0)); 
       CHECK_CUDA(cudaHostGetDevicePointer(&dB, hB, 0));
       break;
+			       }
     case Mode::GH_HMM_PAGEABLE_CUDA_INIT: //same alocated with malloc by the host, the initialization differs
-    case Mode::GH_HMM_PAGEABLE: //plain malloc(I think this falls into the category of system allocated memory), the GPU touches CPU pages on demand(first touch overhead maybe)
+    case Mode::GH_HMM_PAGEABLE: { //plain malloc(I think this falls into the category of system allocated memory), the GPU touches CPU pages on demand(first touch overhead maybe)
       if (!pageable) {
         fprintf(stderr, "ERROR: Device lacks cudaDevAttrPageableMemoryAccess; HMM pageable not supported.\n");
         return 1;
@@ -269,6 +281,7 @@ int main(int argc, char** argv) {
       dA = hA; dB = hB; //same raw pointer, GPU will fault pages from CPU on demand
       printf("HMM pageable supported (uses_host_page_tables=%d)\n", uses_host_pt);
       break;
+				}
   }
 
   //random init on cpu
@@ -295,8 +308,9 @@ int main(int argc, char** argv) {
   //prefetch / copies before kernel
   if (mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED) {
     if (args.prefetch) {
-      CHECK_CUDA(cudaMemPrefetchAsync(dA, bytes, dev));
-      CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, dev));
+      cudaMemLocation dst_dev{}; dst_dev.type = cudaMemLocationTypeDevice; dst_dev.id = dev;
+      CHECK_CUDA(cudaMemPrefetchAsync(dA, bytes, dst_dev, 0));
+      CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, dst_dev, 0));
       CHECK_CUDA(cudaDeviceSynchronize());
     }
   } else if (mode == Mode::EXPLICIT || mode == Mode::EXPLICIT_ASYNC) {
@@ -347,8 +361,9 @@ int main(int argc, char** argv) {
 
   //UM migrate: prefetch back to CPU to time migration
   if (mode == Mode::UM_MIGRATE) {
+    cudaMemLocation dst_cpu{}; dst_cpu.type = cudaMemLocationTypeHost; dst_cpu.id = 0;
     auto t0 = wtime();
-    CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, cudaCpuDeviceId));
+    CHECK_CUDA(cudaMemPrefetchAsync(dB, bytes, dst_cpu, 0));
     CHECK_CUDA(cudaDeviceSynchronize());
     auto t1 = wtime();
     double ms = (t1 - t0)*1e3;
@@ -371,11 +386,11 @@ int main(int argc, char** argv) {
     printf("D2H memcpy: %.3f ms (%.2f GB/s)\n", ms, bytes / 1e6 / ms);
   }
 
-  // Full correctness check: max |B - A^T|
+  //correctness check: max |B - A^T|
   double maxerr = max_abs_diff_transpose(hA, hB, N);
   printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
 
-  // ---- Cleanup ----
+
   switch (mode) {
     case Mode::EXPLICIT:
       CHECK_CUDA(cudaFree(dA));

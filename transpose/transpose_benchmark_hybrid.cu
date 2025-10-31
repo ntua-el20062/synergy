@@ -233,14 +233,30 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       CHECK_CUDA(cudaMalloc(&buf.dB, buf.nbytes));
       break;
     }
-    case Mode::UM_MIGRATE:
-    case Mode::GH_HBM_SHARED:
-    case Mode::UM_MIGRATE_NO_PREFETCH:
-    case Mode::GH_HBM_SHARED_NO_PREFETCH: {
+    case Mode::UM_MIGRATE: // the same allocation style with GH_HBM_SHARED(managed memory)
+    case Mode::UM_MIGRATE_NO_PREFETCH: {
       CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
-      buf.hA = buf.dA; buf.hB = buf.dB;
-      // (Optional) memadvise here if desired.
+      buf.hA = buf.dA; buf.hB = buf.dB; //same pointer for CPU and GPU
+      break;
+    }
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:
+    case Mode::GH_HBM_SHARED: {
+      CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
+      CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
+      buf.hA = buf.dA; buf.hB = buf.dB; //same pointer for CPU and GPU
+      cudaMemLocation loc_dev{}; loc_dev.type = cudaMemLocationTypeDevice; loc_dev.id = caps.dev;
+
+      CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev)); //hint to UM pager:If you have a choice, keep these pages resident on GPU dev,it’s a policy hint, 
+                                                                                    //not a hard pin. If the CPU (or another GPU) starts accessing those pages a lot, the runtime may 
+                                                                                    //still migrate or replicate them. But with this hint, after GPU use, the pager will try to keep or return the pages 
+                                                                                    //to GPU memory (HBM) rather than drifting back to system RAM.
+      CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev));
+      cudaMemLocation loc_cpu{}; loc_cpu.type = cudaMemLocationTypeHost; loc_cpu.id = 0;
+
+      CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu)); //This can reduce first-touch penalties when the CPU later reads managed memory.
+      CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu)); //  --//--
+      
       break;
     }
     case Mode::GH_CPU_SHARED: {
@@ -272,8 +288,10 @@ static void pre_kernel_setup(Mode mode, const Buffers<T>& buf, const DeviceCaps&
     CHECK_CUDA(cudaMemcpy(buf.dA, buf.hA, buf.nbytes, cudaMemcpyHostToDevice));
     CHECK_CUDA(cudaMemset(buf.dB, 0, buf.nbytes));
   } else if ((mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED) && prefetch) {
-    CHECK_CUDA(cudaMemPrefetchAsync(buf.dA, buf.nbytes, caps.dev));
-    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, caps.dev));
+    cudaMemLocation dst_dev{}; dst_dev.type = cudaMemLocationTypeDevice; dst_dev.id = caps.dev;
+
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dA, buf.nbytes, dst_dev, 0));
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_dev, 0));
     CHECK_CUDA(cudaDeviceSynchronize());
   }
 }
@@ -415,8 +433,9 @@ int main(int argc, char** argv) {
 
   // Managed migrate back (UM_MIGRATE only): not needed for hybrid semantics, but we can time it
   if (mode == Mode::UM_MIGRATE) {
+    cudaMemLocation dst_cpu{}; dst_cpu.type = cudaMemLocationTypeHost; dst_cpu.id = 0;
     double t0 = wtime();
-    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, cudaCpuDeviceId));
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_cpu, 0));
     CHECK_CUDA(cudaDeviceSynchronize());
     double ms = (wtime() - t0)*1e3;
     printf("UM prefetch-to-CPU: %.3f ms (%.2f GB/s logical)\n", ms, double(buf.nbytes)/1e6/ms);

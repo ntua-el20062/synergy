@@ -98,13 +98,13 @@ main() {
     echo "${YEL}[warn]${RST} ${BIN_TRANSPOSE} not found or not executable — skipping classic transpose."
   fi
 
-#  if has_bin "$BIN_HYBRID"; then
-#    hdr "HYBRID SWEEP (${BIN_HYBRID})"
-#    for N in "${SIZES[@]}"; do
-#      for it in "${ITERS[@]}"; do
-#        for frac in "${FRACS[@]}"; do
-#          sub "N=${N}  iters=${it}  frac=${frac}"
-#          hr
+  if has_bin "$BIN_HYBRID"; then
+    hdr "HYBRID SWEEP (${BIN_HYBRID})"
+    for N in "${SIZES[@]}"; do
+      for it in "${ITERS[@]}"; do
+        for frac in "${FRACS[@]}"; do
+          sub "N=${N}  iters=${it}  frac=${frac}"
+          hr
           for mode in "${MODES[@]}"; do
             for p in "${PREFETCHES[@]}"; do
      		if [[ "$mode" == "explicit" || "$mode" == "explicit_async" ]]; then
@@ -113,15 +113,15 @@ main() {
 
               run_hybrid_case "$BIN_HYBRID" "$mode" "$N" "$it" "$p" "$frac" "$SEED"
 
-#      done
-#          done
-#         hr; echo
-#       done
-#     done
-#    done
-#  else
-#    echo "${YEL}[warn]${RST} ${BIN_HYBRID} not found or not executable — skipping hybrid transpose."
-#  fi
+      done
+          done
+         hr; echo
+       done
+     done
+    done
+  else
+    echo "${YEL}[warn]${RST} ${BIN_HYBRID} not found or not executable — skipping hybrid transpose."
+  fi
 
   echo "${GRN}${BOLD}Done.${RST}"
 }
