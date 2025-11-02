@@ -1,4 +1,0 @@
-impl,block_size,t_loop_avg_ms,t_gpu_ms
-GPU KMeans (managed),64,0.077184,0.231533
-GPU KMeans (system alloc),64,0.09417,0.417253
-GPU KMeans (explicit),64,7.72841,7.710123

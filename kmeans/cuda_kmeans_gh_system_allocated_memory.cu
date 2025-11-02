@@ -208,7 +208,7 @@ do {
       deviceClusters, deviceMembership, dev_delta_ptr);
   checkCuda(cudaDeviceSynchronize());
   checkLastCudaError();
-  loop_gpu_time = wtime() - loop_gpu_time;
+  loop_gpu_time = (wtime() - loop_gpu_time)*1e3;
 
   delta = *dev_delta_ptr;
 
@@ -221,14 +221,14 @@ do {
       numCoords, numClusters, devicenewClusterSize, devicenewClusters, deviceClusters);
   checkCuda(cudaDeviceSynchronize());
   checkLastCudaError();
-  loop_gpu_time += (wtime() - t_gpu2);
+  loop_gpu_time += 1e3 * (wtime() - t_gpu2);
 
   total_timing_gpu += loop_gpu_time;
 
   delta /= numObjs;
   loop++;
 
-  timing_internal = wtime() - timing_internal;
+  timing_internal = 1e3*(wtime() - timing_internal);
   if (timing_internal < timer_min) timer_min = timing_internal;
   if (timing_internal > timer_max) timer_max = timing_internal;
 
@@ -245,7 +245,7 @@ do {
   printf("cluster[0]=%d\n", clusters[0]);
   printf("nloops = %d  : total = %lf ms\n\t-> t_loop_avg = %lf ms\n\t-> t_loop_min = %lf ms\n\t-> t_loop_max = %lf ms\n\t"
          "-> t_gpu = %lf ms\n",
-         loop, wtime() - timing, ((wtime() - timing) / loop), timer_min, timer_max, total_timing_gpu);
+         loop, 10e3*(wtime() - timing), 1e3*((wtime() - timing) / loop), timer_min, timer_max, total_timing_gpu);
 
   cudaFree(deviceObjects);
   cudaFree(deviceClusters);

@@ -1,8 +1,0 @@
-block_size,CPU ms,GPU KMeans (explicit) speedup×,GPU KMeans (managed) speedup×,GPU KMeans (system alloc) speedup×,32 speedup×,48 speedup×,64 speedup×,128 speedup×,238 speedup×,512 speedup×,1024 speedup×
-32,3391.3835050000002,,,,,,,,,,
-48,3391.941404333333,,,,,,,,,,
-64,3390.988294,,,,,,,,,,
-128,3391.0297313333335,,,,,,,,,,
-238,3391.0425663333335,,,,,,,,,,
-512,3390.6834366666662,,,,,,,,,,
-1024,3390.485962,,,,,,,,,,

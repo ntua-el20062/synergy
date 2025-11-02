@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# plot.py — parse & plot KMeans benchmark results
 
 import argparse
 import re

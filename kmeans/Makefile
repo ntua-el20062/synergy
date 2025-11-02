@@ -4,14 +4,14 @@ OBJECT_DIR = ObjectDir
 HELPER_DIR = helper_functions
 
 CPP          = g++
-NVCC        = /usr/local/cuda-12.5/bin/nvcc
+NVCC        = /usr/local/cuda-13/bin/nvcc
 
 # TODO: Enable VALIDATE when implementing new versions to check results in respect to serial execution.  
 VALIDATE_FLAG=-DVALIDATE
 #VALIDATE_FLAG=#IMPORTANT: Disable in long benchmarks if correctness is established.
 
 CFLAGS  = -O3 -I$(HELPER_DIR) $(VALIDATE_FLAG)
-NVCCFLAGS   =$(CFLAGS) --ptxas-options=-v -arch=sm_60\
+NVCCFLAGS   =$(CFLAGS) --ptxas-options=-v -arch=sm_90\
 #-gencode=arch=compute_35,code=sm_35\
 #-gencode=arch=compute_52,code=sm_52\
 -gencode=arch=compute_70,code=sm_70\
