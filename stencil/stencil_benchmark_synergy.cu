@@ -678,6 +678,9 @@ int main(int argc, char** argv) {
 	  return (ms > 0.0) ? (bytes_ / 1e6) / ms : 0.0; 
   };
 
+  double t0_full = wtime();
+  double full_ms_no_checksum = 0.0;
+
   //warmup iterations
   int warmup_iters = 2;
 
@@ -703,8 +706,7 @@ int main(int argc, char** argv) {
   }
   printf("Warm-up done.\n\n");
 
-  double t0_full = wtime();
-  double full_ms_no_checksum = 0.0; //starting the full end to end timing measuring
+  full_ms_no_checksum = (wtime() - t0_full) * 1e3;
 
   //per-iteration accumulators
   double sum_end2end_ms = 0.0, sum_gpu_ms = 0.0, sum_cpu_ms = 0.0;
@@ -740,24 +742,24 @@ int main(int argc, char** argv) {
     sum_cpu_ms     += iter_cpu_ms;
   }
 
+
   //managed migrate back (only UM_MIGRATE)
   totals.um_to_host_ms = post_kernel_maybe_prefetch_back<double>(mode, buf);
 
   //explicit copy back if needed (final full buffer)
   totals.d2h_ms += post_kernel_copy_back_if_needed<double>(mode, buf);
 
-  //stop full end to end run
-  full_ms_no_checksum = (wtime() - t0_full) * 1e3;
-
   // final summary 
-  const double avg_end2end_ms = sum_end2end_ms / args.iters;
+  const double avg_end2end_ms = (sum_end2end_ms / args.iters);
   const double avg_gpu_ms     = sum_gpu_ms     / args.iters; //avg computation per iteration
   const double avg_cpu_ms     = sum_cpu_ms     / args.iters;
 
+  full_ms_no_checksum += (avg_end2end_ms + totals.um_to_host_ms + totals.d2h_ms);
+
   printf("\n==== Total time over %d iteration(s) (steps/iter=%d) ====\n", args.iters, args.steps);
-  //printf("End-to-end (compute loop only): %.3f ms\n", avg_end2end_ms);
-  printf("GPU compute: %.3f ms (pure GPU compute, not cuda device synchronize stream overhead measured)\n", sum_gpu_ms);
-  printf("CPU compute: %.3f ms\n", sum_cpu_ms);
+  printf("End-to-end (compute loop only): %.3f ms\n", avg_end2end_ms);
+  printf("GPU compute: %.3f ms (pure GPU compute, not cuda device synchronize stream overhead measured)\n", avg_gpu_ms);
+  printf("CPU compute: %.3f ms\n", avg_cpu_ms);
 
   if (totals.h2d_ms > 0.0)      printf("H2D memcpy (total): %.3f ms\n", totals.h2d_ms);
   if (totals.d2h_ms > 0.0)      printf("D2H memcpy (total): %.3f ms\n", totals.d2h_ms);
