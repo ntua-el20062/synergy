@@ -49,8 +49,12 @@ parse_metrics() {
   local text; text="$(cat)"
 
   local h2d_ms="" um2dev_ms="" d2h_ms="" um2host_ms=""
-  local end2end_ms="" full_end2end_ms="" gpu_ms="" cpu_ms=""
+  local warmup="" end2end_ms="" full_end2end_ms="" gpu_ms="" cpu_ms=""
   local gpu_gbps="" cpu_gbps="" read_ms=""
+
+  if [[ "$text" =~ WARMUP:\ ([0-9.+-eE]+)\ ms ]]; then
+    warmup="${BASH_REMATCH[1]}"
+  fi
 
   if [[ "$text" =~ H2D\ memcpy\ \+\ D\ memset:\ ([0-9.+-eE]+)\ ms ]]; then
     h2d_ms="${BASH_REMATCH[1]}"
@@ -95,18 +99,18 @@ parse_metrics() {
     read_ms="${BASH_REMATCH[1]}"
   fi
 
-  printf "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" \
+  printf "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" \
     "$h2d_ms" "$um2dev_ms" "$d2h_ms" "$um2host_ms" \
-    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$end2end_ms" "$full_end2end_ms"
+    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$warmup" "$end2end_ms" "$full_end2end_ms"
 }
 
 print_header_stencil() {
   printf "%s\n" "STENCIL RESULTS"
   hr
-  printf "%-22s %-8s %-5s %-7s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-13s %-13s \n" \
+  printf "%-22s %-8s %-5s %-7s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-13s %-13s %-13s \n" \
     "Mode" "N" "Step" "Iters" \
     "H2D(ms)" "UM->Dev(ms)" "D2H(ms)" "UM->Host(ms)" \
-    "GPU(ms)" "GPU(GB/s)" "CPU(ms)" "CPU(GB/s)" "End2End(ms)" "FullE2E(ms)" 
+    "GPU(ms)" "GPU(GB/s)" "CPU(ms)" "CPU(GB/s)" "Warmup" "End2End(ms)" "FullE2E(ms)" 
   hr
 }
 
@@ -128,26 +132,26 @@ print_row_stencil() {
 print_header_synergy_manual() {
   printf "%s\n" "STENCIL SYNERGY (Manual split) RESULTS"
   hr
-  printf "%-22s %-8s %-5s %-7s %-6s %-8s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-13s %-13s %-13s\n" \
+  printf "%-22s %-8s %-5s %-7s %-6s %-8s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-13s %-13s %-13s %-13s\n" \
     "Mode" "N" "Step" "Iters" "K%" "Threads" \
     "H2D(ms)" "UM->Dev(ms)" "D2H(ms)" "UM->Host(ms)" \
-    "GPU(ms)" "GPU(GB/s)" "CPU(ms)" "CPU(GB/s)" "End2End(ms)" "FullE2E(ms)" 
+    "GPU(ms)" "GPU(GB/s)" "CPU(ms)" "CPU(GB/s)" "Warmup(ms)" "End2End(ms)" "FullE2E(ms)" 
   hr
 }
 
 print_row_synergy_manual() {
   local mode="$1" N="$2" steps="$3" iters="$4" kpct="$5" thr="$6"
   local h2d_ms="$7" um2dev_ms="$8" d2h_ms="$9" um2host_ms="${10}"
-  local gpu_ms="${11}" gpu_gbps="${12}" cpu_ms="${13}" cpu_gbps="${14}" end2end_ms="${15}" full_end2end_ms="${16}"
+  local gpu_ms="${11}" gpu_gbps="${12}" cpu_ms="${13}" cpu_gbps="${14}" warmup="${15}" end2end_ms="${16}" full_end2end_ms="${17}"
 
-  for v in h2d_ms um2dev_ms d2h_ms um2host_ms gpu_ms gpu_gbps cpu_ms cpu_gbps end2end_ms full_end2end_ms; do
+  for v in h2d_ms um2dev_ms d2h_ms um2host_ms gpu_ms gpu_gbps cpu_ms cpu_gbps warmup end2end_ms full_end2end_ms; do
     [[ -z "${!v:-}" ]] && printf -v "$v" -- "--"
   done
 
-  printf "%-22s %-8s %-5s %-7s %-6s %-8s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-12s %-13s %-13s\n" \
+  printf "%-22s %-8s %-5s %-7s %-6s %-8s %-10s %-12s %-10s %-12s %-10s %-10s %-10s %-12s %-13s %-13s %-13s\n" \
     "$mode" "$N" "$steps" "$iters" "$kpct" "$thr" \
     "$h2d_ms" "$um2dev_ms" "$d2h_ms" "$um2host_ms" \
-    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$end2end_ms" "$full_end2end_ms" 
+    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$warmup" "$end2end_ms" "$full_end2end_ms" 
 }
 
 
@@ -162,12 +166,12 @@ run_one_synergy_manual() {
 
   IFS='|' read -r \
     h2d_ms um2dev_ms d2h_ms um2host_ms \
-    gpu_ms gpu_gbps cpu_ms cpu_gbps end2end_ms full_end2end_ms \
+    gpu_ms gpu_gbps cpu_ms cpu_gbps warmup end2end_ms full_end2end_ms \
     <<<"$tmp"
 
   print_row_synergy_manual "$mode" "$N" "$steps" "$iters" "$kpct" "$thr" \
     "$h2d_ms" "$um2dev_ms" "$d2h_ms" "$um2host_ms" \
-    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$end2end_ms" "$full_end2end_ms"
+    "$gpu_ms" "$gpu_gbps" "$cpu_ms" "$cpu_gbps" "$warmup" "$end2end_ms" "$full_end2end_ms"
 }
 
 

@@ -400,56 +400,6 @@ static void cpu_stencil_rows_omp(const double* in, double* out, int N, int yStar
   }
 }
 
-/*
-static void run_one_step_hybrid_umlike_timed(
-    Mode mode, double* &hIn, double* &hOut,
-    double* &dIn, double* &dOut,
-    int N, int K, int threads,
-    dim3 grid, dim3 block, cudaStream_t stream,
-    double& gpu_ms_acc, double& cpu_ms_acc, double& h2d_ms_acc=0.0, double& d2h_ms_acc=0.0) {
-  cudaEvent_t evStart, evStop;
-  CHECK_CUDA(cudaEventCreate(&evStart));
-  CHECK_CUDA(cudaEventCreate(&evStop));
-
-  if (K == 0) { //CPU percentage is 0, work done only by the GPU, so do appripriate kernel(with borders)
-    CHECK_CUDA(cudaEventRecord(evStart, stream));
-    stencil5_2d<<<grid, block, 0, stream>>>(dIn, dOut, N);
-    CHECK_CUDA(cudaEventRecord(evStop, stream));
-  } else { //synergy: CPU will touch rows 1..K-1 and borders, GPU does rows K..N-2
-    copy_borders(hIn, hOut, N);  //borders computed by the CPU
-    const int yStart = std::max(K, 1);
-    const int yEnd   = std::max(0, N-2);
-    CHECK_CUDA(cudaEventRecord(evStart, stream));
-    if (yStart <= yEnd) {
-      stencil5_2d_yspan<<<grid, block, 0, stream>>>(dIn, dOut, N, yStart, yEnd);
-    }
-    CHECK_CUDA(cudaEventRecord(evStop, stream));
-
-    const int cpuStart = 1;
-    const int cpuEnd   = std::max(K-1, 0);
-    if (cpuEnd >= cpuStart) {
-      double t0 = wtime();
-      cpu_stencil_rows_omp(hIn, hOut, N, cpuStart, cpuEnd, threads);
-      cpu_ms_acc += (wtime() - t0) * 1e3;
-    }
-
-    if (mode == Mode::EXPLICIT) {
-    	    explicit_exchange_regions_after_step(N, K, hOut, dOut, dOut, hOut, stream, h2d_ms_acc, d2h_ms_acc);
-    }
-  }
-  //finish kernel
-  CHECK_CUDA(cudaEventSynchronize(evStop));
-  float step_gpu_ms = 0.0f;
-  CHECK_CUDA(cudaEventElapsedTime(&step_gpu_ms, evStart, evStop));
-  gpu_ms_acc += double(step_gpu_ms);
-
-  CHECK_CUDA(cudaEventDestroy(evStart));
-  CHECK_CUDA(cudaEventDestroy(evStop));
-  //swap
-  double* tmpIn = hIn;  hIn  = hOut;  hOut = tmpIn;
-  tmpIn = dIn; dIn = dOut; dOut = tmpIn;
-}
-*/
 
 
 //in explicit, to have consistent view of the data, we exchange regions(cudaMemcpyH2D & D2H), so the computations are correct for the next step and each of the CPU and the GPU has the whole interior
@@ -706,8 +656,10 @@ int main(int argc, char** argv) {
   }
   printf("Warm-up done.\n\n");
 
-  full_ms_no_checksum = (wtime() - t0_full) * 1e3;
 
+  full_ms_no_checksum = (wtime() - t0_full) * 1e3;
+  printf("WARMUP: %.3f ms\n", full_ms_no_checksum);
+  
   //per-iteration accumulators
   double sum_end2end_ms = 0.0, sum_gpu_ms = 0.0, sum_cpu_ms = 0.0;
 
