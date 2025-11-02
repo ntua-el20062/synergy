@@ -1,0 +1,524 @@
+//transpose_hybrid_benchmark.cu
+//hybrid CPU+GPU tiled transpose with 7 memory modes (explicit, UM variants, GH_*).
+//CPU handles columns [0:k), GPU handles columns [k:N). Both run concurrently.
+
+#include <cuda_runtime.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <random>
+#include <algorithm>
+#include <thread>
+#include <atomic>
+#include <unistd.h>     
+#include <sys/time.h>   
+#include <omp.h>
+
+#ifndef CHECK_CUDA
+#define CHECK_CUDA(call) do { \
+  cudaError_t err__ = (call); \
+  if (err__ != cudaSuccess) { \
+    fprintf(stderr, "CUDA error %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(err__)); \
+    std::exit(EXIT_FAILURE); \
+  } \
+} while (0)
+#endif
+
+static inline double wtime(void)
+{
+  struct timeval  tv; struct timezone tz{};
+  if (gettimeofday(&tv, &tz) == -1) perror("gettimeofday failed");
+  return (double)tv.tv_sec + (double)tv.tv_usec * 1e-6;
+}
+
+//validation 
+static double max_abs_diff_transpose(const double* A, const double* B, int N) {
+  double m = 0.0;
+  for (int i = 0; i < N; ++i) {
+    size_t baseB = (size_t)i * N;
+    for (int j = 0; j < N; ++j) {
+      double diff = std::fabs(B[baseB + j] - A[(size_t)j * N + i]);
+      if (diff > m) m = diff;
+    }
+  }
+  return m;
+}
+
+
+__device__ inline uint64_t splitmix64(uint64_t x) {
+  x += 0x9e3779b97f4a7c15ULL;
+  x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+  x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+  return x ^ (x >> 31);
+}
+__device__ inline double u01_from_u64(uint64_t x) {
+  const double inv2_53 = 1.0 / 9007199254740992.0; // 2^53
+  return double(x >> 11) * inv2_53;
+}
+__global__ void init_random_double(double* a, size_t n, uint64_t seed) {
+  size_t i = blockIdx.x * size_t(blockDim.x) + threadIdx.x;
+  if (i < n) {
+    uint64_t r = splitmix64(seed + i);
+    double u = u01_from_u64(r);
+    a[i] = 2.0 * u - 1.0; // [-1,1)
+  }
+}
+__global__ void set_zero_double(double* a, size_t n) {
+  size_t i = blockIdx.x * size_t(blockDim.x) + threadIdx.x;
+  if (i < n) a[i] = 0.0;
+}
+
+
+template <typename T, int TILE=32, int BLOCK_ROWS=8>
+__global__ void transpose_tiled_rect(const T* __restrict__ A, T* __restrict__ B,
+                                     int N, int x0, int y0, int W, int H)
+{
+  __shared__ T tile[TILE][TILE+1];
+
+  int block_x = blockIdx.x * TILE;
+  int block_y = blockIdx.y * TILE;
+  int tx = threadIdx.x, ty = threadIdx.y;
+
+  int validW = max(0, min(TILE, W - block_x));
+  int validH = max(0, min(TILE, H - block_y));
+
+  int ax0 = x0 + block_x + tx;
+  int ay0 = y0 + block_y + ty;
+
+  #pragma unroll
+  for (int i = 0; i < TILE; i += BLOCK_ROWS) {
+    if (tx < validW && ty + i < validH)
+      tile[ty + i][tx] = A[(size_t)(ay0 + i) * N + ax0];
+  }
+  __syncthreads();
+
+  int bx  = y0 + block_y + tx;     // column in B
+  int by0 = x0 + block_x + ty;     // base row in B
+
+  #pragma unroll
+  for (int i = 0; i < TILE; i += BLOCK_ROWS) {
+    if (tx < validH && ty + i < validW)
+      B[(size_t)(by0 + i) * N + bx] = tile[tx][ty + i];
+  }
+}
+
+static void transpose_cpu_blocked(const double* __restrict__ A,
+                                  double* __restrict__ B,
+                                  int N, int c0, int c1, int BS=32)
+{
+  for (int jj = c0; jj < c1; jj += BS) {
+    int Jmax = std::min(jj + BS, c1);
+    for (int ii = 0; ii < N; ii += BS) {
+      int Imax = std::min(ii + BS, N);
+      for (int j = jj; j < Jmax; ++j) {
+        const size_t jN = (size_t)j * N;
+        for (int i = ii; i < Imax; ++i) {
+          B[jN + i] = A[(size_t)i * N + j];
+        }
+      }
+    }
+  }
+}
+
+
+enum class Mode {
+  EXPLICIT,
+  UM_MIGRATE,
+  GH_HBM_SHARED,
+  GH_CPU_SHARED,
+  GH_HMM_PAGEABLE,
+  GH_HMM_PAGEABLE_CUDA_INIT,
+  UM_MIGRATE_NO_PREFETCH,
+  GH_HBM_SHARED_NO_PREFETCH
+};
+
+static Mode parse_mode_str(const std::string& s) {
+  if (s == "explicit")                  return Mode::EXPLICIT;
+  if (s == "um_migrate")                return Mode::UM_MIGRATE;
+  if (s == "gh_hbm_shared")             return Mode::GH_HBM_SHARED;
+  if (s == "gh_cpu_shared")             return Mode::GH_CPU_SHARED;
+  if (s == "gh_hmm_pageable")           return Mode::GH_HMM_PAGEABLE;
+  if (s == "gh_hmm_pageable_cuda_init")  return Mode::GH_HMM_PAGEABLE_CUDA_INIT;
+  if (s == "um_migrate_no_prefetch")    return Mode::UM_MIGRATE_NO_PREFETCH;
+  if (s == "gh_hbm_shared_no_prefetch") return Mode::GH_HBM_SHARED_NO_PREFETCH;
+  fprintf(stderr, "Unknown --mode=%s\n", s.c_str()); std::exit(EXIT_FAILURE);
+}
+
+struct Args {
+  int N = 8192;
+  int iters = 10;         
+  std::string mode = "explicit";
+  int prefetch = 1;       
+  uint64_t seed = 12345;
+  double frac = 0.5; //this is how much the CPU takes, the GPU taked 1-frac
+  int threads = 72;
+};
+
+static void usage(const char* prog) {
+  fprintf(stderr,
+    "Usage: %s [options]\n"
+    "  -n INT     matrix order N (default 8192)\n"
+    "  -i INT     iterations (default 10)\n"
+    "  -m STR     mode: explicit | um_migrate | gh_hbm_shared | gh_cpu_shared | gh_hmm_pageable |\n"
+    "             um_migrate_no_prefetch | gh_hbm_shared_no_prefetch (default explicit)\n"
+    "  -p 0|1     prefetch for UM/GH_HBM_SHARED (default 1)\n"
+    "  -f FLOAT   GPU fraction in [0,1] (default 0.5) — GPU handles columns [f*N, N)\n"
+    "  -r UINT64  RNG seed (default 12345)\n"
+    "  -h         help\n", prog);
+}
+
+static Args parse(int argc, char** argv) {
+  Args a; int opt;
+  while ((opt = getopt(argc, argv, "n:i:m:p:f:r:h")) != -1) {
+    switch (opt) {
+      case 'n': a.N = std::atoi(optarg); break;
+      case 'i': a.iters = std::atoi(optarg); break;
+      case 'm': a.mode = optarg; break;
+      case 'p': a.prefetch = std::atoi(optarg); break;
+      case 'f': a.frac = std::atof(optarg); break;
+      case 'r': a.seed = (uint64_t)std::strtoull(optarg, nullptr, 10); break;
+      case 'h': usage(argv[0]); std::exit(EXIT_SUCCESS);
+      default:  usage(argv[0]); std::exit(EXIT_FAILURE);
+    }
+  }
+  return a;
+}
+
+struct DeviceCaps { int pageable=0, uses_host_pt=0, dev=0; };
+static DeviceCaps query_caps() {
+  DeviceCaps c{}; CHECK_CUDA(cudaGetDevice(&c.dev));
+  CHECK_CUDA(cudaDeviceGetAttribute(&c.pageable, cudaDevAttrPageableMemoryAccess, c.dev));
+  CHECK_CUDA(cudaDeviceGetAttribute(&c.uses_host_pt, cudaDevAttrPageableMemoryAccessUsesHostPageTables, c.dev));
+  return c;
+}
+
+template <typename T> struct Buffers {
+  T *hA=nullptr, *hB=nullptr; // host
+  T *dA=nullptr, *dB=nullptr; // device
+  size_t nbytes=0;
+};
+
+template <typename T>
+static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const DeviceCaps& caps) {
+  buf.nbytes = nElems * sizeof(T);
+  switch (mode) {
+    case Mode::EXPLICIT: {
+      CHECK_CUDA(cudaMallocHost(&buf.hA, buf.nbytes));
+      CHECK_CUDA(cudaMallocHost(&buf.hB, buf.nbytes));
+      CHECK_CUDA(cudaMalloc(&buf.dA, buf.nbytes));
+      CHECK_CUDA(cudaMalloc(&buf.dB, buf.nbytes));
+      break;
+    }
+    case Mode::UM_MIGRATE:
+    case Mode::UM_MIGRATE_NO_PREFETCH: {
+      CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
+      CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
+      buf.hA = buf.dA; buf.hB = buf.dB; break;
+    }
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:
+    case Mode::GH_HBM_SHARED: {
+      CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
+      CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
+      buf.hA = buf.dA; buf.hB = buf.dB;
+      cudaMemLocation loc_dev{}; loc_dev.type = cudaMemLocationTypeDevice; loc_dev.id = caps.dev;
+      CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev));
+      CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev));
+      cudaMemLocation loc_cpu{}; loc_cpu.type = cudaMemLocationTypeHost; loc_cpu.id = 0;
+      CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
+      CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
+      break;
+    }
+    case Mode::GH_CPU_SHARED: {
+      CHECK_CUDA(cudaMallocHost(&buf.hA, buf.nbytes));
+      CHECK_CUDA(cudaMallocHost(&buf.hB, buf.nbytes));
+      CHECK_CUDA(cudaHostGetDevicePointer(&buf.dA, buf.hA, 0));
+      CHECK_CUDA(cudaHostGetDevicePointer(&buf.dB, buf.hB, 0));
+      break;
+    }
+    case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
+    case Mode::GH_HMM_PAGEABLE: {
+      buf.hA = (T*)std::malloc(buf.nbytes);
+      buf.hB = (T*)std::malloc(buf.nbytes);
+      if (!buf.hA || !buf.hB) { perror("malloc"); std::exit(EXIT_FAILURE); }
+      buf.dA = buf.hA; buf.dB = buf.hB; 
+      break;
+    }
+  }
+}
+
+template <typename T>
+static void pre_kernel_setup(Mode mode, const Buffers<T>& buf, const DeviceCaps& caps, int prefetch,
+                             double& ms_h2d_once, double& ms_prefetch_to_dev)
+{
+  ms_h2d_once = 0.0; ms_prefetch_to_dev = 0.0;
+  if (mode == Mode::EXPLICIT) {
+    double t0 = wtime();
+    CHECK_CUDA(cudaMemcpy(buf.dA, buf.hA, buf.nbytes, cudaMemcpyHostToDevice));     
+    CHECK_CUDA(cudaMemset(buf.dB, 0, buf.nbytes));
+    ms_h2d_once = (wtime() - t0) * 1e3;
+  } else if ((mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED) && prefetch) {
+    cudaMemLocation dst_dev{}; dst_dev.type = cudaMemLocationTypeDevice; dst_dev.id = caps.dev;
+    double t0 = wtime();
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dA, buf.nbytes, dst_dev, 0));
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_dev, 0));
+    CHECK_CUDA(cudaDeviceSynchronize());
+    ms_prefetch_to_dev = (wtime() - t0) * 1e3;
+  }
+}
+
+template <typename T>
+static double checksum_host(const T* p, size_t n) {
+  double s=0.0; for (size_t i=0;i<n;++i) s += (double)p[i]; return s;
+}
+
+int main(int argc, char** argv) {
+  Args args = parse(argc, argv);
+  Mode mode = parse_mode_str(args.mode);
+  DeviceCaps caps = query_caps();
+
+  const int N = args.N; const size_t elems = (size_t)N * N;
+  Buffers<double> buf; allocate_buffers<double>(mode, elems, buf, caps);
+
+  if (mode != Mode::GH_HMM_PAGEABLE_CUDA_INIT) {
+    std::mt19937_64 rng(args.seed); std::uniform_real_distribution<double> dist(-1.0, 1.0);
+    for (size_t i = 0; i < elems; ++i) buf.hA[i] = dist(rng);
+    std::fill(buf.hB, buf.hB + elems, 0.0);
+  } else {
+    const int threads = 256; const int blocks = int((elems + threads - 1) / threads);
+    init_random_double<<<blocks, threads>>>(buf.dA, elems, args.seed);
+    set_zero_double<<<blocks, threads>>>(buf.dB, elems);
+    CHECK_CUDA(cudaGetLastError()); CHECK_CUDA(cudaDeviceSynchronize());
+  }
+
+  
+  double ms_h2d_once = 0.0, ms_prefetch_to_dev = 0.0;
+
+  double pre_kernel_ms = 0.0;
+  const double t00 = wtime();
+  pre_kernel_setup<double>(mode, buf, caps, args.prefetch, ms_h2d_once, ms_prefetch_to_dev);
+  pre_kernel_ms = (wtime() - t00) * 1e3;
+
+
+  int k = args.frac * N; //0-k*N: taken by CPU, the rest taken by GPU
+  printf("Hybrid split: CPU columns [0, %d), GPU columns [%d, %d)\n", k, k, N);
+  const int Wcpu = k, Wgpu = N - k, H = N;
+  constexpr int TILEC = 32; constexpr int BRC = 8;
+
+  //START END TO END MEASUREMENT OF TIME
+  const double t_compute_all_start = wtime();
+
+  // WARMUP: run 2 iterations, second to return to original state
+  {
+    const int warmup_iters = 2;
+    std::vector<double> w_ms_gpu(warmup_iters, 0.0), w_ms_cpu(warmup_iters, 0.0),
+                        w_ms_overlap(warmup_iters, 0.0), w_ms_d2h(warmup_iters, 0.0);
+
+    for (int it = 0; it < warmup_iters; ++it) {
+      const double t_iter_start = wtime();
+      double cpu_ms_local = 0.0;
+      //CPU warmup
+      std::thread cpu_thr([&]{
+        if (Wcpu > 0) {
+          const double t0 = wtime();
+          const int T = std::max(1, args.threads);
+          const int chunks = std::min(T, std::max(1, Wcpu));
+          const int base   = Wcpu / chunks;
+          const int rem    = Wcpu % chunks;
+          #pragma omp parallel for schedule(static) num_threads(T)
+          for (int t = 0; t < chunks; ++t) {
+            const int c0 = (t < rem) ? (t * (base + 1)) : (rem * (base + 1) + (t - rem) * base);
+            const int c1 = c0 + ((t < rem) ? (base + 1) : base);
+            transpose_cpu_blocked(buf.hA, buf.hB, N, /*c0=*/c0, /*c1=*/c1, /*BS=*/32);
+          }
+          cpu_ms_local = (wtime() - t0) * 1e-3 * 1e3; // keep units explicit
+        }
+      });
+      //GPU warmup
+      float ms_gpu_this = 0.0f;
+      if (Wgpu > 0) {
+        cudaEvent_t evS, evE; CHECK_CUDA(cudaEventCreate(&evS)); CHECK_CUDA(cudaEventCreate(&evE));
+        dim3 block(TILEC, BRC); dim3 grid((Wgpu + TILEC - 1)/TILEC, (H + TILEC - 1)/TILEC);
+        CHECK_CUDA(cudaEventRecord(evS));
+        transpose_tiled_rect<double, TILEC, BRC><<<grid, block>>>(buf.dA, buf.dB, N, k, 0, Wgpu, H);
+        CHECK_CUDA(cudaEventRecord(evE)); CHECK_CUDA(cudaEventSynchronize(evE));
+        CHECK_CUDA(cudaEventElapsedTime(&ms_gpu_this, evS, evE));
+        CHECK_CUDA(cudaEventDestroy(evS)); CHECK_CUDA(cudaEventDestroy(evE));
+      }
+      //join CPU and ensure GPU done
+      cpu_thr.join(); CHECK_CUDA(cudaDeviceSynchronize());
+      //EXPLICIT mode, memcpy back to host (same as main loop)
+      if (mode == Mode::EXPLICIT) {
+        double t0 = wtime();
+        CHECK_CUDA(cudaMemcpy(buf.hB, buf.dB, buf.nbytes, cudaMemcpyDeviceToHost));
+        w_ms_d2h[it] = (wtime() - t0) * 1e3;
+      }
+      //record warmup per-iter
+      w_ms_cpu[it]     = cpu_ms_local;
+      w_ms_gpu[it]     = (double)ms_gpu_this;
+      w_ms_overlap[it] = (wtime() - t_iter_start) * 1e3;
+    }
+
+    auto avg = [](const std::vector<double>& v){ double s=0; for(double x:v) s+=x; return v.empty()?0.0:s/v.size(); };
+    const double w_gpu_avg  = avg(w_ms_gpu);
+    const double w_cpu_avg  = avg(w_ms_cpu);
+    const double w_olap_avg = avg(w_ms_overlap);
+    const double w_d2h_avg  = avg(w_ms_d2h);
+
+    if (Wgpu>0) printf("WARMUP GPU Kernel (first iter): %.3f ms\n", w_ms_gpu[0]);
+    if (Wcpu>0) printf("WARMUP CPU compute avg (first iter): %.3f ms\n", w_ms_cpu[0]);
+    else        printf("WARMUP CPU compute (first iter): N/A (no CPU work)\n");
+    printf("WARMUP Compute E2E (avg per-iter, 2 iters): %.3f ms\n", w_ms_d2h[0]);
+  }
+  //end warmup
+  
+  
+  //timed iteration
+  std::vector<double> ms_gpu(args.iters, 0.0), ms_cpu(args.iters, 0.0), ms_overlap(args.iters, 0.0), ms_d2h(args.iters, 0.0);
+  
+  //CPU
+  for (int it = 0; it < args.iters; ++it) {
+   const double t_iter_start = wtime();
+   double cpu_ms_local = 0.0;
+   std::thread cpu_thr([&]{
+   if (Wcpu > 0) {
+    const double t0 = wtime();
+    const int T = std::max(1, args.threads);
+    //we partition the CPU columns [0, Wcpu) into 'chunks' ~ T parts
+    const int chunks = std::min(T, std::max(1, Wcpu));
+    const int base   = Wcpu / chunks;
+    const int rem    = Wcpu % chunks;
+    #pragma omp parallel for schedule(static) num_threads(T)
+    for (int t = 0; t < chunks; ++t) {
+      //balanced partition [0, Wcpu): each out of the T worker gets a Wcpu/T sized chunk
+      const int c0 = (t < rem) ? (t * (base + 1)) : (rem * (base + 1) + (t - rem) * base);
+      const int c1 = c0 + ((t < rem) ? (base + 1) : base);
+      transpose_cpu_blocked(buf.hA, buf.hB, N, /*c0=*/c0, /*c1=*/c1, /*BS=*/32);
+    }
+    cpu_ms_local = (wtime() - t0) * 1e3;
+   }
+  });
+
+    //GPU
+    float ms_gpu_this = 0.0f;
+    if (Wgpu > 0) {
+      cudaEvent_t evS, evE; CHECK_CUDA(cudaEventCreate(&evS)); CHECK_CUDA(cudaEventCreate(&evE));
+      dim3 block(TILEC, BRC); dim3 grid((Wgpu + TILEC - 1)/TILEC, (H + TILEC - 1)/TILEC);
+      CHECK_CUDA(cudaEventRecord(evS));
+      transpose_tiled_rect<double, TILEC, BRC><<<grid, block>>>(buf.dA, buf.dB, N, k, 0, Wgpu, H);
+      CHECK_CUDA(cudaEventRecord(evE)); CHECK_CUDA(cudaEventSynchronize(evE));
+      CHECK_CUDA(cudaEventElapsedTime(&ms_gpu_this, evS, evE));
+      CHECK_CUDA(cudaEventDestroy(evS)); CHECK_CUDA(cudaEventDestroy(evE));
+    }
+
+    //join CPU and ensure GPU done 
+    cpu_thr.join(); CHECK_CUDA(cudaDeviceSynchronize());
+
+    //EXPLICIT mode, memcpy back to host
+    if (mode == Mode::EXPLICIT) {
+      double t0 = wtime();
+      CHECK_CUDA(cudaMemcpy(buf.hB, buf.dB, buf.nbytes, cudaMemcpyDeviceToHost));
+      ms_d2h[it] = (wtime() - t0) * 1e3;
+    }
+
+    //record per-iter
+    ms_cpu[it]    = cpu_ms_local;          
+    ms_gpu[it]    = (double)ms_gpu_this;   
+    ms_overlap[it]= (wtime() - t_iter_start) * 1e3; //compute end to end for this iteration
+  }
+  
+  auto avg = [](const std::vector<double>& v){ double s=0; for(double x:v) s+=x; return v.empty()?0.0:s/v.size(); };
+  const double ms_gpu_avg  = avg(ms_gpu);
+  const double ms_cpu_avg  = avg(ms_cpu);
+  const double ms_olap_avg = avg(ms_overlap);
+  const double ms_d2h_avg  = avg(ms_d2h);
+
+  //UM migrate back for CPU read timing
+  double ms_um_to_cpu = 0.0;
+  if (mode == Mode::UM_MIGRATE) {
+    cudaMemLocation dst_cpu{}; dst_cpu.type = cudaMemLocationTypeHost; dst_cpu.id = 0;
+    double t0 = wtime();
+    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_cpu, 0));
+    CHECK_CUDA(cudaDeviceSynchronize());
+    ms_um_to_cpu = (wtime() - t0) * 1e3;
+  }
+
+  //host checksum read (captures migration costs for no-prefetch/HMM)
+  double t_chk0 = wtime();
+  double sumB = checksum_host(buf.hB, elems);
+  double ms_host_read = (wtime() - t_chk0) * 1e3;
+
+  
+  //END OF FULL END TO END RUN
+  const double ms_compute_all = (wtime() - t_compute_all_start) * 1e3; //includes loop overhead
+
+
+  //E2E: from before first compute iter to after verify(not prefetch and H2D copies overhead)
+  double t_verify0 = wtime();
+  double maxerr = max_abs_diff_transpose(buf.hA, buf.hB, N);
+  double ms_verify = (wtime() - t_verify0) * 1e3;
+
+
+  //2: one read and one write
+  const double bytes_gpu = 2.0 * (double)Wgpu * (double)H * sizeof(double);
+  const double bytes_cpu = 2.0 * (double)Wcpu * (double)H * sizeof(double);
+  const double bytes_all = 2.0 * (double)N    * (double)N * sizeof(double);
+
+  const double bw_gpu   = (bytes_gpu>0 && ms_gpu_avg>0) ? bytes_gpu/(ms_gpu_avg/1e3)/1e9 : 0.0;
+  const double bw_cpu   = (bytes_cpu>0 && ms_cpu_avg>0) ? bytes_cpu/(ms_cpu_avg/1e3)/1e9 : 0.0;
+  const double bw_olap  = (bytes_all>0 && ms_olap_avg>0) ? bytes_all/(ms_olap_avg/1e3)/1e9 : 0.0;  
+  const double ms_full_e2e = pre_kernel_ms + ms_compute_all; 
+  const double bw_full_e2e = (bytes_all>0 && ms_full_e2e>0) ? bytes_all/(ms_full_e2e/1e3)/1e9 : 0.0;
+
+  //prints
+  printf("Pre Kernel Costs: %.3f ms \n", pre_kernel_ms);
+
+  if (mode == Mode::UM_MIGRATE && args.prefetch)
+    printf("UM prefetch-to-GPU: %.3f ms\n", ms_prefetch_to_dev);
+  if (mode == Mode::EXPLICIT)
+    printf("H2D once: %.3f ms\n", ms_h2d_once);
+  if (mode == Mode::EXPLICIT && Wgpu>0)
+    printf("D2H avg per-iter: %.3f ms\n", ms_d2h_avg);
+  if (mode == Mode::UM_MIGRATE && Wgpu>0)
+    printf("UM prefetch-to-CPU (post): %.3f ms\n",ms_um_to_cpu);
+
+
+  double total_gpu = std::accumulate(ms_gpu.begin(), ms_gpu.end(), 0.0);
+  double total_cpu = std::accumulate(ms_cpu.begin(), ms_cpu.end(), 0.0);
+  if (Wgpu>0) printf("GPU Kernel avg: %.3f ms\n", ms_gpu_avg);
+  else        printf("GPU Kernel avg: N/A (no GPU work)\n");
+  if (Wcpu>0) printf("CPU compute:    %.3f ms\n", ms_cpu_avg);
+  else        printf("CPU compute:    N/A (no CPU work)\n");
+  if (Wgpu>0) printf("GPU Kernel total: %.3f ms\n", total_gpu);
+  if (Wcpu>0) printf("CPU compute total:    %.3f ms\n", total_cpu);
+
+
+  printf("Compute E2E (avg per-iter): %.3f ms\n", ms_olap_avg);
+  printf("Compute E2E (whole loop):   %.3f ms\n", ms_compute_all);
+  printf("Full    E2E:                %.3f ms\n", ms_full_e2e);
+
+  printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms\n", sumB, ms_host_read);
+  printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
+
+  switch (mode) {
+    case Mode::EXPLICIT:
+      CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
+      CHECK_CUDA(cudaFreeHost(buf.hA)); CHECK_CUDA(cudaFreeHost(buf.hB));
+      break;
+    case Mode::UM_MIGRATE:
+    case Mode::GH_HBM_SHARED:
+    case Mode::UM_MIGRATE_NO_PREFETCH:
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:
+      CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
+      break;
+    case Mode::GH_CPU_SHARED:
+      CHECK_CUDA(cudaFreeHost(buf.hA)); CHECK_CUDA(cudaFreeHost(buf.hB));
+      break;
+    case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
+    case Mode::GH_HMM_PAGEABLE:
+      std::free(buf.hA); std::free(buf.hB); break;
+  }
+  return 0;
+}
+

@@ -1,27 +1,17 @@
 #!/usr/bin/env bash
-# run.sh — sweep transpose configurations (classic + hybrid)
-# Usage:
-#   chmod +x run.sh
-#   ./run.sh
-# Env overrides:
-#   BIN_TRANSPOSE=./transpose_bench BIN_HYBRID=./transpose_hybrid N="4096 8192" ITERS="10" PREFETCHES="1" FRACS="0.5 0.8" ./run.sh
 
 set -euo pipefail
 
-# -------- Binaries --------
-BIN_TRANSPOSE=${BIN_TRANSPOSE:-./transpose_bench}
 BIN_HYBRID=${BIN_HYBRID:-./transpose_bench_hybrid}
 
-# -------- Sweeps (override with env) --------
-SIZES=(${N:-2048 4096 8192})
-ITERS=(${ITERS:-5 10})
-PREFETCHES=(${PREFETCHES:-1})     # used by um_migrate/gh_hbm_shared
-SEED=${SEED:-12345}
+SIZES=(${N:-1024 2048 4096 8192})
+ITERS=(${ITERS:-1})
+PREFETCHES=(${PREFETCHES:-1})  
+SEED=${SEED:-42}
 
-# Hybrid-only sweep (GPU fraction)
-FRACS=(${FRACS:-0.1 0.2 0.3 0.4 0.5 0.7 0.8})
+#CPU fraction
+FRACS=(${FRACS:-0.0 0.1 0.2 0.4 0.5 0.6 0.8})
 
-# Full mode set (include your custom ones; errors are tolerated per-mode)
 MODES=(
   explicit
   explicit_async            
@@ -34,7 +24,6 @@ MODES=(
   gh_hmm_pageable_cuda_init 
 )
 
-# -------- Pretty printing --------
 BOLD=$(tput bold 2>/dev/null || true)
 DIM=$(tput dim 2>/dev/null || true)
 RED=$(tput setaf 1 2>/dev/null || true)
@@ -51,18 +40,6 @@ sub(){ printf "%s\n" "${CYN}$*${RST}"; }
 # -------- Helpers --------
 has_bin() { [[ -x "$1" ]]; }
 
-run_transpose_case() {
-  local bin="$1" mode="$2" N="$3" iters="$4" prefetch="$5" seed="$6"
-  echo "${DIM}mode=${mode} N=${N} iters=${iters} prefetch=${prefetch}${RST}"
-  set +e
-  "$bin" -n "$N" -i "$iters" -m "$mode" -p "$prefetch" -r "$seed"
-  local rc=$?
-  set -e
-  if [[ $rc -ne 0 ]]; then
-    echo "${YEL}[skip]${RST} ${mode} failed or unsupported (rc=${rc})"
-  fi
-  echo
-}
 
 run_hybrid_case() {
   local bin="$1" mode="$2" N="$3" iters="$4" prefetch="$5" frac="$6" seed="$7"
@@ -77,27 +54,8 @@ run_hybrid_case() {
   echo
 }
 
-# ================= MAIN =================
-main() {
-  if has_bin "$BIN_TRANSPOSE"; then
-    hdr "TRANSPOSE SWEEP (${BIN_TRANSPOSE})"
-    for N in "${SIZES[@]}"; do
-      for it in "${ITERS[@]}"; do
-        sub "N=${N}  iters=${it}"
-        hr
-        for mode in "${MODES[@]}"; do
-          # prefetch only meaningful for UM/GH_HBM_SHARED (but safe to pass always)
-          for p in "${PREFETCHES[@]}"; do
-            run_transpose_case "$BIN_TRANSPOSE" "$mode" "$N" "$it" "$p" "$SEED"
-          done
-        done
-        hr; echo
-      done
-    done
-  else
-    echo "${YEL}[warn]${RST} ${BIN_TRANSPOSE} not found or not executable — skipping classic transpose."
-  fi
 
+main() {
   if has_bin "$BIN_HYBRID"; then
     hdr "HYBRID SWEEP (${BIN_HYBRID})"
     for N in "${SIZES[@]}"; do
@@ -107,7 +65,7 @@ main() {
           hr
           for mode in "${MODES[@]}"; do
             for p in "${PREFETCHES[@]}"; do
-     		if [[ "$mode" == "explicit" || "$mode" == "explicit_async" ]]; then
+     		if [[ "$mode" == "explicit_async" ]]; then
     			continue
 		fi
 
