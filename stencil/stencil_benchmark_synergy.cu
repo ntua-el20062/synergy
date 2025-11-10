@@ -13,7 +13,6 @@
 #include <omp.h>
 #include <numeric>
 #include <stdint.h>
-#include <cuda_runtime.h>
 
 #ifndef CHECK_CUDA
 #define CHECK_CUDA(call) do { \
@@ -129,8 +128,6 @@ static Args parse(int argc, char** argv) {
   if (a.amp <= 0) a.amp = 1e-3;
   return a;
 }
-
-#pragma once
 
 //initiallizing on gpu from hmm_pageable_gpu_init
 // A simple stateless per-index RNG (SplitMix64-ish) -> uniform [0,1)
@@ -400,8 +397,6 @@ static void cpu_stencil_rows_omp(const double* in, double* out, int N, int yStar
   }
 }
 
-
-
 //in explicit, to have consistent view of the data, we exchange regions(cudaMemcpyH2D & D2H), so the computations are correct for the next step and each of the CPU and the GPU has the whole interior
 static void explicit_exchange_regions_after_step(
     int N, int K,
@@ -558,7 +553,7 @@ static void run_one_step_hybrid_explicit_timed(double* &hIn, double* &hOut, doub
   }
 
   //finish kernel
-  CHECK_CUDA(cudaEventSynchronize(evStop));
+  CHECK_CUDA(cudaEventSynchronize(evStop)); //wait until everything up unti evStop is finished --> GPU synchonization!
   float step_gpu_ms = 0.0f;
   CHECK_CUDA(cudaEventElapsedTime(&step_gpu_ms, evStart, evStop));
   gpu_ms_acc += double(step_gpu_ms);
@@ -669,11 +664,11 @@ int main(int argc, char** argv) {
 
     for (int s = 0; s < args.steps; ++s) {
       if (mode == Mode::EXPLICIT) {
-        run_one_step_hybrid_umlike_timed(
+        run_one_step_hybrid_explicit_timed(
           buf.hIn, buf.hOut,
           buf.dIn, buf.dOut,
           N, K, cpuThreads, grid, block, stream,
-          iter_gpu_ms, iter_cpu_ms);
+          iter_gpu_ms, iter_cpu_ms, totals.h2d_ms, totals.d2h_ms);
       } else {
         run_one_step_hybrid_umlike_timed(
           buf.hIn, buf.hOut,

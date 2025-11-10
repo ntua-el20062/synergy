@@ -37,9 +37,10 @@ progs=(
 	#kmeans_cuda_naive
 	#kmeans_cuda_transpose
 	#kmeans_cuda_shared
-	kmeans_cuda_gh
+	kmeans_cuda_gh_managed
 	kmeans_cuda_gh_system_allocated
-	kmeans_cuda_all_gpu
+        #kmeans_cuda_gh_system_allocated_row_major
+        kmeans_cuda_all_gpu
 	#kmeans_cuda_all_gpu_delta_reduction
 )
 
@@ -65,11 +66,13 @@ for size in $sizes; do
 		                ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
 		            elif [[ $prog == 'kmeans_cuda_all_gpu_reduction' ]]; then
 		                ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
-		            elif [[ $prog == 'kmeans_cuda_gh' ]]; then
+		            elif [[ $prog == 'kmeans_cuda_gh_managed' ]]; then
 		                ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
 		            elif [[ $prog == 'kmeans_cuda_gh_system_allocated' ]]; then
                                 ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
-		            fi
+                            elif [[ $prog == 'kmeans_cuda_gh_system_allocated_row_major' ]]; then
+                                ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
+			    fi
 		    	done    
             done
         done

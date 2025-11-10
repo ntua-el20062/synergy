@@ -139,23 +139,16 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   int *deviceMembership;
   int *devicenewClusterSize;
 
-  /*
-  checkCuda(cudaMallocManaged(&deviceObjects, numObjs * numCoords * sizeof(double)));
-  checkCuda(cudaMallocManaged(&deviceClusters, numClusters * numCoords * sizeof(double)));
-  checkCuda(cudaMallocManaged(&devicenewClusters, numClusters * numCoords * sizeof(double)));
-  checkCuda(cudaMallocManaged(&devicenewClusterSize, numClusters * sizeof(int)));
-  checkCuda(cudaMallocManaged(&deviceMembership, numObjs * sizeof(int)));
-  checkCuda(cudaMallocManaged(&dev_delta_ptr, sizeof(double)));
-  */
-
+  double t_alloc = wtime();
   deviceObjects = (typeof(objects)) malloc(numObjs * numCoords * sizeof(*objects));
   deviceClusters = (double*)  malloc(numClusters * numCoords * sizeof(double));
   devicenewClusters = (double*)  malloc(numClusters * numCoords * sizeof(double));
   devicenewClusterSize = (int*)  malloc(numClusters * sizeof(int));
   deviceMembership = (int*) malloc(numObjs * sizeof(int));
   dev_delta_ptr = (double*) malloc(sizeof(double));
+  t_alloc = wtime() - t_alloc;
 
-
+  double t_init = wtime();
   //column-major
   for (int i = 0; i < numObjs; i++) {
     for (int j = 0; j < numCoords; j++) {
@@ -169,17 +162,21 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
       deviceClusters[j * numClusters + i] = deviceObjects[j * numObjs + i];
     }
   }
-
+  
   for (int i = 0; i < numClusters * numCoords; i++) {
     devicenewClusters[i] = 0.0;
   }
   for (int i = 0; i < numClusters; i++) {
     devicenewClusterSize[i] = 0;
   }
+  
   for (int i = 0; i < numObjs; i++) {
     deviceMembership[i] = -1;
   }
-
+  t_init = wtime() - t_init;
+  
+  double cpu_time = 0.0;
+  double t1 = wtime();
   const unsigned int numThreadsPerClusterBlock = (numObjs > blockSize) ? blockSize : numObjs;
   const unsigned int numClusterBlocks = (numObjs + numThreadsPerClusterBlock - 1) / numThreadsPerClusterBlock;
   const unsigned int clusterBlockSharedDataSize =
@@ -194,12 +191,16 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   if (clusterBlockSharedDataSize > deviceProp.sharedMemPerBlock) {
     error("Your CUDA hardware has insufficient block shared memory to hold all cluster centroids\n");
   }
-
+  t1 = wtime() - t1;
+  cpu_time += t1;
 double total_timing_gpu = 0.0;
 
 do {
   timing_internal = wtime();
+  
+  double t2=wtime();
   checkCuda(cudaMemset(dev_delta_ptr, 0, sizeof(double)));
+  t2 = 1e3*(wtime() - t2);
 
   double loop_gpu_time = wtime();
   find_nearest_cluster<<<numClusterBlocks, numThreadsPerClusterBlock, clusterBlockSharedDataSize>>>(
@@ -210,12 +211,17 @@ do {
   checkLastCudaError();
   loop_gpu_time = (wtime() - loop_gpu_time)*1e3;
 
+  t1 = wtime();
   delta = *dev_delta_ptr;
+  t1 = wtime() - t1;
+  cpu_time += t1;
 
-
+  t1 = wtime();
   const unsigned int update_centroids_block_sz = (numCoords * numClusters > blockSize) ? blockSize : numCoords * numClusters;
   const unsigned int update_centroids_dim_sz = (numCoords * numClusters + update_centroids_block_sz - 1) / update_centroids_block_sz;
-
+  t1 = wtime() - t1;
+  cpu_time += t1;
+  
   double t_gpu2 = wtime();
   update_centroids<<<update_centroids_dim_sz, update_centroids_block_sz>>>(
       numCoords, numClusters, devicenewClusterSize, devicenewClusters, deviceClusters);
@@ -223,10 +229,13 @@ do {
   checkLastCudaError();
   loop_gpu_time += 1e3 * (wtime() - t_gpu2);
 
-  total_timing_gpu += loop_gpu_time;
+  total_timing_gpu += loop_gpu_time + t2;
 
+  t1 = wtime();
   delta /= numObjs;
   loop++;
+  t1 = wtime() - t1;
+  cpu_time +=t1;
 
   timing_internal = 1e3*(wtime() - timing_internal);
   if (timing_internal < timer_min) timer_min = timing_internal;
@@ -234,18 +243,17 @@ do {
 
 } while (delta > threshold && loop < loop_threshold);
 
-  
+  t1 = wtime();
   for (int i = 0; i < numClusters; i++) {
     for (int j = 0; j < numCoords; j++) {
       clusters[i * numCoords + j] = deviceClusters[j * numClusters + i];
     }
   }
+  t1 = wtime() - t1;
+  cpu_time += t1;
 
-
-  printf("cluster[0]=%d\n", clusters[0]);
-  printf("nloops = %d  : total = %lf ms\n\t-> t_loop_avg = %lf ms\n\t-> t_loop_min = %lf ms\n\t-> t_loop_max = %lf ms\n\t"
-         "-> t_gpu = %lf ms\n",
-         loop, 10e3*(wtime() - timing), 1e3*((wtime() - timing) / loop), timer_min, timer_max, total_timing_gpu);
+  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc = %lf ms\n\t-> t_init = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t",
+         loop, 1e3*(wtime() - timing), 1e3*t_alloc, 1e3*t_init, cpu_time*1e3, total_timing_gpu);
 
   cudaFree(deviceObjects);
   cudaFree(deviceClusters);
