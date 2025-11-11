@@ -29,7 +29,7 @@ double * dataset_generation(int numObjs, int numCoords)
     int numa_aware = 0;
     if(!numa_aware){    
         for (i=0; i<numObjs; i++)
-        {
+        { 
             unsigned int seed = i;
             for (j=0; j<numCoords; j++)
             {

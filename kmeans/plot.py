@@ -92,7 +92,7 @@ def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
     offset = width / 2
 
     # prefer a consistent stacking order if present
-    preferred = ["t_alloc_cpu", "t_alloc_gpu", "t_init_um", "t_alloc_um", "t_init_malloc", "t_alloc_malloc",  "t_cpu", "t_gpu", "t_transfers"]
+    preferred = ["t_um_advise","t_um_prefetch","t_alloc_cpu", "t_alloc_gpu", "t_init_um", "t_alloc_um", "t_init_malloc", "t_alloc_malloc",  "t_cpu", "t_gpu", "t_transfers"]
     comp_cols = [c for c in df.columns if c.startswith("t_") and c.lower() != "t_end2end"]
     # sort using preferred order first, then any extras alphabetically
     extras = [c for c in comp_cols if c not in preferred]

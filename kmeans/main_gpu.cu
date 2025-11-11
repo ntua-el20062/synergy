@@ -92,6 +92,7 @@ int main(int argc, char **argv)
     }
     printf("dataset_size = %.2f MB    numObjs = %ld    numCoords = %ld    numClusters = %ld, block_size = %d\n", dataset_size, numObjs, numCoords, numClusters, block_size);
 
+
     objects = dataset_generation(numObjs, numCoords);
 
     // Allocate space for clusters (coordinates of cluster centers)
@@ -115,7 +116,6 @@ int main(int argc, char **argv)
         printf("Error: some initial clusters are repeated. Please select distinct initial centers\n");
         return 1;
     }
-
     
     //printf("Initial cluster centers:\n");
     //for (i=0; i<numClusters; i++) {
@@ -135,7 +135,9 @@ int main(int argc, char **argv)
 #endif 
     // start the core computation
     printf("\n");
+    //printf("vefore kmeans gpu\n");
     kmeans_gpu(objects, numCoords, numObjs, numClusters, threshold, loop_threshold, membership, clusters, block_size);
+    //printf("after kmeans gpu");
     printf("\n");
 
     

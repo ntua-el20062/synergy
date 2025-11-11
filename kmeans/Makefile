@@ -6,7 +6,7 @@ HELPER_DIR = helper_functions
 CPP          = g++
 NVCC        = /usr/local/cuda-13/bin/nvcc
 
-# TODO: Enable VALIDATE when implementing new versions to check results in respect to serial execution.  
+#TODO: Enable VALIDATE when implementing new versions to check results in respect to serial execution.  
 #VALIDATE_FLAG=-DVALIDATE
 #VALIDATE_FLAG=#IMPORTANT: Disable in long benchmarks if correctness is established.
 
@@ -28,7 +28,7 @@ LIBS        =
 SEQ_HELP_OBJ = $(OBJECT_DIR)/main_sec.o $(OBJECT_DIR)/file_io.o $(OBJECT_DIR)/util.o 
 CUDA_HELP_OBJ = $(OBJECT_DIR)/main_gpu.o  $(OBJECT_DIR)/file_io.o $(OBJECT_DIR)/util.o $(OBJECT_DIR)/error.o $(OBJECT_DIR)/alloc.o $(OBJECT_DIR)/seq_kmeans.o
 
-all: kmeans_cuda_gh_system_allocated_row_major kmeans_seq kmeans_cuda_naive kmeans_cuda_transpose kmeans_cuda_gh_managed kmeans_cuda_gh_system_allocated kmeans_cuda_shared kmeans_cuda_all_gpu kmeans_cuda_all_gpu_delta_reduction
+all: kmeans_cuda_gh_prefetch_memadvise kmeans_cuda_gh_system_allocated_row_major kmeans_seq kmeans_cuda_naive kmeans_cuda_transpose kmeans_cuda_gh_managed kmeans_cuda_gh_system_allocated kmeans_cuda_shared kmeans_cuda_all_gpu kmeans_cuda_all_gpu_delta_reduction
 
 #---------------------------------------------------------------------
 
@@ -60,6 +60,9 @@ kmeans_cuda_gh_managed: $(OBJECT_DIR)/cuda_kmeans_gh.o $(CUDA_HELP_OBJ)
 kmeans_cuda_gh_system_allocated: $(OBJECT_DIR)/cuda_kmeans_gh_system_allocated.o $(CUDA_HELP_OBJ)
 	$(NVCC) $(NVCCFLAGS) $^ -o $@ $(LDFLAGS)
 
+kmeans_cuda_gh_prefetch_memadvise: $(OBJECT_DIR)/cuda_kmeans_gh_prefetch_memadvise.o $(CUDA_HELP_OBJ)
+	$(NVCC) $(NVCCFLAGS) $^ -o $@ $(LDFLAGS)
+
 kmeans_cuda_gh_system_allocated_row_major: $(OBJECT_DIR)/cuda_kmeans_gh_system_allocated_row_major_gpu.o $(CUDA_HELP_OBJ)
 	$(NVCC) $(NVCCFLAGS) $^ -o $@ $(LDFLAGS)
 
@@ -87,6 +90,10 @@ $(OBJECT_DIR)/cuda_kmeans_all_gpu_delta_reduction.o: cuda_kmeans_all_gpu_delta_r
 		
 $(OBJECT_DIR)/cuda_kmeans_gh.o: cuda_kmeans_gh.cu
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@
+
+$(OBJECT_DIR)/cuda_kmeans_gh_prefetch_memadvise.o: cuda_kmeans_gh_prefetch_memadvise.cu
+	$(NVCC) $(NVCCFLAGS) -c $< -o $@
+
 
 $(OBJECT_DIR)/cuda_kmeans_gh_system_allocated.o: cuda_kmeans_gh_system_allocated_memory.cu
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@

@@ -1,0 +1,112 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 32
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 866.196871 ms
+	-> t_alloc_um = 406.622887 ms
+	-> t_init_um = 246.145010 ms
+	-> t_cpu = 0.024319 ms
+	-> t_gpu = 126.088142 ms
+	-> t_um_advise = 3.369808 ms
+	-> t_um_prefetch = 83.940029 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 48
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 744.297981 ms
+	-> t_alloc_um = 308.120012 ms
+	-> t_init_um = 247.699976 ms
+	-> t_cpu = 0.026703 ms
+	-> t_gpu = 100.760698 ms
+	-> t_um_advise = 3.343105 ms
+	-> t_um_prefetch = 84.345579 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 64
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 733.412027 ms
+	-> t_alloc_um = 311.856031 ms
+	-> t_init_um = 249.562025 ms
+	-> t_cpu = 0.022411 ms
+	-> t_gpu = 84.197521 ms
+	-> t_um_advise = 3.349066 ms
+	-> t_um_prefetch = 84.419966 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 751.049995 ms
+	-> t_alloc_um = 321.898937 ms
+	-> t_init_um = 246.150017 ms
+	-> t_cpu = 0.024796 ms
+	-> t_gpu = 95.211506 ms
+	-> t_um_advise = 3.358126 ms
+	-> t_um_prefetch = 84.402561 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 238
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 758.692026 ms
+	-> t_alloc_um = 305.697203 ms
+	-> t_init_um = 246.329784 ms
+	-> t_cpu = 0.023127 ms
+	-> t_gpu = 119.574785 ms
+	-> t_um_advise = 3.399849 ms
+	-> t_um_prefetch = 83.662510 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 512
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 768.175125 ms
+	-> t_alloc_um = 306.660891 ms
+	-> t_init_um = 247.234106 ms
+	-> t_cpu = 0.026226 ms
+	-> t_gpu = 126.626015 ms
+	-> t_um_advise = 3.320932 ms
+	-> t_um_prefetch = 84.301710 ms
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 1024
+
+
+|-----------Full-offload GPU KMeans (managed memory, prefetch async and memadvise)------------|
+
+nloops = 10  : end2end = 754.557848 ms
+	-> t_alloc_um = 306.824923 ms
+	-> t_init_um = 246.173859 ms
+	-> t_cpu = 0.026703 ms
+	-> t_gpu = 114.320040 ms
+	-> t_um_advise = 3.355980 ms
+	-> t_um_prefetch = 83.854437 ms
+
