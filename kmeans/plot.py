@@ -9,7 +9,16 @@ from typing import List, Dict, Tuple
 import pandas as pd
 import matplotlib.pyplot as plt
 
-SECTION_HEAD_RE = re.compile(r"block_size\s*=\s*(\d+)", re.IGNORECASE)
+# Header line looks like:
+# dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 128
+CONFIG_HEADER_RE = re.compile(
+    r"dataset_size\s*=\s*([\d.]+)\s*MB\s*"
+    r".*?numObjs\s*=\s*(\d+)\s*"
+    r".*?numCoords\s*=\s*(\d+)\s*"
+    r".*?numClusters\s*=\s*(\d+)\s*,\s*block_size\s*=\s*(\d+)",
+    re.IGNORECASE | re.DOTALL,
+)
+
 END2END_RE = re.compile(r"end2end\s*=\s*([\d.]+)\s*ms", re.IGNORECASE)
 
 COMPONENT_RE = re.compile(
@@ -17,101 +26,114 @@ COMPONENT_RE = re.compile(
     re.IGNORECASE
 )
 
-
-def split_sections(text: str) -> List[Tuple[int, str]]:
-    """Return list of (block_size, section_text)."""
-    sections = []
-    matches = list(SECTION_HEAD_RE.finditer(text))
-    for i, m in enumerate(matches):
-        bs = int(m.group(1))
+def split_sections(text: str) -> List[Tuple[re.Match, str]]:
+    """Return list of (header_match, section_text_including_header)."""
+    headers = list(CONFIG_HEADER_RE.finditer(text))
+    sections: List[Tuple[re.Match, str]] = []
+    for i, m in enumerate(headers):
         start = m.start()
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-        sections.append((bs, text[start:end]))
+        end = headers[i + 1].start() if i + 1 < len(headers) else len(text)
+        sections.append((m, text[start:end]))
     return sections
 
-
 def parse_section(section_text: str) -> Dict[str, float]:
-    """Parse one section, returning dict of metrics including end2end."""
+    """Parse timings within a section."""
     data: Dict[str, float] = {}
 
-    # end2end
     m = END2END_RE.search(section_text)
     if not m:
         raise ValueError("Could not find 'end2end' in a section.")
     data["end2end"] = float(m.group(1))
 
-    # components
     for name, val in COMPONENT_RE.findall(section_text):
         key = name.strip()
-        # focus on t_* keys (includes t_alloc, t_alloc_gpu, t_init, t_cpu, t_gpu, t_transfers)
         if not key.lower().startswith("t_"):
             continue
-        # don't overwrite end2end if it's matched by the general pattern (it won't, but just in case)
-        if key.lower() == "t_end2end" or key.lower() == "end2end":
+        if key.lower() in ("t_end2end", "end2end"):
             continue
         data[key] = float(val)
 
     return data
-
 
 def parse_file(path: str) -> pd.DataFrame:
     with open(path, "r", encoding="utf-8") as f:
         text = f.read()
 
     rows = []
-    for block_size, sec in split_sections(text):
-        row = {"block_size": block_size}
-        vals = parse_section(sec)
-        row.update(vals)
+    for hdr, sec in split_sections(text):
+        size_mb = float(hdr.group(1))
+        num_objs = int(hdr.group(2))
+        num_coords = int(hdr.group(3))
+        num_clusters = int(hdr.group(4))
+        block_size = int(hdr.group(5))
+
+        label = f"{size_mb:.0f}MB_{num_coords}coords_{num_clusters}centers"
+
+        row = {
+            "config": label,
+            "block_size": block_size,          # kept if you still want to see it in the CSV
+            "dataset_size_MB": size_mb,
+            "numObjs": num_objs,
+            "numCoords": num_coords,
+            "numClusters": num_clusters,
+        }
+        row.update(parse_section(sec))
         rows.append(row)
 
     if not rows:
         raise ValueError("No data parsed. Check the input format.")
 
-    df = pd.DataFrame(rows).sort_values("block_size").reset_index(drop=True)
+    df = pd.DataFrame(rows).reset_index(drop=True)
 
-    # Identify component columns (all t_* except any accidental t_end2end)
     comp_cols = [c for c in df.columns if c.startswith("t_") and c.lower() != "t_end2end"]
-    # If a component is missing in a row, fill with 0 for stacking consistency
-    df[comp_cols] = df[comp_cols].fillna(0.0)
+    if comp_cols:
+        df[comp_cols] = df[comp_cols].fillna(0.0)
 
-    # Compute totals and error vs end2end
-    df["components_sum_ms"] = df[comp_cols].sum(axis=1)
+    df["components_sum_ms"] = df[comp_cols].sum(axis=1) if comp_cols else 0.0
     df["end2end_ms"] = df["end2end"]
     df["components_error_ms"] = df["end2end_ms"] - df["components_sum_ms"]
 
-    # Reorder columns nicely
-    ordered_cols = ["block_size"] + sorted(comp_cols) + ["components_sum_ms", "end2end_ms", "components_error_ms"]
+    ordered_cols = (
+        ["config", "block_size", "dataset_size_MB", "numObjs", "numCoords", "numClusters"]
+        + sorted(comp_cols)
+        + ["components_sum_ms", "end2end_ms", "components_error_ms"]
+    )
     return df[ordered_cols]
 
-
 def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
-    labels = df["block_size"].astype(str).tolist()
+    labels = df["config"].tolist()
     x = range(len(labels))
     width = 0.35
     offset = width / 2
 
-    # prefer a consistent stacking order if present
-    preferred = ["t_alloc_dealloc_cpu", "t_alloc_dealloc_gpu", "t_gpu_computation","t_um_advise","t_um_prefetch","t_alloc_dealloc_um","t_alloc_dealloc_malloc", "t_transfers", "t_other"]
+    preferred = [
+        "t_alloc_dealloc_cpu",
+        "t_alloc_dealloc_gpu",
+        "t_gpu_computation",
+        "t_um_advise",
+        "t_um_prefetch",
+        "t_alloc_dealloc_um",
+        "t_alloc_dealloc_malloc",
+        "t_transfers",
+        "t_other",
+    ]
+
     comp_cols = [c for c in df.columns if c.startswith("t_") and c.lower() != "t_end2end"]
-    # sort using preferred order first, then any extras alphabetically
     extras = [c for c in comp_cols if c not in preferred]
     ordered = [c for c in preferred if c in comp_cols] + sorted(extras)
 
     fig, ax = plt.subplots(figsize=(12, 6))
 
     bottoms = [0.0] * len(labels)
-    # draw left stacked bar (all components)
     for col in ordered:
         ax.bar([i - offset for i in x], df[col], width, bottom=bottoms, label=col)
         bottoms = [b + v for b, v in zip(bottoms, df[col])]
 
-    # draw right bar (end2end)
-    ax.bar([i + offset for i in x], df["end2end_ms"], width, label="end2end")
+    #ax.bar([i + offset for i in x], df["end2end_ms"], width, label="end2end")
 
     ax.set_xticks(list(x))
-    ax.set_xticklabels(labels)
-    ax.set_xlabel("block_size")
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_xlabel("Configuration (dataset_size_MB_numCoords_numClusters)")
     ax.set_ylabel("Total Time (ms)")
     ax.set_title(f"GPU KMeans ({prefix}): Components vs End2End")
     ax.legend(loc="upper left", ncol=2)
@@ -120,9 +142,6 @@ def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
     fig.tight_layout()
     fig.savefig(out_path, dpi=180)
     plt.close(fig)
-
-
-# --- CLI ---------------------------------------------------------------------
 
 def main():
     ap = argparse.ArgumentParser(description="Plot stacked component timings vs end-to-end from KMeans logs.")
@@ -147,7 +166,6 @@ def main():
     print(f"Wrote: {img_path}")
     print("\nPreview:")
     print(df.head().to_string(index=False))
-
 
 if __name__ == "__main__":
     main()
