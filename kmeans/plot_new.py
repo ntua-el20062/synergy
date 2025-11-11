@@ -129,7 +129,7 @@ def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
         ax.bar([i - offset for i in x], df[col], width, bottom=bottoms, label=col)
         bottoms = [b + v for b, v in zip(bottoms, df[col])]
 
-    ax.bar([i + offset for i in x], df["end2end_ms"], width, label="end2end")
+    #ax.bar([i + offset for i in x], df["end2end_ms"], width, label="end2end")
 
     ax.set_xticks(list(x))
     ax.set_xticklabels(labels, rotation=25, ha="right")
