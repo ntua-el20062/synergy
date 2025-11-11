@@ -9,17 +9,9 @@ from typing import List, Dict, Tuple
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-# --- Parsing helpers ---------------------------------------------------------
-
 SECTION_HEAD_RE = re.compile(r"block_size\s*=\s*(\d+)", re.IGNORECASE)
 END2END_RE = re.compile(r"end2end\s*=\s*([\d.]+)\s*ms", re.IGNORECASE)
 
-# Matches lines like:
-#  "t_alloc: 492.417812 ms"
-#  "-> t_alloc = 0.010967 ms"
-#  "t_alloc_gpu: 205.168009 ms"
-#  "t_init = 233.5 ms"
 COMPONENT_RE = re.compile(
     r"(?:->\s*)?([A-Za-z0-9_]+)\s*[:=]\s*([\d.]+)\s*ms",
     re.IGNORECASE
@@ -93,8 +85,6 @@ def parse_file(path: str) -> pd.DataFrame:
     return df[ordered_cols]
 
 
-# --- Plotting ----------------------------------------------------------------
-
 def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
     labels = df["block_size"].astype(str).tolist()
     x = range(len(labels))
@@ -102,7 +92,7 @@ def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
     offset = width / 2
 
     # prefer a consistent stacking order if present
-    preferred = ["t_alloc", "t_alloc_gpu", "t_init", "t_cpu", "t_gpu", "t_transfers"]
+    preferred = ["t_alloc_cpu", "t_alloc_gpu", "t_init_um", "t_alloc_um", "t_init_malloc", "t_alloc_malloc",  "t_cpu", "t_gpu", "t_transfers"]
     comp_cols = [c for c in df.columns if c.startswith("t_") and c.lower() != "t_end2end"]
     # sort using preferred order first, then any extras alphabetically
     extras = [c for c in comp_cols if c not in preferred]

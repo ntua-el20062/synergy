@@ -252,7 +252,7 @@ do {
   t1 = wtime() - t1;
   cpu_time += t1;
 
-  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc = %lf ms\n\t-> t_init = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t",
+  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_malloc = %lf ms\n\t-> t_init_malloc = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t",
          loop, 1e3*(wtime() - timing), 1e3*t_alloc, 1e3*t_init, cpu_time*1e3, total_timing_gpu);
 
   cudaFree(deviceObjects);

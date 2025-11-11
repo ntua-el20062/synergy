@@ -196,7 +196,7 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   for (i = 0; i < numObjs; i++) membership[i] = -1;
 
   timing = wtime() - timing;
-  printf("t_alloc: %lf ms\n\n", 1000 * timing);
+  printf("t_alloc_cpu: %lf ms\n\n", 1000 * timing);
   double t1 = wtime();
   const unsigned int numThreadsPerClusterBlock = (numObjs > blockSize) ? blockSize : numObjs;
   const unsigned int numClusterBlocks = (numObjs-1+numThreadsPerClusterBlock)/numThreadsPerClusterBlock; /* TODO: Calculate Grid size, e.g. number of blocks. */
