@@ -1,0 +1,104 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 1654.175997 ms
+	-> t_alloc_dealloc_um = 320.236921 ms
+	-> t_gpu_computation = 1088.472605 ms
+	-> t_other = 245.466471 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 1771.307945 ms
+	-> t_alloc_dealloc_um = 232.181072 ms
+	-> t_gpu_computation = 1292.513132 ms
+	-> t_other = 246.613741 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 2097152    numCoords = 64    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 2010.488033 ms
+	-> t_alloc_dealloc_um = 227.959156 ms
+	-> t_gpu_computation = 1428.965569 ms
+	-> t_other = 353.563309 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 2097152    numCoords = 64    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 2258.435011 ms
+	-> t_alloc_dealloc_um = 229.589701 ms
+	-> t_gpu_computation = 1675.334692 ms
+	-> t_other = 353.510618 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 16777216    numCoords = 32    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 5411.874056 ms
+	-> t_alloc_dealloc_um = 250.924826 ms
+	-> t_gpu_computation = 4168.994188 ms
+	-> t_other = 991.955042 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 16777216    numCoords = 32    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 6463.165045 ms
+	-> t_alloc_dealloc_um = 342.111826 ms
+	-> t_gpu_computation = 5126.984596 ms
+	-> t_other = 994.068623 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 8388608    numCoords = 64    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 7432.032108 ms
+	-> t_alloc_dealloc_um = 349.374056 ms
+	-> t_gpu_computation = 5668.199062 ms
+	-> t_other = 1414.458990 ms
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 8388608    numCoords = 64    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU KMeans (managed memory)------------|
+
+nloops = 100  : end2end = 8572.427034 ms
+	-> t_alloc_dealloc_um = 341.953993 ms
+	-> t_gpu_computation = 6818.147421 ms
+	-> t_other = 1412.325621 ms
+	

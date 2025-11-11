@@ -7,7 +7,7 @@ export CUDA_VISIBLE_DEVICES=0
 # sizes='1024'
 # sizes='4096'
 # sizes='32 64 128 256 512 1024 2048'
-sizes='1024'
+sizes='1024 4096'
 
 # coordinates='1'
 # coordinates='16'
@@ -16,7 +16,7 @@ sizes='1024'
 # coordinates='128'
 # coordinates='2 4 8'
 #coordinates='1'
-coordinates='32'
+coordinates='32 64'
 
 # centers='256'
 # centers='64'
@@ -25,19 +25,19 @@ coordinates='32'
 # centers='2 4 16 64'
 # centers='2 4 16'
 
-centers='64'
+centers='64 94'
 
-loop_threashold='10'
-# loop_threashold='100''
+#loop_threashold='10'
+loop_threashold='100'
 
-block_size='32 48 64 128 238 512 1024'
+block_size='128'
 
 progs=(
 	#kmeans_seq
 	#kmeans_cuda_naive
 	#kmeans_cuda_transpose
 	#kmeans_cuda_shared
-	#kmeans_cuda_gh_managed
+        #kmeans_cuda_gh_managed
 	#kmeans_cuda_gh_system_allocated
         #kmeans_cuda_gh_system_allocated_row_major
         #kmeans_cuda_all_gpu
@@ -71,7 +71,7 @@ for size in $sizes; do
 		                ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
 		            elif [[ $prog == 'kmeans_cuda_gh_prefetch_memadvise' ]]; then
                                 ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
-                            elif [[ $prog == 'kmeans_cuda_gh_overlap' ]]; then
+                            elif [[ $prog == 'kmeans_cuda_gh_system_allocated' ]]; then
                                 ./${prog} -s $size -n $coord -c $center -l $loop_threashold -b $bs
 			    fi
 		    	done    

@@ -159,10 +159,9 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   checkCuda(cudaMallocManaged(&devicenewClusterSize, numClusters * sizeof(int)));
   checkCuda(cudaMallocManaged(&deviceMembership, numObjs * sizeof(int)));
   checkCuda(cudaMallocManaged(&dev_delta_ptr, sizeof(double)));
-  
   t_alloc = wtime() - t_alloc;
 
-  double t_init = wtime();
+  //double t_init = wtime();
   //column-major
   for (int i = 0; i < numObjs; i++) {
     for (int j = 0; j < numCoords; j++) {
@@ -187,9 +186,9 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     deviceMembership[i] = -1;
   }
 
-  t_init = wtime()-t_init;
+  //t_init = wtime()-t_init;
 
-  double t1 = wtime();
+  //double t1 = wtime();
   const unsigned int numThreadsPerClusterBlock = (numObjs > blockSize) ? blockSize : numObjs;
   const unsigned int numClusterBlocks = (numObjs + numThreadsPerClusterBlock - 1) / numThreadsPerClusterBlock;
   const unsigned int clusterBlockSharedDataSize =
@@ -205,8 +204,8 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     error("Your CUDA hardware has insufficient block shared memory to hold all cluster centroids\n");
   }
 
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  //t1 = wtime() - t1;
+  //cpu_time += t1;
 
   size_t sz_obj  = (size_t)numObjs * numCoords * sizeof(double);
   size_t sz_clu  = (size_t)numClusters * numCoords * sizeof(double);
@@ -278,11 +277,11 @@ do {
   checkLastCudaError();
   loop_gpu_time = (wtime() - loop_gpu_time)*1e3;
 
-  t1 = wtime();
+  //t1 = wtime();
   const unsigned int update_centroids_block_sz = (numCoords * numClusters > blockSize) ? blockSize : numCoords * numClusters;
   const unsigned int update_centroids_dim_sz = (numCoords * numClusters + update_centroids_block_sz - 1) / update_centroids_block_sz;
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  //t1 = wtime() - t1;
+  //cpu_time += t1;
 
   double t_gpu2 = wtime();
   update_centroids<<<update_centroids_dim_sz, update_centroids_block_sz>>>(
@@ -293,22 +292,12 @@ do {
 
   total_timing_gpu += loop_gpu_time + t2;
 
-  // Bring the scalar delta back to CPU for the convergence check (timed)
-  /*t_um_it = wtime();
-  {
-    unsigned int flags = 0;
-    checkCuda(cudaMemPrefetchAsync(dev_delta_ptr, sizeof(double), hostLoc, flags));
-    checkCuda(cudaDeviceSynchronize());
-  }
-  t_um_iter_prefetch_ms_accum += 1e3 * (wtime() - t_um_it);
-  */
-
-  t1 = wtime();
+  //t1 = wtime();
   delta = *dev_delta_ptr;
   delta /= numObjs;
   loop++;
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  //t1 = wtime() - t1;
+  //cpu_time += t1;
 
   timing_internal = 1e3 * (wtime() - timing_internal);
   if (timing_internal < timer_min) timer_min = timing_internal;
@@ -325,27 +314,30 @@ do {
   }
   t_um_final_prefetch = 1e3 * (wtime() - t_um_final_prefetch);
 
-  t1=wtime();
+  //t1=wtime();
   for (int i = 0; i < numClusters; i++) {
     for (int j = 0; j < numCoords; j++) {
       clusters[i * numCoords + j] = deviceClusters[j * numClusters + i];
     }
   }
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  //t1 = wtime() - t1;
+  //cpu_time += t1;
 
-
-  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_um = %lf ms\n\t-> t_init_um = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t",
-         loop, 1e3*(wtime() - timing), 1e3*t_alloc, 1e3*t_init, 1e3*cpu_time, total_timing_gpu);
-
-  printf("-> t_um_advise = %lf ms\n\t-> t_um_prefetch = %lf ms\n",
-         t_um_advise, (t_um_prefetch_init+t_um_iter_prefetch_ms_accum+t_um_final_prefetch));
-
+  double t_dealloc = wtime();
   cudaFree(deviceObjects);
   cudaFree(deviceClusters);
   cudaFree(devicenewClusters);
   cudaFree(devicenewClusterSize);
   cudaFree(deviceMembership);
   cudaFree(dev_delta_ptr);
+  t_dealloc = wtime() - t_dealloc;
+
+  double t_e2e = wtime() - timing;
+  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_dealloc_um = %lf ms\n\t-> t_gpu = %lf ms\n\t-> t_other = %lf ms\n\t",
+         loop, 1e3*(t_e2e), 1e3*(t_alloc+t_dealloc), total_timing_gpu, ((1e3*(t_e2e-t_alloc-t_dealloc)) - total_timing_gpu - t_um_advise - t_um_prefetch_init - t_um_iter_prefetch_ms_accum - t_um_final_prefetch));
+
+  printf("-> t_um_advise = %lf ms\n\t-> t_um_prefetch = %lf ms\n",
+         t_um_advise, (t_um_prefetch_init+t_um_iter_prefetch_ms_accum+t_um_final_prefetch));
+
 }
 

@@ -50,9 +50,11 @@ void find_nearest_cluster(int numCoords,
                           double *deviceClusters,         //  [numCoords][numClusters]
                           int *deviceMembership,          //  [numObjs]
                           double *devdelta) {
-  extern __shared__ double shmem_total[];
-  double *shmemClusters = shmem_total;
-  double *delta_reduce_buff = shmem_total + numClusters * numCoords;
+  //extern __shared__ double shmem_total[];
+  //double *shmemClusters = shmem_total;
+  extern __shared__ double shmemClusters[];
+
+  double *delta_reduce_buff = shmemClusters + numClusters * numCoords;
 
   int tid1 = threadIdx.x;
     
@@ -145,11 +147,10 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   checkCuda(cudaMallocManaged(&devicenewClusters, numClusters * numCoords * sizeof(double)));
   checkCuda(cudaMallocManaged(&devicenewClusterSize, numClusters * sizeof(int)));
   checkCuda(cudaMallocManaged(&deviceMembership, numObjs * sizeof(int)));
-  checkCuda(cudaMallocManaged(&dev_delta_ptr, sizeof(double)));
-  
+  checkCuda(cudaMallocManaged(&dev_delta_ptr, sizeof(double)));  
   t_alloc = wtime() - t_alloc;
 
-  double t_init = wtime();
+  
   //column-major
   for (int i = 0; i < numObjs; i++) {
     for (int j = 0; j < numCoords; j++) {
@@ -174,9 +175,7 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     deviceMembership[i] = -1;
   }
 
-  t_init = wtime()-t_init;
-
-  double t1 = wtime();
+  
   const unsigned int numThreadsPerClusterBlock = (numObjs > blockSize) ? blockSize : numObjs;
   const unsigned int numClusterBlocks = (numObjs + numThreadsPerClusterBlock - 1) / numThreadsPerClusterBlock;
   const unsigned int clusterBlockSharedDataSize =
@@ -192,8 +191,7 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     error("Your CUDA hardware has insufficient block shared memory to hold all cluster centroids\n");
   }
 
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  
 
 double total_timing_gpu = 0.0;
 
@@ -212,13 +210,11 @@ do {
   checkLastCudaError();
   loop_gpu_time = (wtime() - loop_gpu_time)*1e3;
 
-  t1 = wtime();
+  
   delta = *dev_delta_ptr;
   const unsigned int update_centroids_block_sz = (numCoords * numClusters > blockSize) ? blockSize : numCoords * numClusters;
   const unsigned int update_centroids_dim_sz = (numCoords * numClusters + update_centroids_block_sz - 1) / update_centroids_block_sz;
-  t1 = wtime() - t1;
-  cpu_time += t1;
-
+  
   double t_gpu2 = wtime();
   update_centroids<<<update_centroids_dim_sz, update_centroids_block_sz>>>(
       numCoords, numClusters, devicenewClusterSize, devicenewClusters, deviceClusters);
@@ -228,38 +224,39 @@ do {
 
   total_timing_gpu += loop_gpu_time + t2;
 
-    t1 = wtime();
+  
     delta /= numObjs;
     loop++;
-    t1 = wtime() - t1;
-    cpu_time += t1;
-
-
+  
   timing_internal = 1e3 * (wtime() - timing_internal);
   if (timing_internal < timer_min) timer_min = timing_internal;
   if (timing_internal > timer_max) timer_max = timing_internal;
 
 } while (delta > threshold && loop < loop_threshold);
 
-  t1=wtime();
+  
   for (int i = 0; i < numClusters; i++) {
     for (int j = 0; j < numCoords; j++) {
       clusters[i * numCoords + j] = deviceClusters[j * numClusters + i];
     }
   }
-  t1 = wtime() - t1;
-  cpu_time += t1;
+  
 
-
-  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_um = %lf ms\n\t-> t_init_um = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t",
-         loop, 1e3*(wtime() - timing), 1e3*t_alloc, 1e3*t_init, 1e3*cpu_time, total_timing_gpu);
-
+  double t_dealloc = wtime();
   cudaFree(deviceObjects);
   cudaFree(deviceClusters);
   cudaFree(devicenewClusters);
   cudaFree(devicenewClusterSize);
   cudaFree(deviceMembership);
   cudaFree(dev_delta_ptr);
+  t_dealloc = wtime() - t_dealloc;
+  
+  double t_e2e = wtime() - timing;
+  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_dealloc_um = %lf ms\n\t-> t_gpu_computation = %lf ms\n\t-> t_other = %lf ms\n\t",
+         loop, 1e3*(t_e2e), 1e3*(t_alloc+t_dealloc), total_timing_gpu,  ((1e3*(t_e2e-t_alloc - t_dealloc)) - total_timing_gpu));
+ 
+  return;
+
 }
 
 

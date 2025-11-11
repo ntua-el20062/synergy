@@ -1,0 +1,128 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 1970.168114 ms
+	-> t_alloc_dealloc_cpu = 3.831148 ms
+	-> t_alloc_dealloc_gpu = 215.887785 ms
+	-> t_gpu_computation = 1067.495108 ms
+	-> t_transfers = 4.120111 ms
+	-> t_other = 678.833961 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 4194304    numCoords = 32    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 1898.045063 ms
+	-> t_alloc_dealloc_cpu = 5.445957 ms
+	-> t_alloc_dealloc_gpu = 211.348057 ms
+	-> t_gpu_computation = 1086.773872 ms
+	-> t_transfers = 4.146814 ms
+	-> t_other = 590.330362 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 2097152    numCoords = 64    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 1903.176069 ms
+	-> t_alloc_dealloc_cpu = 3.819942 ms
+	-> t_alloc_dealloc_gpu = 202.074051 ms
+	-> t_gpu_computation = 1110.098124 ms
+	-> t_transfers = 4.034996 ms
+	-> t_other = 583.148956 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 1024.00 MB    numObjs = 2097152    numCoords = 64    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 2160.585165 ms
+	-> t_alloc_dealloc_cpu = 5.428076 ms
+	-> t_alloc_dealloc_gpu = 202.023029 ms
+	-> t_gpu_computation = 1352.548599 ms
+	-> t_transfers = 4.295826 ms
+	-> t_other = 596.289635 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 16777216    numCoords = 32    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 6720.096111 ms
+	-> t_alloc_dealloc_cpu = 12.223005 ms
+	-> t_alloc_dealloc_gpu = 438.560009 ms
+	-> t_gpu_computation = 4055.214643 ms
+	-> t_transfers = 13.077974 ms
+	-> t_other = 2201.020479 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 16777216    numCoords = 32    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 7030.313015 ms
+	-> t_alloc_dealloc_cpu = 12.202978 ms
+	-> t_alloc_dealloc_gpu = 455.144167 ms
+	-> t_gpu_computation = 4345.656395 ms
+	-> t_transfers = 13.081312 ms
+	-> t_other = 2204.228163 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 8388608    numCoords = 64    numClusters = 64, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 7002.558947 ms
+	-> t_alloc_dealloc_cpu = 11.899948 ms
+	-> t_alloc_dealloc_gpu = 434.885025 ms
+	-> t_gpu_computation = 4160.953760 ms
+	-> t_transfers = 12.683392 ms
+	-> t_other = 2382.136822 ms
+|-------------------------------------------|
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset_size = 4096.00 MB    numObjs = 8388608    numCoords = 64    numClusters = 94, block_size = 128
+
+
+|-----------Full-offload GPU Kmeans------------|
+
+nloops = 100  : end2end = 7971.292019 ms
+	-> t_alloc_dealloc_cpu = 12.180090 ms
+	-> t_alloc_dealloc_gpu = 434.641123 ms
+	-> t_gpu_computation = 5282.547712 ms
+	-> t_transfers = 12.948275 ms
+	-> t_other = 2228.974819 ms
+|-------------------------------------------|
+

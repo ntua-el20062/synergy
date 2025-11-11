@@ -167,24 +167,23 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   int i, j, index, loop = 0;
   double delta = 0, *dev_delta_ptr;          /* % of objects change their clusters */
   
-  double **dimObjects = (double **)calloc_2d(numCoords, numObjs, sizeof(double)); 
-  double **dimClusters = (double **)calloc_2d(numCoords, numClusters, sizeof(double));
-  double **newClusters = (double **)calloc_2d(numCoords, numClusters, sizeof(double));	
-  
   printf("\n|-----------Full-offload GPU Kmeans------------|\n\n");
 
-  /* TODO: Copy me from transpose version*/
+  double t_alloc_cpu = wtime();
+  double **dimObjects = (double **)calloc_2d(numCoords, numObjs, sizeof(double)); 
+  double **dimClusters = (double **)calloc_2d(numCoords, numClusters, sizeof(double));
+  double **newClusters = (double **)calloc_2d(numCoords, numClusters, sizeof(double));	 
+  t_alloc_cpu = wtime() - t_alloc_cpu;
+
   for (int i = 0; i < numCoords; i++) {            
     for (int j = 0; j < numObjs; j++) {      
         dimObjects[i][j] = objects[j*numCoords+i];     
     }
   }
-
   double *deviceObjects;
   double *deviceClusters, *devicenewClusters;
   int *deviceMembership;
-  int *devicenewClusterSize; /* [numClusters]: no. objects assigned in each new cluster */
-
+  int *devicenewClusterSize;
   /* pick first numClusters elements of objects[] as initial cluster centers*/
   for (i = 0; i < numCoords; i++) {
     for (j = 0; j < numClusters; j++) {
@@ -192,32 +191,19 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     }
   }
 
-  /* initialize membership[] */
   for (i = 0; i < numObjs; i++) membership[i] = -1;
-
-  timing = wtime() - timing;
-  printf("t_alloc_cpu: %lf ms\n\n", 1000 * timing);
+  
   double t1 = wtime();
   const unsigned int numThreadsPerClusterBlock = (numObjs > blockSize) ? blockSize : numObjs;
   const unsigned int numClusterBlocks = (numObjs-1+numThreadsPerClusterBlock)/numThreadsPerClusterBlock; /* TODO: Calculate Grid size, e.g. number of blocks. */
-  /*	Define the shared memory needed per block.
-      - BEWARE: We can overrun our shared memory here if there are too many
-      clusters or too many coordinates!
-      - This can lead to occupancy problems or even inability to run.
-      - Your exercise implementation is not requested to account for that (e.g. always assume deviceClusters fit in shmemClusters */
   const unsigned int clusterBlockSharedDataSize = numCoords*numClusters*sizeof(double);
-
   cudaDeviceProp deviceProp;
   int deviceNum;
   cudaGetDevice(&deviceNum);
   cudaGetDeviceProperties(&deviceProp, deviceNum);
-
   if (clusterBlockSharedDataSize > deviceProp.sharedMemPerBlock) {
     error("Your CUDA hardware has insufficient block shared memory to hold all cluster centroids\n");
   }
-
-  t1 = wtime() - t1;
-  cpu_time += t1;
 
   timing = wtime();
   checkCuda(cudaMalloc(&deviceObjects, numObjs * numCoords * sizeof(double)));
@@ -226,25 +212,21 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   checkCuda(cudaMalloc(&devicenewClusterSize, numClusters * sizeof(int)));
   checkCuda(cudaMalloc(&deviceMembership, numObjs * sizeof(int)));
   checkCuda(cudaMalloc(&dev_delta_ptr, sizeof(double)));
-
   timing = wtime() - timing;
-  printf("t_alloc_gpu: %lf ms\n\n", 1000 * timing);
+  double gpu_alloc = timing;
+  //printf("t_alloc_gpu: %lf ms\n\n", 1000 * gpu_alloc);
+  
+  
   timing = wtime();
-
-  checkCuda(cudaMemcpy(deviceObjects, dimObjects[0],
-                       numObjs * numCoords * sizeof(double), cudaMemcpyHostToDevice));
-  checkCuda(cudaMemcpy(deviceMembership, membership,
-                       numObjs * sizeof(int), cudaMemcpyHostToDevice));
-  checkCuda(cudaMemcpy(deviceClusters, dimClusters[0],
-                       numClusters * numCoords * sizeof(double), cudaMemcpyHostToDevice));
+  checkCuda(cudaMemcpy(deviceObjects, dimObjects[0], numObjs * numCoords * sizeof(double), cudaMemcpyHostToDevice));
+  checkCuda(cudaMemcpy(deviceMembership, membership, numObjs * sizeof(int), cudaMemcpyHostToDevice));
+  checkCuda(cudaMemcpy(deviceClusters, dimClusters[0], numClusters * numCoords * sizeof(double), cudaMemcpyHostToDevice));
   checkCuda(cudaMemset(devicenewClusterSize, 0, numClusters * sizeof(int)));
-  free(dimObjects[0]);
-
   timing = wtime() - timing;
   transfers_time += timing;
 
-  timing = wtime();
 
+  timing = wtime();
   do {
     timing_internal = wtime();
     timing_gpu=wtime();
@@ -265,11 +247,10 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     checkCuda(cudaMemcpy(&delta, dev_delta_ptr, sizeof(double), cudaMemcpyDeviceToHost));   
     transfers_time += wtime() - timing_transfers;
     
-    t1=wtime();
+    
     const unsigned int update_centroids_block_sz = (numCoords * numClusters > blockSize) ? blockSize : numCoords * numClusters;  
-    const unsigned int update_centroids_dim_sz = ((numCoords*numClusters) + update_centroids_block_sz - 1)/update_centroids_block_sz; // dim_sz = basically the number of blocks 
-    t1 = wtime() -t1;
-    cpu_time += t1;
+    const unsigned int update_centroids_dim_sz = ((numCoords*numClusters) + update_centroids_block_sz - 1)/update_centroids_block_sz; 
+
     timing_gpu = wtime();
      	update_centroids<<< update_centroids_dim_sz, update_centroids_block_sz, 0 >>>
             (numCoords, numClusters, devicenewClusterSize, devicenewClusters, deviceClusters);  
@@ -277,12 +258,10 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
     checkLastCudaError();
     gpu_time += wtime() - timing_gpu;
 
-    timing_cpu = wtime();
     delta /= numObjs;
     //printf("delta is %f - ", delta);
     loop++;
     //printf("completed loop %d\n", loop);
-    cpu_time += wtime() - timing_cpu;
 
     timing_internal = wtime() - timing_internal;
     if (timing_internal < timer_min) timer_min = timing_internal;
@@ -290,31 +269,37 @@ void kmeans_gpu(double *objects,      /* in: [numObjs][numCoords] */
   } while (delta > threshold && loop < loop_threshold);
 
   double t2 = wtime();
-  checkCuda(cudaMemcpy(membership, deviceMembership,
-                       numObjs * sizeof(int), cudaMemcpyDeviceToHost));
-  checkCuda(cudaMemcpy(dimClusters[0], deviceClusters,
-                       numClusters * numCoords * sizeof(double), cudaMemcpyDeviceToHost));
+  checkCuda(cudaMemcpy(membership, deviceMembership, numObjs * sizeof(int), cudaMemcpyDeviceToHost));
+  checkCuda(cudaMemcpy(dimClusters[0], deviceClusters, numClusters * numCoords * sizeof(double), cudaMemcpyDeviceToHost));
   t2 = wtime() - t2;
   transfers_time += t2;
 
-  t1 = wtime();
   for (i = 0; i < numClusters; i++) {
     for (j = 0; j < numCoords; j++) {
       clusters[i * numCoords + j] = dimClusters[j][i];
     }
   }
-  t1 = wtime() - t1;
-  cpu_time += t1;
-
-  printf("nloops = %d  : end2end = %lf ms\n\t-> t_cpu = %lf ms\n\t-> t_gpu = %lf ms\n\t-> t_transfers = %lf ms\n\n|-------------------------------------------|\n",
-         loop, 1000 * (wtime() - timing_all), 1000 * cpu_time, 1000 * gpu_time, 1000 * transfers_time);
-
+  
+  double gpu_dealloc=wtime();
   checkCuda(cudaFree(deviceObjects));
   checkCuda(cudaFree(deviceClusters));
   checkCuda(cudaFree(devicenewClusters));
   checkCuda(cudaFree(devicenewClusterSize));
   checkCuda(cudaFree(deviceMembership));
+  gpu_dealloc = wtime() - gpu_dealloc;
+  //printf("t_gpu_dealloc: %lf ms\n\n", 1000 * gpu_dealloc);
 
+
+  double cpu_dealloc=wtime();
+  free_2d((void **)dimObjects);
+  //free_2d((void **)dimClusters);
+  //free_2d((void **)newClusters);
+  cpu_dealloc = wtime() - cpu_dealloc;
+  //printf("t_cpu_dealloc: %lf ms\n\n", 1000 * cpu_dealloc);
+  double t_end2end = wtime() - timing_all;
+
+  printf("nloops = %d  : end2end = %lf ms\n\t-> t_alloc_dealloc_cpu = %lf ms\n\t-> t_alloc_dealloc_gpu = %lf ms\n\t-> t_gpu_computation = %lf ms\n\t-> t_transfers = %lf ms\n\t-> t_other = %lf ms\n|-------------------------------------------|\n", loop, 1000 * t_end2end, 1000 * (t_alloc_cpu+cpu_dealloc), 1e3*(gpu_alloc + gpu_dealloc), 1000 * gpu_time, 1000 * transfers_time, 1e3*(t_end2end - t_alloc_cpu - cpu_dealloc - gpu_alloc - gpu_dealloc - gpu_time - transfers_time));
+  
   return;
 }
 
