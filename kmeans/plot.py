@@ -112,8 +112,8 @@ def plot_stacked_vs_end2end(df: pd.DataFrame, out_path: str, prefix: str):
     ax.set_xticks(list(x))
     ax.set_xticklabels(labels)
     ax.set_xlabel("block_size")
-    ax.set_ylabel("Time (ms) over 10 loops")
-    ax.set_title(f"GPU KMeans ({prefix}): Components (stacked) vs End-to-End")
+    ax.set_ylabel("Total Time (ms)")
+    ax.set_title(f"GPU KMeans ({prefix}): Components vs End2End")
     ax.legend(loc="upper left", ncol=2)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -140,7 +140,7 @@ def main():
     df.to_csv(csv_path, index=False)
 
     # Plot (stacked components vs end2end)
-    img_path = os.path.join(args.outdir, f"{args.prefix}_stacked_vs_end2end.png")
+    img_path = os.path.join(args.outdir, f"{args.prefix}.png")
     plot_stacked_vs_end2end(df, img_path, args.prefix)
 
     print(f"Wrote: {csv_path}")
