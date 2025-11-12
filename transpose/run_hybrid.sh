@@ -10,7 +10,7 @@ PREFETCHES=(${PREFETCHES:-1})
 SEED=${SEED:-42}
 
 #CPU fraction
-FRACS=(${FRACS:-0.0 0.1 0.2 0.4 0.5 0.6 0.8})
+FRACS=(${FRACS:-0.0 0.2 0.4 0.6 0.8 1.0})
 
 MODES=(
   explicit

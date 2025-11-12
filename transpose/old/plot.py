@@ -1,229 +1,163 @@
 #!/usr/bin/env python3
-
-import argparse
-import re
-from pathlib import Path
-import pandas as pd
+import argparse, os, re, sys
+from collections import defaultdict, OrderedDict
 import matplotlib.pyplot as plt
 
-HEADER_RE = re.compile(r'^N=(\d+)\s+iters=(\d+)(?:\s+frac=([0-9.]+))?')
-MODE_RE = re.compile(r'^mode=([a-zA-Z0-9_]+)')
-ANSI_RE = re.compile(r'\x1b\[[0-9;]*[A-Za-z]')
+# Broad ANSI/control escape matcher (handles CSI, OSC, charset selects like ESC(B), etc.)
+ANSI_RE = re.compile(
+    r'(?:\x1B[@-Z\\-_]|\x1B\[[0-?]*[ -/]*[@-~]|\x1B\][^\x1B]*\x1B\\|\x1B\([0-~]|\x1B\)[0-~])'
+)
+NBSP_RE = re.compile(r"[\u00A0\u2000-\u200B]")
+TIME_RE = re.compile(r"^\s*(t_[A-Za-z0-9_]+)\s*:\s*([0-9.]+)\s*ms\s*$")
 
-METRIC_RES = {
-    # Prefetch / copies / pre-setup
-    "UM prefetch-to-GPU": re.compile(r'^UM prefetch-to-GPU:\s*([0-9.]+)\s*ms'),
-    "UM prefetch-to-CPU (post)": re.compile(r'^UM prefetch-to-CPU.*?:\s*([0-9.]+)\s*ms'),
-    "H2D once": re.compile(r'^H2D once:\s*([0-9.]+)\s*ms'),
-    "D2H avg per-iter": re.compile(r'^D2H avg per-iter:\s*([0-9.]+)\s*ms'),
-    "Pre-setup alloc": re.compile(r'^Pre-setup alloc:\s*([0-9.]+)\s*ms'),
-    "Pre-setup init": re.compile(r'^Pre-setup init:\s*([0-9.]+)\s*ms'),
-    "Pre-setup total": re.compile(r'^Pre-setup total:\s*([0-9.]+)\s*ms'),
-    "Pre Kernel Costs": re.compile(r'^\s*Pre Kernel Costs:\s*([0-9.]+)\s*ms'),
+def clean_line(s: str) -> str:
+    s = ANSI_RE.sub("", s)
+    s = NBSP_RE.sub(" ", s)
+    return s.replace("\r", "")
 
-    # Main compute timings
-    "GPU Kernel avg": re.compile(r'^GPU Kernel avg:\s*([0-9.]+)\s*ms'),
-    "GPU Kernel total": re.compile(r'^GPU Kernel total:\s*([0-9.]+)\s*ms'),
-    "CPU compute": re.compile(r'^CPU compute:\s*([0-9.]+)\s*ms'),
-    "CPU compute total": re.compile(r'^CPU compute total:\s*([0-9.]+)\s*ms'),
-    "Compute E2E (avg per-iter)": re.compile(r'^Compute E2E \(avg per-iter\):\s*([0-9.]+)\s*ms'),
-    "Compute E2E (whole loop)": re.compile(r'^Compute E2E \(whole loop\):\s*([0-9.]+)\s*ms'),
-    "Full    E2E": re.compile(r'^Full\s+E2E:\s*([0-9.]+)\s*ms'),
-    "CPU read time": re.compile(r'CPU read time:\s*([0-9.]+)\s*ms'),
-
-    # -------- Warm-up timings (single-iter and totals) --------
-    # Single-iteration (first iter) warm-up lines — capture both "avg (first iter)" and "(first iter)"
-    "WARMUP GPU Kernel (first iter)": re.compile(r'^WARMUP GPU Kernel \(first iter\):\s*([0-9.]+)\s*ms'),
-    "WARMUP CPU compute (first iter)": re.compile(r'^WARMUP CPU compute (?:avg )?\(first iter\):\s*([0-9.]+)\s*ms'),
-    "WARMUP D2H (first iter)": re.compile(r'^WARMUP D2H \(first iter\):\s*([0-9.]+)\s*ms'),
-    "WARMUP Compute E2E (first iter)": re.compile(r'^WARMUP Compute E2E \(first iter\):\s*([0-9.]+)\s*ms'),
-
-    # Two-iteration warm-up summaries (kept)
-    "WARMUP GPU Kernel avg (2 iters)": re.compile(r'^WARMUP GPU Kernel avg \(2 iters\):\s*([0-9.]+)\s*ms'),
-    "WARMUP CPU compute avg (2 iters)": re.compile(r'^WARMUP CPU compute avg \(2 iters\):\s*([0-9.]+)\s*ms'),
-    "WARMUP D2H avg per-iter": re.compile(r'^WARMUP D2H avg per-iter:\s*([0-9.]+)\s*ms'),
-
-    # Total warm-up wall-clock time
-    "WARMUP total time": re.compile(r'^WARMUP total time:\s*([0-9.]+)\s*ms'),
-}
-
-BANDWIDTH_RES = {
-    "GPU Kernel avg": re.compile(r'^GPU Kernel avg:\s*[0-9.]+\s*ms,\s*effective bandwidth:\s*([0-9.]+)\s*GB/s'),
-    "GPU Kernel total": re.compile(r'^GPU Kernel total:\s*[0-9.]+\s*ms.*?([0-9.]+)\s*GB/s'),
-    "CPU compute": re.compile(r'^CPU compute:\s*[0-9.]+\s*ms,\s*([0-9.]+)\s*GB/s'),
-    "CPU compute total": re.compile(r'^CPU compute total:\s*[0-9.]+\s*ms.*?([0-9.]+)\s*GB/s'),
-    "Compute E2E (avg per-iter)": re.compile(r'^Compute E2E \(avg per-iter\):.*?([0-9.]+)\s*GB/s'),
-    "Full    E2E": re.compile(r'^Full\s+E2E:.*?([0-9.]+)\s*GB/s'),
-    "CPU read time": re.compile(r'CPU read time:\s*[0-9.]+\s*ms.*?([0-9.]+)\s*GB/s'),
-    "H2D once": re.compile(r'^H2D once:\s*[0-9.]+\s*ms.*?([0-9.]+)\s*GB/s'),
-}
-
-
-def parse_file(path: Path) -> pd.DataFrame:
-    text = path.read_text(errors="ignore")
-    text = ANSI_RE.sub('', text)
-    lines = [l.strip() for l in text.splitlines()]
-
-    current_N = None
-    current_iters = None
-    current_frac = None
-    current_mode = None
-    rows = []
-
-    def emit(metric_name: str, time_ms: float, maybe_line: str):
-        bw = None
-        if metric_name in BANDWIDTH_RES:
-            m_bw = BANDWIDTH_RES[metric_name].search(maybe_line)
-            if m_bw:
-                try:
-                    bw = float(m_bw.group(1))
-                except Exception:
-                    bw = None
-        rows.append({
-            "N": current_N,
-            "iters": current_iters,
-            "frac": current_frac,
-            "mode": current_mode,
-            "metric": metric_name,
-            "time_ms": float(time_ms),
-            "bandwidth_GBps": bw,
-        })
-
-    for line in lines:
-        m = HEADER_RE.search(line)
-        if m:
-            current_N = int(m.group(1))
-            current_iters = int(m.group(2))
-            current_frac = float(m.group(3)) if m.group(3) else None
-            current_mode = None
-            continue
-        m = MODE_RE.search(line)
-        if m:
-            current_mode = m.group(1)
-            continue
-        if current_N is not None and current_iters is not None and current_mode is not None:
-            for metric_name, rx in METRIC_RES.items():
-                tm = rx.search(line)
-                if tm:
-                    emit(metric_name, float(tm.group(1)), line)
-                    break
-
-    return pd.DataFrame(rows)
-
-
-def save_csv(df: pd.DataFrame, outdir: Path) -> Path:
-    outdir.mkdir(parents=True, exist_ok=True)
-    p = outdir / "all_time_metrics_long.csv"
-    df.to_csv(p, index=False)
-    return p
-
-
-def _all_pairs(df: pd.DataFrame):
-    if df.empty:
-        return []
-    pairs = df.drop_duplicates(["N", "iters"])[["N", "iters"]].sort_values(["N", "iters"])  # type: ignore
-    return [tuple(x) for x in pairs.to_records(index=False)]
-
-
-def plot_metric_vs_frac(df: pd.DataFrame, outdir: Path, *, n: int, iters: int, metric: str, show=False):
-    sub = df[(df["N"] == n) & (df["iters"] == iters) & (df["metric"] == metric)].copy()
-    if sub.empty:
-        print(f"No data for metric='{metric}' N={n} iters={iters}")
+def parse_header(line: str):
+    toks = clean_line(line).strip().split()
+    kv = {}
+    for t in toks:
+        if "=" in t:
+            k, v = t.split("=", 1)
+            kv[k.strip().strip(",").lower()] = v.strip().strip(",")
+    mode = kv.get("mode")
+    nstr = kv.get("n")
+    fstr = kv.get("frac")
+    if not (mode and nstr and fstr):
+        return None
+    try:
+        return mode, int(nstr), float(fstr)
+    except ValueError:
         return None
 
-    pivot_time = sub.pivot_table(index="frac", columns="mode", values="time_ms", aggfunc="mean").sort_index()
-    pivot_bw = sub.pivot_table(index="frac", columns="mode", values="bandwidth_GBps", aggfunc="mean").sort_index()
+def parse_log(text: str):
+    lines = text.splitlines()
+    recs = []
+    i = 0
+    while i < len(lines):
+        line = clean_line(lines[i])
+        if "mode=" not in line:
+            i += 1
+            continue
+        hdr = parse_header(line)
+        if not hdr:
+            i += 1
+            continue
+        mode, N, frac = hdr
+        rec = {"mode": mode, "N": N, "frac": frac}
+        i += 1
 
-    fig, axes = plt.subplots(2, 1, figsize=(11, 10))
+        accum = defaultdict(float)
+        while i < len(lines):
+            l = clean_line(lines[i])
+            ls = l.strip()
+            if "mode=" in l or ls.startswith("N=") or ls.startswith("N ="):
+                break
+            m = TIME_RE.match(ls)
+            if m:
+                k, sval = m.groups()
+                v = float(sval)
+                if k == "t_end_2_end":
+                    rec[k] = v
+                else:
+                    accum[k] += v
+            i += 1
+        rec.update(accum)
+        recs.append(rec)
+    return recs
 
-    if len(pivot_time.columns) == 0:
-        return None
-    bar_width = 0.8 / max(1, len(pivot_time.columns))
-    x = list(range(len(pivot_time.index)))
+def plot_by_mode(records, outdir):
+    import matplotlib.pyplot as plt
+    import os
+    from collections import defaultdict
 
-    for i, col in enumerate(pivot_time.columns):
-        axes[0].bar([xx + i * bar_width for xx in x], pivot_time[col], width=bar_width, label=col)
-    axes[0].set_title(f"{metric} — Time vs CPU fraction (N={n}, iters={iters})")
-    axes[0].set_xlabel("CPU fraction (frac)")
-    axes[0].set_ylabel("Time (ms)")
-    axes[0].set_xticks([xx + bar_width * (len(pivot_time.columns) - 1) / 2 for xx in x], pivot_time.index)
-    axes[0].legend(ncol=2, fontsize=8)
-    axes[0].grid(True, axis='y', alpha=0.3)
+    os.makedirs(outdir, exist_ok=True)
+    by_mode = defaultdict(list)
+    for r in records:
+        by_mode[r["mode"]].append(r)
 
-    if not pivot_bw.dropna(how='all').empty:
-        for i, col in enumerate(pivot_bw.columns):
-            axes[1].bar([xx + i * bar_width for xx in x], pivot_bw[col], width=bar_width, label=col)
-        axes[1].set_title(f"{metric} — Bandwidth vs CPU fraction (N={n}, iters={iters})")
-        axes[1].set_xlabel("CPU fraction (frac)")
-        axes[1].set_ylabel("Bandwidth (GB/s)")
-        axes[1].set_xticks([xx + bar_width * (len(pivot_time.columns) - 1) / 2 for xx in x], pivot_bw.index)
-        axes[1].legend(ncol=2, fontsize=8)
-        axes[1].grid(True, axis='y', alpha=0.3)
+    print(f"Parsed {len(records)} blocks across {len(by_mode)} modes: {', '.join(sorted(by_mode))}")
 
-    plt.tight_layout()
+    for mode, rows in by_mode.items():
+        rows.sort(key=lambda r: (r["N"], r["frac"]))
 
-    out = outdir / f"bars_{metric.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '-')}_N{n}_iters{iters}.png"
-    plt.savefig(out, dpi=200)
-    if show:
-        plt.show()
-    else:
+        # Get all timing keys for this mode (excluding t_end_2_end)
+        keys, seen = [], set()
+        for r in rows:
+            for k, v in r.items():
+                if k.startswith("t_") and k != "t_end_2_end" and v != 0.0 and k not in seen:
+                    seen.add(k)
+                    keys.append(k)
+
+        x = list(range(len(rows)))
+        # Prettier, compact x-axis labels
+        xlabels = [f"N={r['N']}, f={r['frac']:.1f}" for r in rows]
+        bottom = [0.0] * len(rows)
+
+        # Auto width depending on number of bars
+        fig_width = max(10, len(rows) * 0.4)
+        plt.figure(figsize=(fig_width, 6))
+        bar_width = 0.7
+
+        # Plot stacked bars
+        for k in keys:
+            heights = [r.get(k, 0.0) for r in rows]
+            plt.bar(x, heights, width=bar_width, bottom=bottom, label=k.replace("_", " "))
+            bottom = [b + h for b, h in zip(bottom, heights)]
+
+        # Nice axis formatting
+        plt.xticks(x, xlabels, rotation=45, ha="right", fontsize=9)
+        plt.xlabel("(N, fraction)", fontsize=11)
+        plt.ylabel("Time (ms)", fontsize=11)
+        plt.title(f"Stacked timings for mode={mode} (excluding t_end_2_end)", fontsize=13, pad=10)
+        plt.grid(axis="y", linestyle="--", alpha=0.4)
+
+        # Add a bit of headroom so bars don’t get cut off
+        ymax = max(bottom) if bottom else 0
+        plt.ylim(0, ymax * 1.1)
+
+        if keys:
+            plt.legend(fontsize=8, ncol=2)
+
+        # Avoid cropping tall bars or labels
+        plt.tight_layout(rect=[0, 0.05, 1, 1])
+        outpath = os.path.join(outdir, f"stacked_{mode}.png")
+        plt.savefig(outpath, dpi=150, bbox_inches="tight")
         plt.close()
-    return out
+        print(f"Saved {outpath}")
 
 
-def plot_all_metrics_for_pair(df: pd.DataFrame, outdir: Path, *, n: int, iters: int, metrics: list[str], show=False):
-    paths = []
-    for m in metrics:
-        p = plot_metric_vs_frac(df, outdir, n=n, iters=iters, metric=m, show=show)
-        if p:
-            print(f"Saved plot: {p}")
-            paths.append(p)
-    return paths
-
-
-def list_available_metrics(df: pd.DataFrame) -> list[str]:
-    return sorted(df["metric"].dropna().unique().tolist())
-
+def write_csv(records, path):
+    cols = OrderedDict((k, True) for k in ["mode","N","frac","t_end_2_end"])
+    for r in records:
+        for k in r.keys():
+            cols.setdefault(k, True)
+    cols = list(cols.keys())
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(",".join(cols) + "\n")
+        for r in records:
+            f.write(",".join(str(r.get(c, "")) for c in cols) + "\n")
+    print(f"Wrote {path}")
 
 def main():
-    p = argparse.ArgumentParser(description="Parse and plot ALL timing metrics as grouped bar charts (includes bandwidth where available).")
-    p.add_argument("--input", "-i", required=True, type=Path, help="Path to results text file")
-    p.add_argument("--outdir", "-o", type=Path, default=Path("plots"), help="Output directory")
-    p.add_argument("--show", action="store_true", help="Show plots interactively")
-    p.add_argument("--metrics", type=str, help="Comma-separated list of metric names to plot.")
-    p.add_argument("--all", action="store_true", help="Generate plots for ALL (N,iters) pairs")
-    p.add_argument("--n", type=int, help="Filter to a specific N")
-    p.add_argument("--iters", type=int, help="Filter to a specific iters")
-    args = p.parse_args()
+    ap = argparse.ArgumentParser(description="Plot stacked timings per mode from bench logs.")
+    ap.add_argument("logfile")
+    ap.add_argument("--outdir", default="plots")
+    ap.add_argument("--csv", help="Optional CSV export")
+    args = ap.parse_args()
 
-    df = parse_file(args.input)
-    if df.empty:
-        print("No timing metrics parsed from file.")
-        return
+    with open(args.logfile, "rb") as fh:
+        text = fh.read().decode("utf-8", errors="ignore")
 
-    csv_path = save_csv(df, args.outdir)
-    print(f"Wrote CSV: {csv_path}")
-
-    if args.metrics:
-        metrics = [m.strip() for m in args.metrics.split(',') if m.strip()]
-    else:
-        metrics = list_available_metrics(df)
-        print("Detected metrics:", ", ".join(metrics))
-
-    if args.n is not None:
-        df = df[df["N"] == args.n]
-    if args.iters is not None:
-        df = df[df["iters"] == args.iters]
-
-    if args.all:
-        pairs = _all_pairs(df)
-        for n, iters in pairs:
-            plot_all_metrics_for_pair(df, args.outdir, n=n, iters=iters, metrics=metrics, show=args.show)
-    else:
-        common_pair = df.groupby(["N", "iters"]).size().sort_values(ascending=False).index[0]
-        n, iters = int(common_pair[0]), int(common_pair[1])
-        plot_all_metrics_for_pair(df, args.outdir, n=n, iters=iters, metrics=metrics, show=args.show)
-
+    records = parse_log(text)
+    if not records:
+        print("Still no records parsed. Try piping the file through: `sed -r 's/\\x1B\\[[0-9;?]*[ -\\/]*[@-~]//g' file`", file=sys.stderr)
+        sys.exit(1)
+    plot_by_mode(records, args.outdir)
+    if args.csv:
+        write_csv(records, args.csv)
 
 if __name__ == "__main__":
     main()

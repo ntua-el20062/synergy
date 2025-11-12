@@ -2,1746 +2,1473 @@
 [36mN=2048  iters=1  frac=0.0(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_cpu: 128.262 ms
-t_alloc_gpu: 4.893 ms
-t_init: 6.25706 ms
+t_alloc_cpu: 128.319 ms
+t_alloc_gpu: 4.860 ms
+t_init: 6.28304 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 14.729 ms
+t_valid: 14.469 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.214 ms
-t_dealloc_cpu: 0.583 ms
-t_transfers: 0.222 ms
-t_transfers: 0.403 ms
-t_gpu_computation: 0.096 ms
-t_end_2_end:  155.544 ms
-t_other:  0.107 ms
+t_dealloc_gpu: 0.204 ms
+t_dealloc_cpu: 0.568 ms
+t_transfers: 0.223 ms
+t_transfers: 0.408 ms
+t_gpu_computation: 0.097 ms
+t_end_2_end:  155.312 ms
+t_other:  0.104 ms
 
 [2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 123.268 ms
-t_init: 8.46505 ms
+t_alloc_managed: 123.487 ms
+t_init: 8.49009 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 18.368 ms
+t_valid: 18.455 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.890 ms
-t_managed_prefetch: 5.400 ms
-t_gpu_computation: 0.105 ms
-t_end_2_end:  156.582 ms
+t_dealloc_managed: 0.906 ms
+t_managed_prefetch: 5.462 ms
+t_gpu_computation: 0.103 ms
+t_end_2_end:  156.989 ms
 t_other:  0.086 ms
 
 [2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 123.608 ms
-t_init: 8.56304 ms
+t_alloc_managed: 123.914 ms
+t_init: 8.58593 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 18.197 ms
+t_valid: 18.392 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.866 ms
-t_gpu_computation: 9.293 ms
-t_end_2_end:  160.631 ms
-t_other:  0.104 ms
+t_dealloc_managed: 1.015 ms
+t_gpu_computation: 9.661 ms
+t_end_2_end:  161.675 ms
+t_other:  0.107 ms
 
 [2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 128.722 ms
+t_alloc_managed: 122.903 ms
 t_managed_memadvise: 0.014 ms
-t_init: 13.66401 ms
+t_init: 13.65113 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 24.887 ms
+t_valid: 24.758 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.775 ms
-t_managed_prefetch: 0.351 ms
-t_managed_memadvise: 0.351 ms
-t_gpu_computation: 0.170 ms
-t_end_2_end:  168.673 ms
-t_other:  0.090 ms
+t_dealloc_managed: 0.744 ms
+t_managed_prefetch: 0.313 ms
+t_managed_memadvise: 0.313 ms
+t_gpu_computation: 0.156 ms
+t_end_2_end:  162.615 ms
+t_other:  0.076 ms
 
 [2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.0(B[m
-t_malloc: 0.016 ms
-t_init: 8.57306 ms
+t_malloc: 0.018 ms
+t_init: 8.53395 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 27.646 ms
+t_valid: 27.075 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.399 ms
-t_gpu_computation: 0.366 ms
-t_end_2_end:  163.408 ms
-t_other:  126.408 ms
+t_dealloc_malloc: 0.345 ms
+t_gpu_computation: 0.365 ms
+t_end_2_end:  162.082 ms
+t_other:  125.745 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.0(B[m
 t_malloc: 0.018 ms
-t_init: 140.59496 ms
+t_init: 141.49690 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 2048)
-t_valid: 25.546 ms
+t_valid: 25.366 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.272 ms
+t_dealloc_malloc: 0.249 ms
 t_gpu_computation: 0.041 ms
-t_end_2_end:  166.558 ms
-t_other:  0.086 ms
-
---------------------------------------------------------------------------------
-
-[36mN=2048  iters=1  frac=0.1(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_cpu: 127.067 ms
-t_alloc_gpu: 4.881 ms
-t_init: 6.26493 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 13.951 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.211 ms
-t_dealloc_cpu: 0.600 ms
-t_transfers: 0.224 ms
-t_transfers: 0.387 ms
-t_gpu_computation: 0.091 ms
-t_cpu_computation:    1.096 ms
-t_end_2_end:  154.597 ms
-t_other:  0.139 ms
-
-[2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 124.409 ms
-t_init: 8.65102 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 15.748 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.912 ms
-t_managed_prefetch: 5.448 ms
-t_gpu_computation: 0.215 ms
-t_cpu_computation:    3.200 ms
-t_end_2_end:  158.481 ms
-t_other:  0.113 ms
-
-[2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 136.369 ms
-t_init: 8.57902 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 18.442 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.871 ms
-t_gpu_computation: 11.404 ms
-t_cpu_computation:    1.681 ms
-t_end_2_end:  175.764 ms
-t_other:  0.099 ms
-
-[2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 126.588 ms
-t_managed_memadvise: 0.013 ms
-t_init: 13.74817 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 23.306 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.764 ms
-t_managed_prefetch: 0.293 ms
-t_managed_memadvise: 0.293 ms
-t_gpu_computation: 0.178 ms
-t_cpu_computation:    1.120 ms
-t_end_2_end:  165.953 ms
-t_other:  0.121 ms
-
-[2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.018 ms
-t_init: 8.55398 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 27.221 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.373 ms
-t_gpu_computation: 0.350 ms
-t_cpu_computation:    0.762 ms
-t_end_2_end:  165.493 ms
-t_other:  128.565 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.018 ms
-t_init: 141.10398 ms
-Hybrid split: CPU columns [0, 204), GPU columns [204, 2048)
-t_valid: 24.254 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.283 ms
-t_gpu_computation: 0.044 ms
-t_cpu_computation:    2.491 ms
-t_end_2_end:  168.281 ms
-t_other:  0.131 ms
+t_end_2_end:  167.416 ms
+t_other:  0.245 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=2048  iters=1  frac=0.2(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_cpu: 131.145 ms
-t_alloc_gpu: 4.882 ms
-t_init: 6.26016 ms
+t_alloc_cpu: 126.564 ms
+t_alloc_gpu: 4.875 ms
+t_init: 6.26588 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 13.322 ms
+t_valid: 13.637 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.212 ms
-t_dealloc_cpu: 0.580 ms
-t_transfers: 0.220 ms
-t_transfers: 0.367 ms
-t_gpu_computation: 0.091 ms
-t_cpu_computation:    1.775 ms
-t_end_2_end:  158.695 ms
-t_other:  0.152 ms
+t_dealloc_gpu: 0.211 ms
+t_dealloc_cpu: 0.573 ms
+t_transfers: 0.215 ms
+t_transfers: 0.366 ms
+t_gpu_computation: 0.090 ms
+t_cpu_computation:    1.800 ms
+t_end_2_end:  154.433 ms
+t_other:  0.141 ms
 
 [2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 124.791 ms
-t_init: 8.56614 ms
+t_alloc_managed: 124.328 ms
+t_init: 8.65102 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 14.790 ms
+t_valid: 14.871 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.860 ms
-t_managed_prefetch: 5.459 ms
-t_gpu_computation: 0.261 ms
-t_cpu_computation:    4.177 ms
-t_end_2_end:  158.752 ms
-t_other:  0.108 ms
+t_dealloc_managed: 0.896 ms
+t_managed_prefetch: 5.392 ms
+t_gpu_computation: 0.215 ms
+t_cpu_computation:    4.117 ms
+t_end_2_end:  158.366 ms
+t_other:  0.111 ms
 
 [2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 124.180 ms
-t_init: 8.58903 ms
+t_alloc_managed: 137.445 ms
+t_init: 8.48198 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 18.196 ms
+t_valid: 18.960 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.851 ms
-t_gpu_computation: 12.205 ms
-t_cpu_computation:    5.127 ms
-t_end_2_end:  164.126 ms
-t_other:  0.105 ms
+t_dealloc_managed: 0.867 ms
+t_gpu_computation: 11.931 ms
+t_cpu_computation:    4.127 ms
+t_end_2_end:  177.796 ms
+t_other:  0.111 ms
 
 [2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 125.770 ms
+t_alloc_managed: 126.347 ms
 t_managed_memadvise: 0.014 ms
-t_init: 13.67688 ms
+t_init: 13.76104 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 21.941 ms
+t_valid: 21.871 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.770 ms
-t_managed_prefetch: 0.280 ms
-t_managed_memadvise: 0.280 ms
-t_gpu_computation: 0.148 ms
-t_cpu_computation:    2.227 ms
-t_end_2_end:  164.799 ms
-t_other:  0.120 ms
+t_dealloc_managed: 0.788 ms
+t_managed_prefetch: 0.296 ms
+t_managed_memadvise: 0.296 ms
+t_gpu_computation: 0.157 ms
+t_cpu_computation:    1.947 ms
+t_end_2_end:  165.152 ms
+t_other:  0.128 ms
 
 [2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_malloc: 0.018 ms
-t_init: 8.58498 ms
+t_malloc: 0.017 ms
+t_init: 8.51583 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 28.638 ms
+t_valid: 29.576 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.395 ms
-t_gpu_computation: 0.319 ms
-t_cpu_computation:    1.350 ms
-t_end_2_end:  163.539 ms
-t_other:  124.553 ms
+t_dealloc_malloc: 0.368 ms
+t_gpu_computation: 0.307 ms
+t_cpu_computation:    1.375 ms
+t_end_2_end:  166.811 ms
+t_other:  126.959 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.2(B[m
-t_malloc: 0.018 ms
-t_init: 153.67007 ms
+t_malloc: 0.017 ms
+t_init: 140.92898 ms
 Hybrid split: CPU columns [0, 409), GPU columns [409, 2048)
-t_valid: 23.084 ms
+t_valid: 22.748 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.277 ms
+t_dealloc_malloc: 0.235 ms
 t_gpu_computation: 0.040 ms
-t_cpu_computation:    3.883 ms
-t_end_2_end:  181.072 ms
-t_other:  0.140 ms
+t_cpu_computation:    3.894 ms
+t_end_2_end:  167.968 ms
+t_other:  0.145 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=2048  iters=1  frac=0.4(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_cpu: 126.933 ms
-t_alloc_gpu: 4.882 ms
-t_init: 6.26707 ms
+t_alloc_cpu: 127.994 ms
+t_alloc_gpu: 4.875 ms
+t_init: 6.26612 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 12.823 ms
+t_valid: 12.844 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.222 ms
-t_dealloc_cpu: 0.602 ms
-t_transfers: 0.214 ms
-t_transfers: 0.327 ms
-t_gpu_computation: 0.087 ms
-t_cpu_computation:    3.145 ms
-t_end_2_end:  155.344 ms
+t_dealloc_gpu: 0.201 ms
+t_dealloc_cpu: 0.581 ms
+t_transfers: 0.215 ms
+t_transfers: 0.330 ms
+t_gpu_computation: 0.085 ms
+t_cpu_computation:    3.114 ms
+t_end_2_end:  156.348 ms
 t_other:  0.143 ms
 
 [2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 124.304 ms
-t_init: 8.58116 ms
+t_alloc_managed: 123.950 ms
+t_init: 8.57615 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 13.596 ms
+t_valid: 13.534 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.962 ms
-t_managed_prefetch: 5.447 ms
-t_gpu_computation: 0.216 ms
-t_cpu_computation:    5.996 ms
-t_end_2_end:  158.997 ms
-t_other:  0.111 ms
+t_dealloc_managed: 0.889 ms
+t_managed_prefetch: 5.601 ms
+t_gpu_computation: 0.228 ms
+t_cpu_computation:    5.968 ms
+t_end_2_end:  158.643 ms
+t_other:  0.124 ms
 
 [2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 123.008 ms
-t_init: 8.51893 ms
+t_alloc_managed: 123.379 ms
+t_init: 8.56304 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 18.050 ms
+t_valid: 17.973 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.813 ms
-t_gpu_computation: 13.120 ms
-t_cpu_computation:    7.876 ms
-t_end_2_end:  163.615 ms
-t_other:  0.105 ms
+t_dealloc_managed: 0.900 ms
+t_gpu_computation: 13.582 ms
+t_cpu_computation:    8.153 ms
+t_end_2_end:  164.503 ms
+t_other:  0.106 ms
 
 [2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 127.110 ms
-t_managed_memadvise: 0.013 ms
-t_init: 13.65709 ms
+t_alloc_managed: 120.244 ms
+t_managed_memadvise: 0.014 ms
+t_init: 13.76009 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 19.071 ms
+t_valid: 19.354 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.784 ms
-t_managed_prefetch: 0.316 ms
-t_managed_memadvise: 0.316 ms
-t_gpu_computation: 0.122 ms
-t_cpu_computation:    4.177 ms
-t_end_2_end:  165.247 ms
-t_other:  0.118 ms
+t_dealloc_managed: 0.757 ms
+t_managed_prefetch: 0.297 ms
+t_managed_memadvise: 0.297 ms
+t_gpu_computation: 0.142 ms
+t_cpu_computation:    3.503 ms
+t_end_2_end:  158.059 ms
+t_other:  0.130 ms
 
 [2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_malloc: 0.017 ms
-t_init: 8.56900 ms
+t_malloc: 0.018 ms
+t_init: 8.55303 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 27.509 ms
+t_valid: 27.722 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.357 ms
+t_dealloc_malloc: 0.350 ms
 t_gpu_computation: 0.256 ms
-t_cpu_computation:    2.574 ms
-t_end_2_end:  163.804 ms
-t_other:  124.778 ms
+t_cpu_computation:    2.456 ms
+t_end_2_end:  160.597 ms
+t_other:  121.498 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.4(B[m
-t_malloc: 0.018 ms
-t_init: 142.97605 ms
+t_malloc: 0.019 ms
+t_init: 141.48283 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 2048)
-t_valid: 20.406 ms
+t_valid: 20.450 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.296 ms
-t_gpu_computation: 0.033 ms
-t_cpu_computation:    6.616 ms
-t_end_2_end:  170.439 ms
-t_other:  0.127 ms
-
---------------------------------------------------------------------------------
-
-[36mN=2048  iters=1  frac=0.5(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_cpu: 129.750 ms
-t_alloc_gpu: 4.874 ms
-t_init: 6.26612 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 12.459 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.217 ms
-t_dealloc_cpu: 0.601 ms
-t_transfers: 0.215 ms
-t_transfers: 0.311 ms
-t_gpu_computation: 0.085 ms
-t_cpu_computation:    3.724 ms
-t_end_2_end:  158.337 ms
-t_other:  0.135 ms
-
-[2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 125.752 ms
-t_init: 8.56090 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 12.930 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.926 ms
-t_managed_prefetch: 5.455 ms
-t_gpu_computation: 0.181 ms
-t_cpu_computation:    6.631 ms
-t_end_2_end:  160.374 ms
-t_other:  0.119 ms
-
-[2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 122.787 ms
-t_init: 8.49605 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 14.730 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.780 ms
-t_gpu_computation: 11.251 ms
-t_cpu_computation:    13.498 ms
-t_end_2_end:  160.427 ms
-t_other:  0.136 ms
-
-[2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 125.993 ms
-t_managed_memadvise: 0.013 ms
-t_init: 13.73982 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 18.883 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.766 ms
-t_managed_prefetch: 0.301 ms
-t_managed_memadvise: 0.301 ms
-t_gpu_computation: 0.128 ms
-t_cpu_computation:    4.314 ms
-t_end_2_end:  164.138 ms
-t_other:  0.129 ms
-
-[2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_malloc: 0.017 ms
-t_init: 8.56185 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 25.443 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.357 ms
-t_gpu_computation: 0.231 ms
-t_cpu_computation:    3.015 ms
-t_end_2_end:  159.424 ms
-t_other:  122.030 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.5(B[m
-t_malloc: 0.018 ms
-t_init: 145.45894 ms
-Hybrid split: CPU columns [0, 1024), GPU columns [1024, 2048)
-t_valid: 19.300 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.287 ms
-t_gpu_computation: 0.031 ms
-t_cpu_computation:    8.221 ms
-t_end_2_end:  173.420 ms
-t_other:  0.135 ms
+t_dealloc_malloc: 0.266 ms
+t_gpu_computation: 0.036 ms
+t_cpu_computation:    6.666 ms
+t_end_2_end:  169.017 ms
+t_other:  0.134 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=2048  iters=1  frac=0.6(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_cpu: 126.734 ms
-t_alloc_gpu: 4.875 ms
-t_init: 6.28996 ms
+t_alloc_cpu: 133.169 ms
+t_alloc_gpu: 4.912 ms
+t_init: 6.31905 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 11.752 ms
+t_valid: 11.117 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.220 ms
-t_dealloc_cpu: 0.616 ms
-t_transfers: 0.220 ms
-t_transfers: 0.300 ms
-t_gpu_computation: 0.084 ms
-t_cpu_computation:    4.315 ms
-t_end_2_end:  155.274 ms
-t_other:  0.173 ms
+t_dealloc_gpu: 0.217 ms
+t_dealloc_cpu: 0.597 ms
+t_transfers: 0.216 ms
+t_transfers: 0.302 ms
+t_gpu_computation: 0.087 ms
+t_cpu_computation:    4.380 ms
+t_end_2_end:  161.187 ms
+t_other:  0.174 ms
 
 [2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 122.957 ms
-t_init: 8.57306 ms
+t_alloc_managed: 127.605 ms
+t_init: 8.59308 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 12.178 ms
+t_valid: 12.026 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.913 ms
-t_managed_prefetch: 5.431 ms
-t_gpu_computation: 0.222 ms
-t_cpu_computation:    7.750 ms
-t_end_2_end:  157.923 ms
-t_other:  0.121 ms
+t_dealloc_managed: 0.905 ms
+t_managed_prefetch: 5.416 ms
+t_gpu_computation: 0.203 ms
+t_cpu_computation:    7.722 ms
+t_end_2_end:  162.374 ms
+t_other:  0.107 ms
 
 [2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 122.714 ms
-t_init: 8.51989 ms
+t_alloc_managed: 127.605 ms
+t_init: 8.42190 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 15.367 ms
+t_valid: 15.427 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.808 ms
-t_gpu_computation: 17.673 ms
-t_cpu_computation:    19.881 ms
-t_end_2_end:  167.424 ms
-t_other:  0.134 ms
+t_dealloc_managed: 0.792 ms
+t_gpu_computation: 17.117 ms
+t_cpu_computation:    18.331 ms
+t_end_2_end:  170.717 ms
+t_other:  0.140 ms
 
 [2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 123.384 ms
-t_managed_memadvise: 0.013 ms
-t_init: 13.77106 ms
+t_alloc_managed: 128.206 ms
+t_managed_memadvise: 0.015 ms
+t_init: 13.64398 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 17.348 ms
+t_valid: 17.447 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.758 ms
-t_managed_prefetch: 0.304 ms
-t_managed_memadvise: 0.304 ms
-t_gpu_computation: 0.118 ms
-t_cpu_computation:    4.926 ms
-t_end_2_end:  160.618 ms
-t_other:  0.114 ms
+t_dealloc_managed: 0.759 ms
+t_managed_prefetch: 0.293 ms
+t_managed_memadvise: 0.293 ms
+t_gpu_computation: 0.131 ms
+t_cpu_computation:    5.048 ms
+t_end_2_end:  165.539 ms
+t_other:  0.127 ms
 
 [2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.6(B[m
 t_malloc: 0.018 ms
-t_init: 8.56900 ms
+t_init: 8.75115 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 25.126 ms
+t_valid: 25.064 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.462 ms
-t_gpu_computation: 0.206 ms
-t_cpu_computation:    3.717 ms
-t_end_2_end:  161.823 ms
-t_other:  123.931 ms
+t_dealloc_malloc: 0.367 ms
+t_gpu_computation: 0.193 ms
+t_cpu_computation:    3.604 ms
+t_end_2_end:  161.610 ms
+t_other:  123.806 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.6(B[m
-t_malloc: 0.018 ms
-t_init: 141.60490 ms
+t_malloc: 0.019 ms
+t_init: 142.81702 ms
 Hybrid split: CPU columns [0, 1228), GPU columns [1228, 2048)
-t_valid: 18.601 ms
+t_valid: 17.590 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.252 ms
-t_gpu_computation: 0.030 ms
-t_cpu_computation:    9.655 ms
-t_end_2_end:  170.262 ms
-t_other:  0.131 ms
+t_dealloc_malloc: 0.269 ms
+t_gpu_computation: 0.031 ms
+t_cpu_computation:    9.654 ms
+t_end_2_end:  170.492 ms
+t_other:  0.143 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=2048  iters=1  frac=0.8(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=2048 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_cpu: 132.420 ms
-t_alloc_gpu: 4.885 ms
-t_init: 6.26898 ms
+t_alloc_cpu: 126.100 ms
+t_alloc_gpu: 4.848 ms
+t_init: 6.26707 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 10.693 ms
+t_valid: 10.444 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.219 ms
-t_dealloc_cpu: 0.587 ms
-t_transfers: 0.214 ms
-t_transfers: 0.259 ms
-t_gpu_computation: 0.080 ms
-t_cpu_computation:    5.368 ms
-t_end_2_end:  160.850 ms
-t_other:  0.150 ms
+t_dealloc_gpu: 0.210 ms
+t_dealloc_cpu: 0.584 ms
+t_transfers: 0.222 ms
+t_transfers: 0.270 ms
+t_gpu_computation: 0.078 ms
+t_cpu_computation:    5.433 ms
+t_end_2_end:  154.302 ms
+t_other:  0.146 ms
 
 [2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 124.229 ms
-t_init: 8.65889 ms
+t_alloc_managed: 124.595 ms
+t_init: 8.64387 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 10.668 ms
+t_valid: 10.943 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.907 ms
-t_managed_prefetch: 5.399 ms
-t_gpu_computation: 0.165 ms
-t_cpu_computation:    9.174 ms
-t_end_2_end:  159.153 ms
-t_other:  0.117 ms
+t_dealloc_managed: 0.897 ms
+t_managed_prefetch: 5.397 ms
+t_gpu_computation: 0.161 ms
+t_cpu_computation:    9.019 ms
+t_end_2_end:  159.617 ms
+t_other:  0.122 ms
 
 [2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 124.139 ms
-t_init: 8.52299 ms
+t_alloc_managed: 126.842 ms
+t_init: 8.44407 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 12.978 ms
+t_valid: 13.191 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.731 ms
-t_gpu_computation: 15.885 ms
-t_cpu_computation:    21.404 ms
-t_end_2_end:  167.906 ms
-t_other:  0.131 ms
+t_dealloc_managed: 0.727 ms
+t_gpu_computation: 16.011 ms
+t_cpu_computation:    21.116 ms
+t_end_2_end:  170.449 ms
+t_other:  0.129 ms
 
 [2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 135.426 ms
-t_managed_memadvise: 0.014 ms
-t_init: 13.67021 ms
+t_alloc_managed: 137.174 ms
+t_managed_memadvise: 0.013 ms
+t_init: 13.53788 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 15.397 ms
+t_valid: 15.463 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 0.767 ms
-t_managed_prefetch: 0.309 ms
-t_managed_memadvise: 0.309 ms
-t_gpu_computation: 0.102 ms
-t_cpu_computation:    5.979 ms
-t_end_2_end:  171.681 ms
-t_other:  0.119 ms
+t_dealloc_managed: 0.763 ms
+t_managed_prefetch: 0.351 ms
+t_managed_memadvise: 0.351 ms
+t_gpu_computation: 0.097 ms
+t_cpu_computation:    6.928 ms
+t_end_2_end:  174.346 ms
+t_other:  0.116 ms
 
 [2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=0.8(B[m
 t_malloc: 0.018 ms
-t_init: 8.64005 ms
+t_init: 8.54802 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 15.280 ms
+t_valid: 15.291 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.474 ms
-t_gpu_computation: 0.139 ms
-t_cpu_computation:    4.632 ms
-t_end_2_end:  148.692 ms
-t_other:  119.648 ms
+t_dealloc_malloc: 0.460 ms
+t_gpu_computation: 0.138 ms
+t_cpu_computation:    4.723 ms
+t_end_2_end:  148.096 ms
+t_other:  119.056 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=0.8(B[m
 t_malloc: 0.018 ms
-t_init: 138.94606 ms
+t_init: 139.78100 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 2048)
-t_valid: 16.094 ms
+t_valid: 16.092 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 0.281 ms
-t_gpu_computation: 0.027 ms
-t_cpu_computation:    11.152 ms
-t_end_2_end:  166.628 ms
-t_other:  0.137 ms
+t_dealloc_malloc: 0.265 ms
+t_gpu_computation: 0.026 ms
+t_cpu_computation:    10.934 ms
+t_end_2_end:  167.224 ms
+t_other:  0.134 ms
+
+--------------------------------------------------------------------------------
+
+[36mN=2048  iters=1  frac=1.0(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_cpu: 126.915 ms
+t_alloc_gpu: 4.905 ms
+t_init: 6.26922 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 9.868 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_gpu: 0.211 ms
+t_dealloc_cpu: 0.595 ms
+t_transfers: 0.217 ms
+t_cpu_computation:    6.862 ms
+t_end_2_end:  155.990 ms
+t_other:  0.147 ms
+
+[2mmode=um_migrate N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 123.747 ms
+t_init: 8.53992 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 9.505 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 0.898 ms
+t_managed_prefetch: 5.405 ms
+t_cpu_computation:    10.976 ms
+t_end_2_end:  159.195 ms
+t_other:  0.124 ms
+
+[2mmode=um_migrate_no_prefetch N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 123.109 ms
+t_init: 8.51202 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 9.079 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 0.518 ms
+t_cpu_computation:    5.662 ms
+t_end_2_end:  147.019 ms
+t_other:  0.139 ms
+
+[2mmode=gh_hbm_shared N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 122.989 ms
+t_managed_memadvise: 0.015 ms
+t_init: 13.71002 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 13.066 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 0.768 ms
+t_managed_prefetch: 0.317 ms
+t_managed_memadvise: 0.317 ms
+t_cpu_computation:    8.062 ms
+t_end_2_end:  159.050 ms
+t_other:  0.123 ms
+
+[2mmode=gh_hmm_pageable N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.018 ms
+t_init: 8.52394 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 14.260 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 0.484 ms
+t_cpu_computation:    5.865 ms
+t_end_2_end:  155.265 ms
+t_other:  126.114 ms
+
+[2mmode=gh_hmm_pageable_cuda_init N=2048 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.019 ms
+t_init: 140.81502 ms
+Hybrid split: CPU columns [0, 2048), GPU columns [2048, 2048)
+t_valid: 13.679 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 0.264 ms
+t_cpu_computation:    13.594 ms
+t_end_2_end:  168.495 ms
+t_other:  0.124 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=4096  iters=1  frac=0.0(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_cpu: 134.996 ms
-t_alloc_gpu: 18.939 ms
-t_init: 25.57087 ms
+t_alloc_cpu: 135.596 ms
+t_alloc_gpu: 18.867 ms
+t_init: 25.84600 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 82.174 ms
+t_valid: 83.731 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.538 ms
-t_dealloc_cpu: 2.817 ms
-t_transfers: 0.518 ms
-t_transfers: 1.007 ms
-t_gpu_computation: 0.167 ms
-t_end_2_end:  266.329 ms
-t_other:  0.120 ms
+t_dealloc_gpu: 0.537 ms
+t_dealloc_cpu: 2.801 ms
+t_transfers: 0.670 ms
+t_transfers: 1.135 ms
+t_gpu_computation: 0.173 ms
+t_end_2_end:  268.804 ms
+t_other:  0.118 ms
 
 [2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 128.413 ms
-t_init: 34.35516 ms
+t_alloc_managed: 124.779 ms
+t_init: 34.40714 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 101.053 ms
+t_valid: 100.932 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 4.038 ms
-t_managed_prefetch: 20.951 ms
+t_dealloc_managed: 3.620 ms
+t_managed_prefetch: 20.935 ms
 t_gpu_computation: 0.178 ms
-t_end_2_end:  289.088 ms
-t_other:  0.100 ms
+t_end_2_end:  284.948 ms
+t_other:  0.097 ms
 
 [2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 125.936 ms
-t_init: 34.21497 ms
+t_alloc_managed: 137.453 ms
+t_init: 34.00898 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 100.471 ms
+t_valid: 100.333 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.741 ms
-t_gpu_computation: 32.978 ms
-t_end_2_end:  297.476 ms
-t_other:  0.135 ms
+t_dealloc_managed: 3.708 ms
+t_gpu_computation: 32.942 ms
+t_end_2_end:  308.585 ms
+t_other:  0.140 ms
 
 [2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 123.274 ms
+t_alloc_managed: 128.018 ms
 t_managed_memadvise: 0.015 ms
-t_init: 54.15797 ms
+t_init: 54.16608 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 140.240 ms
+t_valid: 130.747 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.000 ms
-t_managed_prefetch: 0.703 ms
-t_managed_memadvise: 0.703 ms
-t_gpu_computation: 0.252 ms
-t_end_2_end:  321.731 ms
-t_other:  0.089 ms
+t_dealloc_managed: 2.802 ms
+t_managed_prefetch: 0.700 ms
+t_managed_memadvise: 0.700 ms
+t_gpu_computation: 0.249 ms
+t_end_2_end:  316.788 ms
+t_other:  0.091 ms
 
 [2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.0(B[m
-t_malloc: 0.018 ms
-t_init: 34.16204 ms
+t_malloc: 0.019 ms
+t_init: 34.08194 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 143.185 ms
+t_valid: 145.350 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.541 ms
-t_gpu_computation: 1.242 ms
-t_end_2_end:  308.237 ms
-t_other:  128.090 ms
+t_dealloc_malloc: 1.492 ms
+t_gpu_computation: 1.197 ms
+t_end_2_end:  308.131 ms
+t_other:  125.991 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.0(B[m
 t_malloc: 0.018 ms
-t_init: 185.70209 ms
+t_init: 188.20190 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 4096)
-t_valid: 134.141 ms
+t_valid: 134.410 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.257 ms
-t_gpu_computation: 0.131 ms
-t_end_2_end:  321.351 ms
-t_other:  0.102 ms
-
---------------------------------------------------------------------------------
-
-[36mN=4096  iters=1  frac=0.1(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_cpu: 139.734 ms
-t_alloc_gpu: 18.856 ms
-t_init: 25.90489 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 82.158 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.552 ms
-t_dealloc_cpu: 2.824 ms
-t_transfers: 0.683 ms
-t_transfers: 1.103 ms
-t_gpu_computation: 0.170 ms
-t_cpu_computation:    4.172 ms
-t_end_2_end:  275.470 ms
-t_other:  0.166 ms
-
-[2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 123.778 ms
-t_init: 34.10792 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 91.163 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.678 ms
-t_managed_prefetch: 21.061 ms
-t_gpu_computation: 0.459 ms
-t_cpu_computation:    11.834 ms
-t_end_2_end:  285.746 ms
-t_other:  0.124 ms
-
-[2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 134.851 ms
-t_init: 33.90408 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 101.070 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.555 ms
-t_gpu_computation: 37.116 ms
-t_cpu_computation:    7.899 ms
-t_end_2_end:  310.625 ms
-t_other:  0.129 ms
-
-[2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 123.090 ms
-t_managed_memadvise: 0.014 ms
-t_init: 54.61311 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 127.854 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 2.791 ms
-t_managed_prefetch: 0.549 ms
-t_managed_memadvise: 0.549 ms
-t_gpu_computation: 0.266 ms
-t_cpu_computation:    7.136 ms
-t_end_2_end:  316.226 ms
-t_other:  0.179 ms
-
-[2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.020 ms
-t_init: 34.11984 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 128.272 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.519 ms
-t_gpu_computation: 23.756 ms
-t_cpu_computation:    4.082 ms
-t_end_2_end:  312.083 ms
-t_other:  124.396 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.018 ms
-t_init: 198.24195 ms
-Hybrid split: CPU columns [0, 409), GPU columns [409, 4096)
-t_valid: 126.649 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.054 ms
-t_gpu_computation: 0.118 ms
-t_cpu_computation:    8.359 ms
-t_end_2_end:  334.470 ms
-t_other:  0.148 ms
+t_dealloc_malloc: 0.996 ms
+t_gpu_computation: 0.121 ms
+t_end_2_end:  323.847 ms
+t_other:  0.100 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=4096  iters=1  frac=0.2(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_cpu: 135.573 ms
-t_alloc_gpu: 18.813 ms
-t_init: 25.85006 ms
+t_alloc_cpu: 135.170 ms
+t_alloc_gpu: 18.756 ms
+t_init: 25.58088 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 81.144 ms
+t_valid: 79.516 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.514 ms
-t_dealloc_cpu: 2.909 ms
-t_transfers: 0.682 ms
-t_transfers: 1.058 ms
-t_gpu_computation: 0.160 ms
-t_cpu_computation:    7.120 ms
-t_end_2_end:  273.162 ms
-t_other:  0.181 ms
+t_dealloc_gpu: 0.533 ms
+t_dealloc_cpu: 2.797 ms
+t_transfers: 0.530 ms
+t_transfers: 0.937 ms
+t_gpu_computation: 0.153 ms
+t_cpu_computation:    7.297 ms
+t_end_2_end:  270.736 ms
+t_other:  0.149 ms
 
 [2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 124.011 ms
-t_init: 34.38687 ms
+t_alloc_managed: 125.066 ms
+t_init: 34.37996 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 88.747 ms
+t_valid: 88.391 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.603 ms
-t_managed_prefetch: 21.029 ms
-t_gpu_computation: 0.269 ms
-t_cpu_computation:    15.796 ms
-t_end_2_end:  287.707 ms
-t_other:  0.134 ms
+t_dealloc_managed: 3.884 ms
+t_managed_prefetch: 20.935 ms
+t_gpu_computation: 0.278 ms
+t_cpu_computation:    15.752 ms
+t_end_2_end:  288.558 ms
+t_other:  0.150 ms
 
 [2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 123.320 ms
-t_init: 33.87594 ms
+t_alloc_managed: 123.220 ms
+t_init: 33.83493 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 99.202 ms
+t_valid: 96.949 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.415 ms
-t_gpu_computation: 37.402 ms
-t_cpu_computation:    12.012 ms
-t_end_2_end:  297.349 ms
-t_other:  0.134 ms
+t_dealloc_managed: 3.614 ms
+t_gpu_computation: 36.145 ms
+t_cpu_computation:    11.686 ms
+t_end_2_end:  293.894 ms
+t_other:  0.131 ms
 
 [2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 136.538 ms
-t_managed_memadvise: 0.013 ms
-t_init: 54.58903 ms
+t_alloc_managed: 124.628 ms
+t_managed_memadvise: 0.015 ms
+t_init: 54.23307 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 125.067 ms
+t_valid: 121.529 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 2.999 ms
-t_managed_prefetch: 0.727 ms
-t_managed_memadvise: 0.727 ms
-t_gpu_computation: 0.236 ms
-t_cpu_computation:    12.064 ms
-t_end_2_end:  332.152 ms
-t_other:  0.155 ms
+t_dealloc_managed: 3.014 ms
+t_managed_prefetch: 0.701 ms
+t_managed_memadvise: 0.701 ms
+t_gpu_computation: 0.233 ms
+t_cpu_computation:    12.274 ms
+t_end_2_end:  316.523 ms
+t_other:  0.129 ms
 
 [2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.2(B[m
 t_malloc: 0.018 ms
-t_init: 34.16681 ms
+t_init: 34.06501 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 143.542 ms
+t_valid: 144.048 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.507 ms
-t_gpu_computation: 0.969 ms
-t_cpu_computation:    7.160 ms
-t_end_2_end:  308.986 ms
-t_other:  122.592 ms
+t_dealloc_malloc: 1.454 ms
+t_gpu_computation: 0.973 ms
+t_cpu_computation:    7.048 ms
+t_end_2_end:  309.235 ms
+t_other:  122.602 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.2(B[m
-t_malloc: 0.018 ms
-t_init: 185.19306 ms
+t_malloc: 0.019 ms
+t_init: 184.14402 ms
 Hybrid split: CPU columns [0, 819), GPU columns [819, 4096)
-t_valid: 122.750 ms
+t_valid: 120.924 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.039 ms
-t_gpu_computation: 0.109 ms
-t_cpu_computation:    14.523 ms
-t_end_2_end:  323.653 ms
-t_other:  0.130 ms
+t_dealloc_malloc: 1.029 ms
+t_gpu_computation: 0.104 ms
+t_cpu_computation:    14.366 ms
+t_end_2_end:  320.627 ms
+t_other:  0.145 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=4096  iters=1  frac=0.4(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_cpu: 136.119 ms
-t_alloc_gpu: 18.810 ms
-t_init: 25.63691 ms
+t_alloc_cpu: 138.871 ms
+t_alloc_gpu: 18.758 ms
+t_init: 25.57302 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 78.123 ms
+t_valid: 75.534 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.532 ms
-t_dealloc_cpu: 2.885 ms
-t_transfers: 0.534 ms
-t_transfers: 0.848 ms
-t_gpu_computation: 0.140 ms
-t_cpu_computation:    11.997 ms
-t_end_2_end:  275.127 ms
-t_other:  0.175 ms
+t_dealloc_gpu: 0.566 ms
+t_dealloc_cpu: 2.760 ms
+t_transfers: 0.535 ms
+t_transfers: 0.844 ms
+t_gpu_computation: 0.135 ms
+t_cpu_computation:    11.952 ms
+t_end_2_end:  275.020 ms
+t_other:  0.162 ms
 
 [2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 123.875 ms
-t_init: 34.44910 ms
+t_alloc_managed: 124.263 ms
+t_init: 34.07097 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 84.535 ms
+t_valid: 83.753 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.669 ms
-t_managed_prefetch: 20.997 ms
-t_gpu_computation: 0.294 ms
-t_cpu_computation:    22.677 ms
-t_end_2_end:  290.333 ms
-t_other:  0.131 ms
+t_dealloc_managed: 3.667 ms
+t_managed_prefetch: 20.979 ms
+t_gpu_computation: 0.341 ms
+t_cpu_computation:    22.505 ms
+t_end_2_end:  289.366 ms
+t_other:  0.128 ms
 
 [2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 123.719 ms
-t_init: 33.94389 ms
+t_alloc_managed: 124.140 ms
+t_init: 34.27386 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 98.705 ms
+t_valid: 97.233 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.390 ms
-t_gpu_computation: 48.251 ms
-t_cpu_computation:    38.322 ms
-t_end_2_end:  308.141 ms
-t_other:  0.133 ms
+t_dealloc_managed: 3.439 ms
+t_gpu_computation: 41.199 ms
+t_cpu_computation:    28.508 ms
+t_end_2_end:  300.416 ms
+t_other:  0.131 ms
 
 [2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 124.336 ms
-t_managed_memadvise: 0.014 ms
-t_init: 54.64816 ms
+t_alloc_managed: 123.580 ms
+t_managed_memadvise: 0.015 ms
+t_init: 54.58689 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 121.907 ms
+t_valid: 124.765 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 2.971 ms
-t_managed_prefetch: 0.732 ms
-t_managed_memadvise: 0.732 ms
-t_gpu_computation: 0.212 ms
-t_cpu_computation:    19.991 ms
-t_end_2_end:  324.737 ms
-t_other:  0.138 ms
+t_dealloc_managed: 2.974 ms
+t_managed_prefetch: 0.714 ms
+t_managed_memadvise: 0.714 ms
+t_gpu_computation: 0.243 ms
+t_cpu_computation:    19.963 ms
+t_end_2_end:  326.731 ms
+t_other:  0.133 ms
 
 [2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_malloc: 0.022 ms
-t_init: 34.18398 ms
+t_malloc: 0.019 ms
+t_init: 34.04808 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 147.054 ms
+t_valid: 141.885 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.490 ms
-t_gpu_computation: 0.744 ms
-t_cpu_computation:    13.018 ms
-t_end_2_end:  310.471 ms
-t_other:  114.703 ms
+t_dealloc_malloc: 1.480 ms
+t_gpu_computation: 0.738 ms
+t_cpu_computation:    12.956 ms
+t_end_2_end:  303.054 ms
+t_other:  112.666 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.4(B[m
-t_malloc: 0.019 ms
-t_init: 184.06892 ms
-Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
-t_valid: 122.782 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.062 ms
-t_gpu_computation: 0.090 ms
-t_cpu_computation:    26.254 ms
-t_end_2_end:  334.326 ms
-t_other:  0.140 ms
-
---------------------------------------------------------------------------------
-
-[36mN=4096  iters=1  frac=0.5(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_cpu: 139.765 ms
-t_alloc_gpu: 18.888 ms
-t_init: 25.85793 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 76.778 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.524 ms
-t_dealloc_cpu: 2.856 ms
-t_transfers: 0.679 ms
-t_transfers: 0.920 ms
-t_gpu_computation: 0.160 ms
-t_cpu_computation:    15.338 ms
-t_end_2_end:  281.083 ms
-t_other:  0.156 ms
-
-[2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 132.960 ms
-t_init: 34.16800 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 83.040 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.871 ms
-t_managed_prefetch: 21.047 ms
-t_gpu_computation: 0.267 ms
-t_cpu_computation:    26.330 ms
-t_end_2_end:  301.551 ms
-t_other:  0.135 ms
-
-[2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 128.376 ms
-t_init: 34.20401 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 88.270 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.210 ms
-t_gpu_computation: 36.526 ms
-t_cpu_computation:    42.770 ms
-t_end_2_end:  296.982 ms
-t_other:  0.152 ms
-
-[2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 130.100 ms
-t_managed_memadvise: 0.014 ms
-t_init: 54.58188 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 124.436 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.001 ms
-t_managed_prefetch: 0.734 ms
-t_managed_memadvise: 0.734 ms
-t_gpu_computation: 0.193 ms
-t_cpu_computation:    26.110 ms
-t_end_2_end:  339.107 ms
-t_other:  0.130 ms
-
-[2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.5(B[m
-t_malloc: 0.019 ms
-t_init: 34.14106 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 123.755 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.866 ms
-t_gpu_computation: 0.646 ms
-t_cpu_computation:    16.192 ms
-t_end_2_end:  285.301 ms
-t_other:  109.328 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.5(B[m
 t_malloc: 0.020 ms
-t_init: 189.46481 ms
-Hybrid split: CPU columns [0, 2048), GPU columns [2048, 4096)
-t_valid: 121.034 ms
+t_init: 191.18905 ms
+Hybrid split: CPU columns [0, 1638), GPU columns [1638, 4096)
+t_valid: 116.652 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.034 ms
-t_gpu_computation: 0.081 ms
-t_cpu_computation:    33.212 ms
-t_end_2_end:  345.046 ms
-t_other:  0.281 ms
+t_dealloc_malloc: 1.055 ms
+t_gpu_computation: 0.088 ms
+t_cpu_computation:    25.899 ms
+t_end_2_end:  334.962 ms
+t_other:  0.147 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=4096  iters=1  frac=0.6(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_cpu: 134.700 ms
-t_alloc_gpu: 18.825 ms
-t_init: 25.82598 ms
+t_alloc_cpu: 137.324 ms
+t_alloc_gpu: 18.795 ms
+t_init: 25.63596 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 76.497 ms
+t_valid: 77.814 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.546 ms
-t_dealloc_cpu: 2.966 ms
-t_transfers: 0.672 ms
-t_transfers: 0.871 ms
-t_gpu_computation: 0.132 ms
-t_cpu_computation:    19.876 ms
-t_end_2_end:  280.287 ms
-t_other:  0.180 ms
+t_dealloc_gpu: 0.511 ms
+t_dealloc_cpu: 2.839 ms
+t_transfers: 0.533 ms
+t_transfers: 0.739 ms
+t_gpu_computation: 0.123 ms
+t_cpu_computation:    20.091 ms
+t_end_2_end:  283.913 ms
+t_other:  0.164 ms
 
 [2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 127.509 ms
-t_init: 34.04093 ms
+t_alloc_managed: 123.386 ms
+t_init: 34.08098 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 79.927 ms
+t_valid: 81.879 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.634 ms
-t_managed_prefetch: 21.033 ms
-t_gpu_computation: 0.255 ms
-t_cpu_computation:    32.768 ms
-t_end_2_end:  299.043 ms
-t_other:  0.131 ms
+t_dealloc_managed: 3.574 ms
+t_managed_prefetch: 20.993 ms
+t_gpu_computation: 0.277 ms
+t_cpu_computation:    32.607 ms
+t_end_2_end:  296.662 ms
+t_other:  0.142 ms
 
 [2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 131.890 ms
-t_init: 33.90121 ms
+t_alloc_managed: 128.704 ms
+t_init: 34.29508 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 89.095 ms
+t_valid: 92.054 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.133 ms
-t_gpu_computation: 67.900 ms
-t_cpu_computation:    81.672 ms
-t_end_2_end:  339.844 ms
-t_other:  0.153 ms
+t_dealloc_managed: 2.977 ms
+t_gpu_computation: 86.275 ms
+t_cpu_computation:    98.247 ms
+t_end_2_end:  356.433 ms
+t_other:  0.155 ms
 
 [2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 136.491 ms
-t_managed_memadvise: 0.013 ms
-t_init: 54.60596 ms
+t_alloc_managed: 123.923 ms
+t_managed_memadvise: 0.016 ms
+t_init: 54.12388 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 126.152 ms
+t_valid: 123.075 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.000 ms
-t_managed_prefetch: 0.732 ms
-t_managed_memadvise: 0.732 ms
-t_gpu_computation: 0.178 ms
-t_cpu_computation:    37.065 ms
-t_end_2_end:  358.200 ms
+t_dealloc_managed: 3.060 ms
+t_managed_prefetch: 0.708 ms
+t_managed_memadvise: 0.708 ms
+t_gpu_computation: 0.177 ms
+t_cpu_computation:    36.732 ms
+t_end_2_end:  341.779 ms
 t_other:  0.141 ms
 
 [2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.6(B[m
 t_malloc: 0.019 ms
-t_init: 34.14893 ms
+t_init: 34.03997 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 95.920 ms
+t_valid: 94.523 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.827 ms
-t_gpu_computation: 0.526 ms
-t_cpu_computation:    20.980 ms
-t_end_2_end:  257.327 ms
-t_other:  104.432 ms
+t_dealloc_malloc: 1.838 ms
+t_gpu_computation: 0.527 ms
+t_cpu_computation:    20.881 ms
+t_end_2_end:  253.677 ms
+t_other:  102.376 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.6(B[m
 t_malloc: 0.019 ms
-t_init: 187.37388 ms
+t_init: 182.37901 ms
 Hybrid split: CPU columns [0, 2457), GPU columns [2457, 4096)
-t_valid: 126.449 ms
+t_valid: 130.207 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.066 ms
-t_gpu_computation: 0.072 ms
-t_cpu_computation:    44.394 ms
-t_end_2_end:  359.473 ms
-t_other:  0.171 ms
+t_dealloc_malloc: 1.143 ms
+t_gpu_computation: 0.083 ms
+t_cpu_computation:    43.210 ms
+t_end_2_end:  357.100 ms
+t_other:  0.142 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=4096  iters=1  frac=0.8(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_cpu: 135.521 ms
-t_alloc_gpu: 18.840 ms
-t_init: 25.81596 ms
+t_alloc_cpu: 132.374 ms
+t_alloc_gpu: 18.805 ms
+t_init: 25.55513 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 77.167 ms
+t_valid: 79.105 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 0.543 ms
-t_dealloc_cpu: 2.897 ms
-t_transfers: 0.676 ms
-t_transfers: 0.784 ms
-t_gpu_computation: 0.114 ms
-t_cpu_computation:    25.012 ms
-t_end_2_end:  286.753 ms
-t_other:  0.173 ms
+t_dealloc_gpu: 0.512 ms
+t_dealloc_cpu: 2.826 ms
+t_transfers: 0.530 ms
+t_transfers: 0.644 ms
+t_gpu_computation: 0.109 ms
+t_cpu_computation:    24.857 ms
+t_end_2_end:  284.843 ms
+t_other:  0.165 ms
 
 [2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 123.773 ms
-t_init: 34.07097 ms
+t_alloc_managed: 125.936 ms
+t_init: 34.39713 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 81.542 ms
+t_valid: 79.434 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 3.729 ms
-t_managed_prefetch: 21.274 ms
-t_gpu_computation: 0.254 ms
-t_cpu_computation:    39.319 ms
-t_end_2_end:  303.850 ms
-t_other:  0.142 ms
+t_dealloc_managed: 3.225 ms
+t_managed_prefetch: 20.846 ms
+t_gpu_computation: 0.248 ms
+t_cpu_computation:    37.691 ms
+t_end_2_end:  301.674 ms
+t_other:  0.145 ms
 
 [2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 124.659 ms
-t_init: 33.89788 ms
+t_alloc_managed: 123.241 ms
+t_init: 34.31797 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 87.463 ms
+t_valid: 89.318 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 2.854 ms
-t_gpu_computation: 70.077 ms
-t_cpu_computation:    87.728 ms
-t_end_2_end:  336.762 ms
-t_other:  0.160 ms
+t_dealloc_managed: 2.698 ms
+t_gpu_computation: 88.333 ms
+t_cpu_computation:    104.514 ms
+t_end_2_end:  354.254 ms
+t_other:  0.165 ms
 
 [2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 124.950 ms
-t_managed_memadvise: 0.014 ms
-t_init: 54.53396 ms
+t_alloc_managed: 128.032 ms
+t_managed_memadvise: 0.016 ms
+t_init: 54.18277 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 130.347 ms
+t_valid: 132.119 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 2.960 ms
-t_managed_prefetch: 0.722 ms
-t_managed_memadvise: 0.722 ms
-t_gpu_computation: 0.148 ms
-t_cpu_computation:    44.063 ms
-t_end_2_end:  357.734 ms
-t_other:  0.144 ms
+t_dealloc_managed: 2.869 ms
+t_managed_prefetch: 0.732 ms
+t_managed_memadvise: 0.732 ms
+t_gpu_computation: 0.138 ms
+t_cpu_computation:    43.525 ms
+t_end_2_end:  361.629 ms
+t_other:  0.153 ms
 
 [2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_malloc: 0.019 ms
-t_init: 34.20210 ms
+t_malloc: 0.018 ms
+t_init: 34.04808 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 83.908 ms
+t_valid: 83.608 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.908 ms
-t_gpu_computation: 0.308 ms
-t_cpu_computation:    27.075 ms
-t_end_2_end:  245.773 ms
-t_other:  98.661 ms
+t_dealloc_malloc: 1.875 ms
+t_gpu_computation: 0.316 ms
+t_cpu_computation:    26.923 ms
+t_end_2_end:  242.746 ms
+t_other:  96.274 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=0.8(B[m
-t_malloc: 0.021 ms
-t_init: 183.12502 ms
+t_malloc: 0.018 ms
+t_init: 182.95503 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 4096)
-t_valid: 135.264 ms
+t_valid: 131.963 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 1.105 ms
-t_gpu_computation: 0.054 ms
-t_cpu_computation:    55.330 ms
-t_end_2_end:  374.999 ms
-t_other:  0.154 ms
+t_dealloc_malloc: 1.036 ms
+t_gpu_computation: 0.055 ms
+t_cpu_computation:    54.037 ms
+t_end_2_end:  370.167 ms
+t_other:  0.158 ms
+
+--------------------------------------------------------------------------------
+
+[36mN=4096  iters=1  frac=1.0(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_cpu: 132.844 ms
+t_alloc_gpu: 18.818 ms
+t_init: 25.56801 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 80.117 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_gpu: 0.500 ms
+t_dealloc_cpu: 2.939 ms
+t_transfers: 0.528 ms
+t_cpu_computation:    30.556 ms
+t_end_2_end:  292.062 ms
+t_other:  0.191 ms
+
+[2mmode=um_migrate N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 129.752 ms
+t_init: 34.45697 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 80.525 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 3.634 ms
+t_managed_prefetch: 20.899 ms
+t_cpu_computation:    46.685 ms
+t_end_2_end:  316.101 ms
+t_other:  0.149 ms
+
+[2mmode=um_migrate_no_prefetch N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 127.152 ms
+t_init: 34.25717 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 80.522 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 2.027 ms
+t_cpu_computation:    30.216 ms
+t_end_2_end:  274.345 ms
+t_other:  0.171 ms
+
+[2mmode=gh_hbm_shared N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 123.302 ms
+t_managed_memadvise: 0.014 ms
+t_init: 54.14009 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 138.673 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 3.021 ms
+t_managed_prefetch: 0.719 ms
+t_managed_memadvise: 0.719 ms
+t_cpu_computation:    51.468 ms
+t_end_2_end:  371.484 ms
+t_other:  0.147 ms
+
+[2mmode=gh_hmm_pageable N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.019 ms
+t_init: 34.03807 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 83.649 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 1.866 ms
+t_cpu_computation:    32.658 ms
+t_end_2_end:  276.897 ms
+t_other:  124.667 ms
+
+[2mmode=gh_hmm_pageable_cuda_init N=4096 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.020 ms
+t_init: 185.33206 ms
+Hybrid split: CPU columns [0, 4096), GPU columns [4096, 4096)
+t_valid: 141.340 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 1.074 ms
+t_cpu_computation:    64.191 ms
+t_end_2_end:  392.121 ms
+t_other:  0.164 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=8192  iters=1  frac=0.0(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_cpu: 174.349 ms
-t_alloc_gpu: 74.723 ms
-t_init: 103.65820 ms
+t_alloc_cpu: 170.865 ms
+t_alloc_gpu: 74.548 ms
+t_init: 103.59597 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 373.679 ms
+t_valid: 372.314 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.391 ms
-t_dealloc_cpu: 10.354 ms
-t_transfers: 1.783 ms
-t_transfers: 3.600 ms
-t_gpu_computation: 0.349 ms
-t_end_2_end:  742.296 ms
+t_dealloc_gpu: 1.293 ms
+t_dealloc_cpu: 10.746 ms
+t_transfers: 1.788 ms
+t_transfers: 3.605 ms
+t_gpu_computation: 0.359 ms
+t_end_2_end:  737.519 ms
 t_other:  0.193 ms
 
 [2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 124.627 ms
-t_init: 137.26902 ms
+t_alloc_managed: 127.655 ms
+t_init: 136.06000 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 419.659 ms
+t_valid: 413.072 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 12.676 ms
-t_managed_prefetch: 82.600 ms
-t_gpu_computation: 0.435 ms
-t_end_2_end:  777.379 ms
-t_other:  0.113 ms
+t_dealloc_managed: 11.797 ms
+t_managed_prefetch: 82.010 ms
+t_gpu_computation: 0.441 ms
+t_end_2_end:  771.146 ms
+t_other:  0.111 ms
 
 [2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 126.969 ms
-t_init: 135.97894 ms
+t_alloc_managed: 125.414 ms
+t_init: 136.24382 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 418.659 ms
+t_valid: 416.624 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 13.124 ms
-t_gpu_computation: 122.240 ms
-t_end_2_end:  817.132 ms
-t_other:  0.161 ms
+t_dealloc_managed: 12.957 ms
+t_gpu_computation: 124.010 ms
+t_end_2_end:  815.407 ms
+t_other:  0.158 ms
 
 [2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_alloc_managed: 123.903 ms
-t_managed_memadvise: 0.014 ms
-t_init: 216.20107 ms
+t_alloc_managed: 126.723 ms
+t_managed_memadvise: 0.015 ms
+t_init: 216.09211 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 568.400 ms
+t_valid: 569.766 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.643 ms
-t_managed_prefetch: 2.116 ms
-t_managed_memadvise: 2.116 ms
-t_gpu_computation: 0.518 ms
-t_end_2_end:  921.932 ms
-t_other:  0.137 ms
+t_dealloc_managed: 10.550 ms
+t_managed_prefetch: 2.113 ms
+t_managed_memadvise: 2.113 ms
+t_gpu_computation: 0.522 ms
+t_end_2_end:  925.917 ms
+t_other:  0.136 ms
 
 [2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_malloc: 0.022 ms
-t_init: 137.27593 ms
+t_malloc: 0.020 ms
+t_init: 137.37202 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 551.026 ms
+t_valid: 518.996 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 5.365 ms
-t_gpu_computation: 8.170 ms
-t_end_2_end:  828.464 ms
-t_other:  126.605 ms
+t_dealloc_malloc: 5.636 ms
+t_gpu_computation: 8.122 ms
+t_end_2_end:  794.483 ms
+t_other:  124.336 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.0(B[m
-t_malloc: 0.021 ms
-t_init: 365.01098 ms
+t_malloc: 0.020 ms
+t_init: 366.63508 ms
 Hybrid split: CPU columns [0, 0), GPU columns [0, 8192)
-t_valid: 612.859 ms
+t_valid: 575.235 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.702 ms
-t_gpu_computation: 0.459 ms
-t_end_2_end:  982.160 ms
-t_other:  0.108 ms
-
---------------------------------------------------------------------------------
-
-[36mN=8192  iters=1  frac=0.1(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_cpu: 174.171 ms
-t_alloc_gpu: 74.668 ms
-t_init: 103.46508 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 361.601 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.316 ms
-t_dealloc_cpu: 10.236 ms
-t_transfers: 1.766 ms
-t_transfers: 3.406 ms
-t_gpu_computation: 0.326 ms
-t_cpu_computation:    14.385 ms
-t_end_2_end:  743.410 ms
-t_other:  0.162 ms
-
-[2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 120.919 ms
-t_init: 137.39395 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 379.603 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 12.909 ms
-t_managed_prefetch: 82.561 ms
-t_gpu_computation: 0.623 ms
-t_cpu_computation:    45.112 ms
-t_end_2_end:  778.630 ms
-t_other:  0.132 ms
-
-[2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 125.495 ms
-t_init: 136.01398 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 407.054 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 11.667 ms
-t_gpu_computation: 132.370 ms
-t_cpu_computation:    18.688 ms
-t_end_2_end:  812.763 ms
-t_other:  0.163 ms
-
-[2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_alloc_managed: 131.002 ms
-t_managed_memadvise: 0.015 ms
-t_init: 217.69714 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 534.124 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.621 ms
-t_managed_prefetch: 2.100 ms
-t_managed_memadvise: 2.100 ms
-t_gpu_computation: 0.523 ms
-t_cpu_computation:    28.890 ms
-t_end_2_end:  924.613 ms
-t_other:  0.164 ms
-
-[2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.021 ms
-t_init: 137.72988 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 460.287 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 5.570 ms
-t_gpu_computation: 66.671 ms
-t_cpu_computation:    15.356 ms
-t_end_2_end:  798.592 ms
-t_other:  128.313 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.1(B[m
-t_malloc: 0.019 ms
-t_init: 366.30201 ms
-Hybrid split: CPU columns [0, 819), GPU columns [819, 8192)
-t_valid: 598.989 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.466 ms
-t_gpu_computation: 0.435 ms
-t_cpu_computation:    29.532 ms
-t_end_2_end:  998.580 ms
-t_other:  0.272 ms
+t_dealloc_malloc: 2.958 ms
+t_gpu_computation: 0.467 ms
+t_end_2_end:  945.424 ms
+t_other:  0.109 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=8192  iters=1  frac=0.2(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_cpu: 174.644 ms
-t_alloc_gpu: 74.693 ms
-t_init: 103.50609 ms
+t_alloc_cpu: 170.996 ms
+t_alloc_gpu: 74.730 ms
+t_init: 103.44100 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 364.678 ms
+t_valid: 360.059 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.319 ms
-t_dealloc_cpu: 11.309 ms
-t_transfers: 1.766 ms
-t_transfers: 3.228 ms
-t_gpu_computation: 0.312 ms
-t_cpu_computation:    23.064 ms
-t_end_2_end:  756.620 ms
-t_other:  0.179 ms
+t_dealloc_gpu: 1.273 ms
+t_dealloc_cpu: 10.945 ms
+t_transfers: 1.750 ms
+t_transfers: 3.210 ms
+t_gpu_computation: 0.304 ms
+t_cpu_computation:    23.150 ms
+t_end_2_end:  747.978 ms
+t_other:  0.174 ms
 
 [2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 121.868 ms
-t_init: 136.07812 ms
+t_alloc_managed: 121.711 ms
+t_init: 136.25598 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 375.121 ms
+t_valid: 375.202 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 13.900 ms
-t_managed_prefetch: 82.473 ms
+t_dealloc_managed: 12.468 ms
+t_managed_prefetch: 82.526 ms
 t_gpu_computation: 0.578 ms
-t_cpu_computation:    58.464 ms
-t_end_2_end:  788.046 ms
-t_other:  0.142 ms
+t_cpu_computation:    58.633 ms
+t_end_2_end:  786.960 ms
+t_other:  0.164 ms
 
 [2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 124.312 ms
-t_init: 137.30097 ms
+t_alloc_managed: 124.190 ms
+t_init: 137.20012 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 406.360 ms
+t_valid: 407.325 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 11.954 ms
-t_gpu_computation: 123.783 ms
-t_cpu_computation:    30.126 ms
-t_end_2_end:  803.869 ms
-t_other:  0.159 ms
+t_dealloc_managed: 12.920 ms
+t_gpu_computation: 125.600 ms
+t_cpu_computation:    30.225 ms
+t_end_2_end:  807.379 ms
+t_other:  0.144 ms
 
 [2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_alloc_managed: 127.855 ms
-t_managed_memadvise: 0.015 ms
-t_init: 217.42201 ms
+t_alloc_managed: 123.192 ms
+t_managed_memadvise: 0.016 ms
+t_init: 216.17699 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 544.334 ms
+t_valid: 564.227 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.452 ms
-t_managed_prefetch: 2.101 ms
-t_managed_memadvise: 2.101 ms
-t_gpu_computation: 0.482 ms
-t_cpu_computation:    45.657 ms
-t_end_2_end:  948.006 ms
-t_other:  0.170 ms
+t_dealloc_managed: 9.619 ms
+t_managed_prefetch: 2.058 ms
+t_managed_memadvise: 2.058 ms
+t_gpu_computation: 0.471 ms
+t_cpu_computation:    46.613 ms
+t_end_2_end:  962.062 ms
+t_other:  0.160 ms
 
 [2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_malloc: 0.021 ms
-t_init: 138.86094 ms
+t_malloc: 0.020 ms
+t_init: 137.38012 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 457.312 ms
+t_valid: 470.959 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 5.322 ms
-t_gpu_computation: 55.437 ms
-t_cpu_computation:    26.796 ms
-t_end_2_end:  779.066 ms
-t_other:  122.114 ms
+t_dealloc_malloc: 5.652 ms
+t_gpu_computation: 58.758 ms
+t_cpu_computation:    26.995 ms
+t_end_2_end:  795.670 ms
+t_other:  122.901 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.2(B[m
-t_malloc: 0.020 ms
-t_init: 370.55397 ms
+t_malloc: 0.024 ms
+t_init: 369.44294 ms
 Hybrid split: CPU columns [0, 1638), GPU columns [1638, 8192)
-t_valid: 567.156 ms
+t_valid: 584.445 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.652 ms
-t_gpu_computation: 0.380 ms
-t_cpu_computation:    51.102 ms
-t_end_2_end:  992.627 ms
-t_other:  0.143 ms
+t_dealloc_malloc: 2.964 ms
+t_gpu_computation: 0.376 ms
+t_cpu_computation:    51.603 ms
+t_end_2_end:  1008.627 ms
+t_other:  0.148 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=8192  iters=1  frac=0.4(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_cpu: 170.936 ms
-t_alloc_gpu: 74.824 ms
-t_init: 103.26290 ms
+t_alloc_cpu: 170.193 ms
+t_alloc_gpu: 74.765 ms
+t_init: 103.58500 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 363.017 ms
+t_valid: 366.985 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.350 ms
-t_dealloc_cpu: 10.157 ms
-t_transfers: 1.756 ms
-t_transfers: 2.863 ms
-t_gpu_computation: 0.248 ms
-t_cpu_computation:    48.162 ms
-t_end_2_end:  774.756 ms
-t_other:  0.184 ms
+t_dealloc_gpu: 1.238 ms
+t_dealloc_cpu: 10.207 ms
+t_transfers: 1.799 ms
+t_transfers: 2.905 ms
+t_gpu_computation: 0.238 ms
+t_cpu_computation:    48.618 ms
+t_end_2_end:  778.665 ms
+t_other:  0.169 ms
 
 [2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 121.459 ms
-t_init: 137.21800 ms
+t_alloc_managed: 126.271 ms
+t_init: 136.42502 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 370.169 ms
+t_valid: 369.416 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 12.515 ms
-t_managed_prefetch: 82.443 ms
-t_gpu_computation: 0.499 ms
-t_cpu_computation:    92.844 ms
-t_end_2_end:  816.803 ms
-t_other:  0.155 ms
+t_dealloc_managed: 12.093 ms
+t_managed_prefetch: 82.150 ms
+t_gpu_computation: 0.506 ms
+t_cpu_computation:    89.141 ms
+t_end_2_end:  815.660 ms
+t_other:  0.164 ms
 
 [2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 124.427 ms
-t_init: 137.23397 ms
+t_alloc_managed: 123.088 ms
+t_init: 137.32505 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 395.149 ms
+t_valid: 394.776 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 11.224 ms
-t_gpu_computation: 172.411 ms
-t_cpu_computation:    127.255 ms
-t_end_2_end:  840.603 ms
-t_other:  0.158 ms
+t_dealloc_managed: 11.107 ms
+t_gpu_computation: 173.359 ms
+t_cpu_computation:    130.836 ms
+t_end_2_end:  839.806 ms
+t_other:  0.151 ms
 
 [2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.4(B[m
-t_alloc_managed: 125.280 ms
-t_managed_memadvise: 0.015 ms
-t_init: 215.98101 ms
+t_alloc_managed: 128.912 ms
+t_managed_memadvise: 0.016 ms
+t_init: 217.65900 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 546.538 ms
+t_valid: 549.814 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.716 ms
-t_managed_prefetch: 2.130 ms
-t_managed_memadvise: 2.130 ms
-t_gpu_computation: 0.425 ms
-t_cpu_computation:    95.508 ms
-t_end_2_end:  996.341 ms
-t_other:  0.173 ms
+t_dealloc_managed: 10.007 ms
+t_managed_prefetch: 2.071 ms
+t_managed_memadvise: 2.071 ms
+t_gpu_computation: 0.411 ms
+t_cpu_computation:    96.205 ms
+t_end_2_end:  1004.858 ms
+t_other:  0.174 ms
 
 [2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.4(B[m
 t_malloc: 0.020 ms
-t_init: 137.62712 ms
+t_init: 137.36391 ms
 Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 463.156 ms
+t_valid: 512.552 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 5.223 ms
-t_gpu_computation: 66.989 ms
-t_cpu_computation:    54.202 ms
-t_end_2_end:  798.043 ms
-t_other:  125.027 ms
+t_dealloc_malloc: 5.483 ms
+t_gpu_computation: 2.982 ms
+t_cpu_computation:    54.553 ms
+t_end_2_end:  784.154 ms
+t_other:  74.182 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.4(B[m
-t_malloc: 0.021 ms
-t_init: 367.10596 ms
-Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
-t_valid: 568.012 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.233 ms
-t_gpu_computation: 0.318 ms
-t_cpu_computation:    106.093 ms
-t_end_2_end:  1044.610 ms
-t_other:  0.145 ms
-
---------------------------------------------------------------------------------
-
-[36mN=8192  iters=1  frac=0.5(B[m
---------------------------------------------------------------------------------
-[2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_cpu: 170.199 ms
-t_alloc_gpu: 74.705 ms
-t_init: 103.60599 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 364.931 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.277 ms
-t_dealloc_cpu: 9.883 ms
-t_transfers: 1.824 ms
-t_transfers: 2.753 ms
-t_gpu_computation: 0.206 ms
-t_cpu_computation:    59.026 ms
-t_end_2_end:  786.550 ms
-t_other:  0.170 ms
-
-[2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 120.681 ms
-t_init: 136.01804 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 365.566 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 11.955 ms
-t_managed_prefetch: 81.909 ms
-t_gpu_computation: 0.406 ms
-t_cpu_computation:    103.064 ms
-t_end_2_end:  819.341 ms
-t_other:  0.148 ms
-
-[2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 124.055 ms
-t_init: 135.53190 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 368.815 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.351 ms
-t_gpu_computation: 207.055 ms
-t_cpu_computation:    217.929 ms
-t_end_2_end:  856.876 ms
-t_other:  0.194 ms
-
-[2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.5(B[m
-t_alloc_managed: 126.668 ms
-t_managed_memadvise: 0.014 ms
-t_init: 217.76891 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 544.472 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.520 ms
-t_managed_prefetch: 2.260 ms
-t_managed_memadvise: 2.260 ms
-t_gpu_computation: 0.345 ms
-t_cpu_computation:    111.405 ms
-t_end_2_end:  1013.244 ms
-t_other:  0.136 ms
-
-[2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.5(B[m
 t_malloc: 0.020 ms
-t_init: 137.06803 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 513.228 ms
+t_init: 371.89579 ms
+Hybrid split: CPU columns [0, 3276), GPU columns [3276, 8192)
+t_valid: 602.902 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 5.495 ms
-t_gpu_computation: 2.419 ms
-t_cpu_computation:    65.947 ms
-t_end_2_end:  786.914 ms
-t_other:  65.156 ms
-
-[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.5(B[m
-t_malloc: 0.021 ms
-t_init: 372.11895 ms
-Hybrid split: CPU columns [0, 4096), GPU columns [4096, 8192)
-t_valid: 596.307 ms
-Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.089 ms
-t_gpu_computation: 0.295 ms
-t_cpu_computation:    125.384 ms
-t_end_2_end:  1097.065 ms
-t_other:  0.145 ms
+t_dealloc_malloc: 3.408 ms
+t_gpu_computation: 0.315 ms
+t_cpu_computation:    106.240 ms
+t_end_2_end:  1084.612 ms
+t_other:  0.146 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=8192  iters=1  frac=0.6(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_cpu: 170.701 ms
-t_alloc_gpu: 74.792 ms
-t_init: 102.61917 ms
+t_alloc_cpu: 170.691 ms
+t_alloc_gpu: 74.853 ms
+t_init: 103.56283 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 367.908 ms
+t_valid: 376.605 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.298 ms
-t_dealloc_cpu: 10.179 ms
-t_transfers: 1.746 ms
-t_transfers: 2.493 ms
-t_gpu_computation: 0.168 ms
-t_cpu_computation:    73.711 ms
-t_end_2_end:  803.870 ms
-t_other:  0.168 ms
+t_dealloc_gpu: 1.260 ms
+t_dealloc_cpu: 10.212 ms
+t_transfers: 1.810 ms
+t_transfers: 2.558 ms
+t_gpu_computation: 0.185 ms
+t_cpu_computation:    74.314 ms
+t_end_2_end:  814.237 ms
+t_other:  0.182 ms
 
 [2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 128.609 ms
-t_init: 136.21807 ms
+t_alloc_managed: 123.628 ms
+t_init: 135.76698 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 364.405 ms
+t_valid: 364.140 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 12.858 ms
-t_managed_prefetch: 82.652 ms
-t_gpu_computation: 1.358 ms
-t_cpu_computation:    129.593 ms
-t_end_2_end:  854.480 ms
-t_other:  0.145 ms
+t_dealloc_managed: 11.804 ms
+t_managed_prefetch: 81.720 ms
+t_gpu_computation: 0.366 ms
+t_cpu_computation:    124.086 ms
+t_end_2_end:  841.314 ms
+t_other:  0.169 ms
 
 [2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 123.828 ms
-t_init: 137.34794 ms
+t_alloc_managed: 126.290 ms
+t_init: 137.31003 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 373.185 ms
+t_valid: 372.260 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 9.491 ms
-t_gpu_computation: 364.820 ms
-t_cpu_computation:    352.680 ms
-t_end_2_end:  1008.824 ms
+t_dealloc_managed: 9.476 ms
+t_gpu_computation: 363.642 ms
+t_cpu_computation:    354.657 ms
+t_end_2_end:  1009.130 ms
 t_other:  0.152 ms
 
 [2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.6(B[m
-t_alloc_managed: 134.780 ms
-t_managed_memadvise: 0.015 ms
-t_init: 216.09497 ms
+t_alloc_managed: 128.204 ms
+t_managed_memadvise: 0.016 ms
+t_init: 217.78011 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 547.561 ms
+t_valid: 545.370 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.889 ms
-t_managed_prefetch: 2.079 ms
-t_managed_memadvise: 2.079 ms
-t_gpu_computation: 0.342 ms
-t_cpu_computation:    149.059 ms
-t_end_2_end:  1060.672 ms
-t_other:  0.194 ms
+t_dealloc_managed: 9.621 ms
+t_managed_prefetch: 2.042 ms
+t_managed_memadvise: 2.042 ms
+t_gpu_computation: 0.336 ms
+t_cpu_computation:    150.338 ms
+t_end_2_end:  1053.560 ms
+t_other:  0.189 ms
 
 [2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.6(B[m
-t_malloc: 0.019 ms
-t_init: 137.67695 ms
+t_malloc: 0.021 ms
+t_init: 137.28189 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 477.908 ms
+t_valid: 439.249 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 6.070 ms
-t_gpu_computation: 1.934 ms
-t_cpu_computation:    83.323 ms
-t_end_2_end:  749.290 ms
-t_other:  44.293 ms
+t_dealloc_malloc: 6.375 ms
+t_gpu_computation: 1.919 ms
+t_cpu_computation:    83.591 ms
+t_end_2_end:  713.520 ms
+t_other:  47.002 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.6(B[m
 t_malloc: 0.021 ms
-t_init: 373.08407 ms
+t_init: 370.13316 ms
 Hybrid split: CPU columns [0, 4915), GPU columns [4915, 8192)
-t_valid: 574.282 ms
+t_valid: 590.634 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.251 ms
-t_gpu_computation: 0.277 ms
-t_cpu_computation:    165.031 ms
-t_end_2_end:  1115.831 ms
-t_other:  0.162 ms
+t_dealloc_malloc: 3.015 ms
+t_gpu_computation: 0.275 ms
+t_cpu_computation:    166.034 ms
+t_end_2_end:  1129.994 ms
+t_other:  0.157 ms
 
 --------------------------------------------------------------------------------
 
 [36mN=8192  iters=1  frac=0.8(B[m
 --------------------------------------------------------------------------------
 [2mmode=explicit N=8192 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_cpu: 170.795 ms
-t_alloc_gpu: 74.910 ms
-t_init: 102.59581 ms
+t_alloc_cpu: 170.726 ms
+t_alloc_gpu: 74.833 ms
+t_init: 103.48701 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 365.165 ms
+t_valid: 365.051 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_gpu: 1.288 ms
-t_dealloc_cpu: 10.527 ms
-t_transfers: 1.758 ms
-t_transfers: 2.145 ms
-t_gpu_computation: 0.119 ms
-t_cpu_computation:    92.244 ms
-t_end_2_end:  819.835 ms
-t_other:  0.165 ms
+t_dealloc_gpu: 1.300 ms
+t_dealloc_cpu: 10.799 ms
+t_transfers: 1.762 ms
+t_transfers: 2.152 ms
+t_gpu_computation: 0.121 ms
+t_cpu_computation:    92.581 ms
+t_end_2_end:  821.097 ms
+t_other:  0.168 ms
 
 [2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 125.082 ms
-t_init: 135.98490 ms
+t_alloc_managed: 121.326 ms
+t_init: 136.24597 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 356.319 ms
+t_valid: 356.764 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 12.798 ms
-t_managed_prefetch: 82.448 ms
-t_gpu_computation: 0.360 ms
-t_cpu_computation:    155.115 ms
-t_end_2_end:  867.900 ms
-t_other:  0.153 ms
+t_dealloc_managed: 11.640 ms
+t_managed_prefetch: 81.969 ms
+t_gpu_computation: 0.307 ms
+t_cpu_computation:    150.232 ms
+t_end_2_end:  858.317 ms
+t_other:  0.140 ms
 
 [2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 123.453 ms
-t_init: 136.02400 ms
+t_alloc_managed: 129.104 ms
+t_init: 136.23190 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 364.887 ms
+t_valid: 361.033 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 9.479 ms
-t_gpu_computation: 500.182 ms
-t_cpu_computation:    499.494 ms
-t_end_2_end:  1134.187 ms
-t_other:  0.162 ms
+t_dealloc_managed: 9.909 ms
+t_gpu_computation: 468.335 ms
+t_cpu_computation:    475.206 ms
+t_end_2_end:  1111.688 ms
+t_other:  0.204 ms
 
 [2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=0.8(B[m
-t_alloc_managed: 129.112 ms
-t_managed_memadvise: 0.015 ms
-t_init: 217.55004 ms
+t_alloc_managed: 123.181 ms
+t_managed_memadvise: 0.016 ms
+t_init: 217.82494 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 545.779 ms
+t_valid: 571.287 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_managed: 10.686 ms
-t_managed_prefetch: 2.292 ms
-t_managed_memadvise: 2.292 ms
-t_gpu_computation: 0.284 ms
-t_cpu_computation:    190.020 ms
-t_end_2_end:  1095.599 ms
+t_dealloc_managed: 10.579 ms
+t_managed_prefetch: 2.301 ms
+t_managed_memadvise: 2.301 ms
+t_gpu_computation: 0.280 ms
+t_cpu_computation:    190.624 ms
+t_end_2_end:  1115.958 ms
 t_other:  0.145 ms
 
 [2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=0.8(B[m
 t_malloc: 0.021 ms
-t_init: 138.23295 ms
+t_init: 137.99500 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 380.227 ms
+t_valid: 366.302 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 6.784 ms
-t_gpu_computation: 0.963 ms
-t_cpu_computation:    104.348 ms
-t_end_2_end:  652.595 ms
-t_other:  22.982 ms
+t_dealloc_malloc: 6.655 ms
+t_gpu_computation: 0.977 ms
+t_cpu_computation:    104.898 ms
+t_end_2_end:  638.617 ms
+t_other:  22.746 ms
 
 [2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=0.8(B[m
 t_malloc: 0.020 ms
-t_init: 378.84998 ms
+t_init: 369.01093 ms
 Hybrid split: CPU columns [0, 6553), GPU columns [6553, 8192)
-t_valid: 581.112 ms
+t_valid: 573.703 ms
 Max |B - A^T| = 0.000e+00  => OK
-t_dealloc_malloc: 3.066 ms
-t_gpu_computation: 0.197 ms
-t_cpu_computation:    207.316 ms
-t_end_2_end:  1170.526 ms
-t_other:  0.162 ms
+t_dealloc_malloc: 3.038 ms
+t_gpu_computation: 0.193 ms
+t_cpu_computation:    209.672 ms
+t_end_2_end:  1155.598 ms
+t_other:  0.154 ms
+
+--------------------------------------------------------------------------------
+
+[36mN=8192  iters=1  frac=1.0(B[m
+--------------------------------------------------------------------------------
+[2mmode=explicit N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_cpu: 171.803 ms
+t_alloc_gpu: 74.765 ms
+t_init: 103.59693 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 365.687 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_gpu: 1.312 ms
+t_dealloc_cpu: 10.658 ms
+t_transfers: 1.794 ms
+t_cpu_computation:    118.353 ms
+t_end_2_end:  848.169 ms
+t_other:  0.199 ms
+
+[2mmode=um_migrate N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 126.407 ms
+t_init: 137.69698 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 350.165 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 11.912 ms
+t_managed_prefetch: 81.913 ms
+t_cpu_computation:    183.368 ms
+t_end_2_end:  891.613 ms
+t_other:  0.151 ms
+
+[2mmode=um_migrate_no_prefetch N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 124.647 ms
+t_init: 137.63595 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 349.424 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 6.129 ms
+t_cpu_computation:    132.287 ms
+t_end_2_end:  750.314 ms
+t_other:  0.191 ms
+
+[2mmode=gh_hbm_shared N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_alloc_managed: 122.758 ms
+t_managed_memadvise: 0.016 ms
+t_init: 215.61503 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 544.049 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_managed: 9.469 ms
+t_managed_prefetch: 2.046 ms
+t_managed_memadvise: 2.046 ms
+t_cpu_computation:    222.108 ms
+t_end_2_end:  1116.249 ms
+t_other:  0.188 ms
+
+[2mmode=gh_hmm_pageable N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.022 ms
+t_init: 137.71415 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 368.604 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 7.000 ms
+t_cpu_computation:    131.999 ms
+t_end_2_end:  770.945 ms
+t_other:  125.606 ms
+
+[2mmode=gh_hmm_pageable_cuda_init N=8192 iters=1 prefetch=1 frac=1.0(B[m
+t_malloc: 0.020 ms
+t_init: 368.48402 ms
+Hybrid split: CPU columns [0, 8192), GPU columns [8192, 8192)
+t_valid: 553.011 ms
+Max |B - A^T| = 0.000e+00  => OK
+t_dealloc_malloc: 3.165 ms
+t_cpu_computation:    255.362 ms
+t_end_2_end:  1180.216 ms
+t_other:  0.174 ms
 
 --------------------------------------------------------------------------------
 
