@@ -209,12 +209,12 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       double t1 = wtime();
       CHECK_CUDA(cudaMallocHost(&buf.hA, buf.nbytes));
       CHECK_CUDA(cudaMallocHost(&buf.hB, buf.nbytes));
-      t_alloc_cpu += wtime() - t1;
+      t_alloc_cpu = (wtime() - t1)*1e3;
 
       t1 = wtime();
       CHECK_CUDA(cudaMalloc(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMalloc(&buf.dB, buf.nbytes));
-      t_alloc_gpu += wtime() - t1;
+      t_alloc_gpu = 1000*(wtime() - t1);
       printf("t_alloc_cpu: %.3f ms\n", t_alloc_cpu);
       printf("t_alloc_gpu: %.3f ms\n", t_alloc_gpu);  
       break;
@@ -225,7 +225,7 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
       buf.hA = buf.dA; buf.hB = buf.dB; 
-      t_alloc_managed += wtime() - t1;
+      t_alloc_managed = 1e3*(wtime() - t1);
       printf("t_alloc_managed: %.3f ms\n", t_alloc_managed);
       break;
     }
@@ -234,7 +234,7 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
       buf.hA = buf.dA; buf.hB = buf.dB;
-      t_alloc_managed += wtime() - t1;
+      t_alloc_managed = (wtime() - t1)*1e3;
       printf("t_alloc_managed: %.3f ms\n", t_alloc_managed);
 
       t1=wtime();
@@ -244,7 +244,7 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       cudaMemLocation loc_cpu{}; loc_cpu.type = cudaMemLocationTypeHost; loc_cpu.id = 0;
       CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
       CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
-      t_managed_memadvise += wtime() - t1;
+      t_managed_memadvise = 1e3*(wtime() - t1);
       printf("t_managed_memadvise: %.3f ms\n", t_managed_memadvise);
 
       break;
@@ -256,7 +256,7 @@ static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const De
       buf.hB = (T*)std::malloc(buf.nbytes);
       if (!buf.hA || !buf.hB) { perror("malloc"); std::exit(EXIT_FAILURE); }
       buf.dA = buf.hA; buf.dB = buf.hB; 
-      t_malloc += wtime() - t1;
+      t_malloc = (wtime() - t1)*1e3;
       printf("t_malloc: %.3f ms\n", t_malloc);
       break;
     }
@@ -283,20 +283,20 @@ static void pre_kernel_setup(Mode mode, const Buffers<T>& buf, const DeviceCaps&
   }
 }
 
-template <typename T>
-static double checksum_host(const T* p, size_t n) {
-  double s=0.0; for (size_t i=0;i<n;++i) s += (double)p[i]; return s;
-}
-
 int main(int argc, char** argv) {
   Args args = parse(argc, argv);
   Mode mode = parse_mode_str(args.mode);
   DeviceCaps caps = query_caps();
-   
-  double t_alloc_cpu = 0.0, t_alloc_gpu = 0.0, t_alloc_managed=0.0, t_malloc=0.0, t_managed_memadvise=0.0, t_end2end=wtime();
-  const int N = args.N; const size_t elems = (size_t)N * N;
-  Buffers<double> buf; allocate_buffers<double>(mode, elems, buf, caps, t_alloc_cpu, t_alloc_gpu, t_alloc_managed, t_malloc, t_managed_memadvise);
+  
+  double t_end2end = wtime(); 
 
+  double t_alloc_cpu = 0.0, t_alloc_gpu = 0.0, t_alloc_managed=0.0, t_malloc=0.0, t_managed_memadvise=0.0;
+  
+  const int N = args.N; const size_t elems = (size_t)N * N;
+  Buffers<double> buf; 
+  allocate_buffers<double>(mode, elems, buf, caps, t_alloc_cpu, t_alloc_gpu, t_alloc_managed, t_malloc, t_managed_memadvise);
+
+  double t_init = wtime();
   if (mode != Mode::GH_HMM_PAGEABLE_CUDA_INIT) {
     std::mt19937_64 rng(args.seed); std::uniform_real_distribution<double> dist(-1.0, 1.0);
     for (size_t i = 0; i < elems; ++i) buf.hA[i] = dist(rng);
@@ -307,6 +307,8 @@ int main(int argc, char** argv) {
     set_zero_double<<<blocks, threads>>>(buf.dB, elems);
     CHECK_CUDA(cudaGetLastError()); CHECK_CUDA(cudaDeviceSynchronize());
   }
+  t_init = 1e3*(wtime() - t_init);
+  printf("t_init: %.5f ms\n", t_init);
 
   
   double ms_h2d_once = 0.0, ms_prefetch_to_dev = 0.0;
@@ -318,61 +320,10 @@ int main(int argc, char** argv) {
   const int Wcpu = k, Wgpu = N - k, H = N;
   constexpr int TILEC = 32; constexpr int BRC = 8;
 
-  //warmup: i run 2 iterations, second to return to original state
-  /*const double t_warmup_start = wtime();
-  {
-    const int warmup_iters = 2;
-    std::vector<double> w_ms_gpu(warmup_iters, 0.0), w_ms_cpu(warmup_iters, 0.0),
-                        w_ms_overlap(warmup_iters, 0.0), w_ms_d2h(warmup_iters, 0.0);
-
-    for (int it = 0; it < warmup_iters; ++it) {
-      double cpu_ms_local = 0.0;
-      //CPU warmup
-      std::thread cpu_thr([&]{
-        if (Wcpu > 0) {
-          const int T = std::max(1, args.threads);
-          const int chunks = std::min(T, std::max(1, Wcpu));
-          const int base   = Wcpu / chunks;
-          const int rem    = Wcpu % chunks;
-          #pragma omp parallel for schedule(static) num_threads(T)
-          for (int t = 0; t < chunks; ++t) {
-            const int c0 = (t < rem) ? (t * (base + 1)) : (rem * (base + 1) + (t - rem) * base);
-            const int c1 = c0 + ((t < rem) ? (base + 1) : base);
-            transpose_cpu_blocked(buf.hA, buf.hB, N, c0, c1, 32);
-          }
-        }
-      });
-      //GPU warmup
-      float ms_gpu_this = 0.0f;
-      if (Wgpu > 0) {
-        cudaEvent_t evS, evE; CHECK_CUDA(cudaEventCreate(&evS)); CHECK_CUDA(cudaEventCreate(&evE));
-        dim3 block(TILEC, BRC); dim3 grid((Wgpu + TILEC - 1)/TILEC, (H + TILEC - 1)/TILEC);
-        CHECK_CUDA(cudaEventRecord(evS));
-        transpose_tiled_rect<double, TILEC, BRC><<<grid, block>>>(buf.dA, buf.dB, N, k, 0, Wgpu, H);
-        CHECK_CUDA(cudaEventRecord(evE)); CHECK_CUDA(cudaEventSynchronize(evE));
-        CHECK_CUDA(cudaEventElapsedTime(&ms_gpu_this, evS, evE));
-        CHECK_CUDA(cudaEventDestroy(evS)); CHECK_CUDA(cudaEventDestroy(evE));
-      }
-      //join CPU, GPU done
-      cpu_thr.join(); CHECK_CUDA(cudaDeviceSynchronize());
-      //EXPLICIT mode, memcpy back to host (copy rows [k,N))
-      if (mode == Mode::EXPLICIT) {
-        const size_t row0_off = (size_t)k * (size_t)N;
-        const size_t n_elems  = (size_t)(N - k) * (size_t)N;
-        const void* src = (const void*)(buf.dB + row0_off);
-        void*       dst = (void*)(buf.hB + row0_off);
-        CHECK_CUDA(cudaMemcpy(dst, src, n_elems * sizeof(double), cudaMemcpyDeviceToHost));
-      }
-    }
-  }
-  //end warmup
-  */
-  
-  //timed iteration
   std::vector<double> ms_gpu(args.iters, 0.0), ms_cpu(args.iters, 0.0), ms_overlap(args.iters, 0.0), ms_d2h(args.iters, 0.0);
-  
+  int it=0;  
   //CPU
-  for (int it = 0; it < args.iters; ++it) {
+  //for (int it = 0; it < args.iters; ++it) {
    const double t_iter_start = wtime();
    double cpu_ms_local = 0.0;
    std::thread cpu_thr([&]{
@@ -392,7 +343,7 @@ int main(int argc, char** argv) {
     }
     cpu_ms_local = (wtime() - t0) * 1e3;
    }
-  });
+   });
 
     //GPU
     float ms_gpu_this = 0.0f;
@@ -402,7 +353,7 @@ int main(int argc, char** argv) {
       CHECK_CUDA(cudaEventRecord(evS));
       transpose_tiled_rect<double, TILEC, BRC><<<grid, block>>>(buf.dA, buf.dB, N, k, 0, Wgpu, H);
       CHECK_CUDA(cudaEventRecord(evE)); CHECK_CUDA(cudaEventSynchronize(evE));
-      CHECK_CUDA(cudaEventElapsedTime(&ms_gpu_this, evS, evE));
+      CHECK_CUDA(cudaEventElapsedTime(&ms_gpu_this, evS, evE)); //time in millisecs
       CHECK_CUDA(cudaEventDestroy(evS)); CHECK_CUDA(cudaEventDestroy(evE));
     }
 
@@ -423,28 +374,13 @@ int main(int argc, char** argv) {
     //per iteration
     ms_cpu[it]    = cpu_ms_local;          
     ms_gpu[it]    = (double)ms_gpu_this;   
-    ms_overlap[it]= (wtime() - t_iter_start) * 1e3; //compute end to end for this iteration
-  }
+  //}
   
-   
-
-  //UM migrate back for CPU read timing
-  /*double ms_um_to_cpu = 0.0;
-  if (mode == Mode::UM_MIGRATE) {
-    cudaMemLocation dst_cpu{}; dst_cpu.type = cudaMemLocationTypeHost; dst_cpu.id = 0;
-    double t0 = wtime();
-    CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_cpu, 0));
-    CHECK_CUDA(cudaDeviceSynchronize());
-    ms_um_to_cpu = (wtime() - t0) * 1e3;
-  }*/
-
-  //host checksum read (captures migration costs for no-prefetch/HMM)
-  //double sumB = checksum_host(buf.hB, elems);
+  double t_valid = wtime();
   double maxerr = max_abs_diff_transpose(buf.hA, buf.hB, N);
-
-  //printf("CPU checksum(B)=%.6e\n", sumB);
-  printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
-
+  t_valid = 1e3*(wtime() - t_valid);
+  printf("t_valid: %.3f ms\n", t_valid );
+    printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
 
   double t1, t_dealloc_cpu = 0.0, t_dealloc_gpu=0.0, t_dealloc_managed = 0.0, t_dealloc_malloc = 0.0;
   switch (mode) {
@@ -452,12 +388,12 @@ int main(int argc, char** argv) {
       t1 = wtime();
       CHECK_CUDA(cudaFree(buf.dA)); 
       CHECK_CUDA(cudaFree(buf.dB));
-      t_dealloc_gpu += wtime() - t1;
-      printf("t_dealloc_gpu: %.3f ms\n", t_dealloc_gpu);
+      t_dealloc_gpu = 1000*(wtime() - t1);
+      printf("t_dealloc_gpu: %.3f ms\n",t_dealloc_gpu);
       t1 = wtime();
       CHECK_CUDA(cudaFreeHost(buf.hA)); 
       CHECK_CUDA(cudaFreeHost(buf.hB));
-      t_dealloc_cpu += wtime() - t1;
+      t_dealloc_cpu = 1000*(wtime() - t1);
       printf("t_dealloc_cpu: %.3f ms\n", t_dealloc_cpu);
       break;
     case Mode::UM_MIGRATE:
@@ -466,33 +402,24 @@ int main(int argc, char** argv) {
     case Mode::GH_HBM_SHARED_NO_PREFETCH:
       t1 = wtime();
       CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
-      t_dealloc_managed += wtime() - t1;
+      t_dealloc_managed = 1000*(wtime() - t1);
       printf("t_dealloc_managed: %.3f ms\n", t_dealloc_managed);
       break;
     case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
     case Mode::GH_HMM_PAGEABLE:
       t1 = wtime();
       std::free(buf.hA); std::free(buf.hB); 
-      t_dealloc_malloc += wtime() - t1;
+      t_dealloc_malloc = 1e3*(wtime() - t1);
       printf("t_dealloc_malloc: %.3f ms\n", t_dealloc_malloc);
       break;
   }
 
-
   //END OF FULL END TO END RUN
   const double ms_full_e2e = (wtime() - t_end2end) * 1e3; 
 
-  // double t_verify0 = wtime();
-  //double maxerr = max_abs_diff_transpose(buf.hA, buf.hB, N);
-  // double ms_verify = (wtime() - t_verify0) * 1e3;
-
-  //prints
-  //printf("Pre Kernel Costs: %.3f ms \n", pre_kernel_ms);
-
-
-  double total_d2h = std::accumulate(ms_d2h.begin(), ms_d2h.end(), 0.0);
-  double total_gpu = std::accumulate(ms_gpu.begin(), ms_gpu.end(), 0.0);
-  double total_cpu = std::accumulate(ms_cpu.begin(), ms_cpu.end(), 0.0);
+  double total_d2h = ms_d2h[it];
+  double total_gpu = ms_gpu[it];
+  double total_cpu = ms_cpu[it];
 
   if (mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED && args.prefetch)
     printf("t_managed_prefetch: %.3f ms\n", ms_prefetch_to_dev);
@@ -505,40 +432,13 @@ int main(int argc, char** argv) {
   if (mode == Mode::EXPLICIT && Wgpu>0)
     printf("t_transfers: %.3f ms\n", total_d2h + ms_h2d_once);
 
-  //if (Wgpu>0) printf("GPU Kernel avg: %.3f ms\n", ms_gpu_avg);
-  //else        printf("GPU Kernel avg: N/A (no GPU work)\n");
-  //if (Wcpu>0) printf("CPU compute:    %.3f ms\n", ms_cpu_avg);
-  //else        printf("CPU compute:    N/A (no CPU work)\n");
   if (Wgpu>0) printf("t_gpu_computation: %.3f ms\n", total_gpu);
   if (Wcpu>0) printf("t_cpu_computation:    %.3f ms\n", total_cpu);
 
-  printf("t_end_2_end:  %.3f ms\n", ms_full_e2e);
-  printf("t_other:  %.3f ms\n", (ms_full_e2e - total_gpu - total_cpu - total_d2h - ms_h2d_once - ms_prefetch_to_dev - t_dealloc_cpu - t_dealloc_gpu - t_dealloc_managed - t_dealloc_malloc - t_alloc_cpu - t_alloc_gpu - t_alloc_managed - t_malloc - t_managed_memadvise));
-
-
-  /*printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms\n", sumB, ms_host_read);
-  printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
-  */
-  /*switch (mode) {
-    case Mode::EXPLICIT:
-      CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
-      CHECK_CUDA(cudaFreeHost(buf.hA)); CHECK_CUDA(cudaFreeHost(buf.hB));
-      break;
-    case Mode::UM_MIGRATE:
-    case Mode::GH_HBM_SHARED:
-    case Mode::UM_MIGRATE_NO_PREFETCH:
-    case Mode::GH_HBM_SHARED_NO_PREFETCH:
-      CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
-      break;
-    case Mode::GH_CPU_SHARED:
-      CHECK_CUDA(cudaFreeHost(buf.hA)); CHECK_CUDA(cudaFreeHost(buf.hB));
-      break;
-    case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
-    case Mode::GH_HMM_PAGEABLE:
-      std::free(buf.hA); std::free(buf.hB); break;
-  }*/
-
-
+  printf("t_end_2_end:  %.3f ms\n", ms_full_e2e );
+  printf("t_other:  %.3f ms\n", (ms_full_e2e - std::max(total_cpu, total_gpu) - total_d2h - ms_h2d_once - ms_prefetch_to_dev - 
+  			  (t_init + t_valid + t_dealloc_cpu + t_dealloc_gpu + t_dealloc_managed + t_dealloc_malloc + t_alloc_cpu + t_alloc_gpu + t_alloc_managed + t_malloc + t_managed_memadvise)));
+  
   return 0;
 }
 

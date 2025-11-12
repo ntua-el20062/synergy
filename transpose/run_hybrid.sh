@@ -4,7 +4,7 @@ set -euo pipefail
 
 BIN_HYBRID=${BIN_HYBRID:-./transpose_bench_hybrid}
 
-SIZES=(${N:-1024 2048 4096 8192})
+SIZES=(${N:-2048 4096 8192})
 ITERS=(${ITERS:-1})
 PREFETCHES=(${PREFETCHES:-1})  
 SEED=${SEED:-42}
