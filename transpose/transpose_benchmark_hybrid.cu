@@ -201,48 +201,63 @@ template <typename T> struct Buffers {
 };
 
 template <typename T>
-static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const DeviceCaps& caps) {
+static void allocate_buffers(Mode mode, size_t nElems, Buffers<T>& buf, const DeviceCaps& caps, double &t_alloc_cpu, double &t_alloc_gpu, double &t_alloc_managed, double &t_malloc, double &t_managed_memadvise) {
   buf.nbytes = nElems * sizeof(T);
   switch (mode) {
     case Mode::EXPLICIT: {
+      
+      double t1 = wtime();
       CHECK_CUDA(cudaMallocHost(&buf.hA, buf.nbytes));
       CHECK_CUDA(cudaMallocHost(&buf.hB, buf.nbytes));
+      t_alloc_cpu += wtime() - t1;
+
+      t1 = wtime();
       CHECK_CUDA(cudaMalloc(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMalloc(&buf.dB, buf.nbytes));
+      t_alloc_gpu += wtime() - t1;
+      printf("t_alloc_cpu: %.3f ms\n", t_alloc_cpu);
+      printf("t_alloc_gpu: %.3f ms\n", t_alloc_gpu);  
       break;
     }
     case Mode::UM_MIGRATE:
-    case Mode::UM_MIGRATE_NO_PREFETCH: {
+    case Mode::UM_MIGRATE_NO_PREFETCH:{
+      double t1 = wtime();
       CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
-      buf.hA = buf.dA; buf.hB = buf.dB; break;
+      buf.hA = buf.dA; buf.hB = buf.dB; 
+      t_alloc_managed += wtime() - t1;
+      printf("t_alloc_managed: %.3f ms\n", t_alloc_managed);
+      break;
     }
-    case Mode::GH_HBM_SHARED_NO_PREFETCH:
     case Mode::GH_HBM_SHARED: {
+      double t1 = wtime();
       CHECK_CUDA(cudaMallocManaged(&buf.dA, buf.nbytes));
       CHECK_CUDA(cudaMallocManaged(&buf.dB, buf.nbytes));
       buf.hA = buf.dA; buf.hB = buf.dB;
+      t_alloc_managed += wtime() - t1;
+      printf("t_alloc_managed: %.3f ms\n", t_alloc_managed);
+
+      t1=wtime();
       cudaMemLocation loc_dev{}; loc_dev.type = cudaMemLocationTypeDevice; loc_dev.id = caps.dev;
       CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev));
       CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetPreferredLocation, loc_dev));
       cudaMemLocation loc_cpu{}; loc_cpu.type = cudaMemLocationTypeHost; loc_cpu.id = 0;
       CHECK_CUDA(cudaMemAdvise(buf.dA, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
       CHECK_CUDA(cudaMemAdvise(buf.dB, buf.nbytes, cudaMemAdviseSetAccessedBy, loc_cpu));
-      break;
-    }
-    case Mode::GH_CPU_SHARED: {
-      CHECK_CUDA(cudaMallocHost(&buf.hA, buf.nbytes));
-      CHECK_CUDA(cudaMallocHost(&buf.hB, buf.nbytes));
-      CHECK_CUDA(cudaHostGetDevicePointer(&buf.dA, buf.hA, 0));
-      CHECK_CUDA(cudaHostGetDevicePointer(&buf.dB, buf.hB, 0));
+      t_managed_memadvise += wtime() - t1;
+      printf("t_managed_memadvise: %.3f ms\n", t_managed_memadvise);
+
       break;
     }
     case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
     case Mode::GH_HMM_PAGEABLE: {
+      double t1 = wtime();
       buf.hA = (T*)std::malloc(buf.nbytes);
       buf.hB = (T*)std::malloc(buf.nbytes);
       if (!buf.hA || !buf.hB) { perror("malloc"); std::exit(EXIT_FAILURE); }
       buf.dA = buf.hA; buf.dB = buf.hB; 
+      t_malloc += wtime() - t1;
+      printf("t_malloc: %.3f ms\n", t_malloc);
       break;
     }
   }
@@ -277,9 +292,10 @@ int main(int argc, char** argv) {
   Args args = parse(argc, argv);
   Mode mode = parse_mode_str(args.mode);
   DeviceCaps caps = query_caps();
-
+   
+  double t_alloc_cpu = 0.0, t_alloc_gpu = 0.0, t_alloc_managed=0.0, t_malloc=0.0, t_managed_memadvise=0.0, t_end2end=wtime();
   const int N = args.N; const size_t elems = (size_t)N * N;
-  Buffers<double> buf; allocate_buffers<double>(mode, elems, buf, caps);
+  Buffers<double> buf; allocate_buffers<double>(mode, elems, buf, caps, t_alloc_cpu, t_alloc_gpu, t_alloc_managed, t_malloc, t_managed_memadvise);
 
   if (mode != Mode::GH_HMM_PAGEABLE_CUDA_INIT) {
     std::mt19937_64 rng(args.seed); std::uniform_real_distribution<double> dist(-1.0, 1.0);
@@ -295,34 +311,25 @@ int main(int argc, char** argv) {
   
   double ms_h2d_once = 0.0, ms_prefetch_to_dev = 0.0;
 
-  double pre_kernel_ms = 0.0;
-  const double t00 = wtime();
   pre_kernel_setup<double>(mode, buf, caps, args.prefetch, ms_h2d_once, ms_prefetch_to_dev);
-  pre_kernel_ms = (wtime() - t00) * 1e3;
-
-
+  
   int k = args.frac * N; //0-k*N: taken by CPU, the rest taken by GPU
   printf("Hybrid split: CPU columns [0, %d), GPU columns [%d, %d)\n", k, k, N);
   const int Wcpu = k, Wgpu = N - k, H = N;
   constexpr int TILEC = 32; constexpr int BRC = 8;
 
-  //start e2e measurment
-  const double t_compute_all_start = wtime();
-
   //warmup: i run 2 iterations, second to return to original state
-  const double t_warmup_start = wtime();
+  /*const double t_warmup_start = wtime();
   {
     const int warmup_iters = 2;
     std::vector<double> w_ms_gpu(warmup_iters, 0.0), w_ms_cpu(warmup_iters, 0.0),
                         w_ms_overlap(warmup_iters, 0.0), w_ms_d2h(warmup_iters, 0.0);
 
     for (int it = 0; it < warmup_iters; ++it) {
-      const double t_iter_start = wtime();
       double cpu_ms_local = 0.0;
       //CPU warmup
       std::thread cpu_thr([&]{
         if (Wcpu > 0) {
-          const double t0 = wtime();
           const int T = std::max(1, args.threads);
           const int chunks = std::min(T, std::max(1, Wcpu));
           const int base   = Wcpu / chunks;
@@ -333,7 +340,6 @@ int main(int argc, char** argv) {
             const int c1 = c0 + ((t < rem) ? (base + 1) : base);
             transpose_cpu_blocked(buf.hA, buf.hB, N, c0, c1, 32);
           }
-          cpu_ms_local = (wtime() - t0) * 1e3;
         }
       });
       //GPU warmup
@@ -351,34 +357,16 @@ int main(int argc, char** argv) {
       cpu_thr.join(); CHECK_CUDA(cudaDeviceSynchronize());
       //EXPLICIT mode, memcpy back to host (copy rows [k,N))
       if (mode == Mode::EXPLICIT) {
-        double t0 = wtime();
         const size_t row0_off = (size_t)k * (size_t)N;
         const size_t n_elems  = (size_t)(N - k) * (size_t)N;
         const void* src = (const void*)(buf.dB + row0_off);
         void*       dst = (void*)(buf.hB + row0_off);
         CHECK_CUDA(cudaMemcpy(dst, src, n_elems * sizeof(double), cudaMemcpyDeviceToHost));
-        w_ms_d2h[it] = (wtime() - t0) * 1e3;
       }
-      //per iteration
-      w_ms_cpu[it]     = cpu_ms_local;
-      w_ms_gpu[it]     = (double)ms_gpu_this;
-      w_ms_overlap[it] = (wtime() - t_iter_start) * 1e3;
     }
-    const double warmup_total_ms = (wtime() - t_warmup_start) * 1e3;
-    auto avg = [](const std::vector<double>& v){ double s=0; for(double x:v) s+=x; return v.empty()?0.0:s/v.size(); };
-    const double w_gpu_avg  = avg(w_ms_gpu);
-    const double w_cpu_avg  = avg(w_ms_cpu);
-    const double w_olap_avg = avg(w_ms_overlap);
-    const double w_d2h_avg  = avg(w_ms_d2h);
-
-    if (Wgpu>0) printf("WARMUP GPU Kernel (first iter): %.3f ms\n", w_ms_gpu[0]);
-    if (Wcpu>0) printf("WARMUP CPU compute avg (first iter): %.3f ms\n", w_ms_cpu[0]);
-    else        printf("WARMUP CPU compute (first iter): N/A (no CPU work)\n");
-    printf("WARMUP total time: %.3f ms\n", warmup_total_ms);
-
   }
   //end warmup
-  
+  */
   
   //timed iteration
   std::vector<double> ms_gpu(args.iters, 0.0), ms_cpu(args.iters, 0.0), ms_overlap(args.iters, 0.0), ms_d2h(args.iters, 0.0);
@@ -438,78 +426,100 @@ int main(int argc, char** argv) {
     ms_overlap[it]= (wtime() - t_iter_start) * 1e3; //compute end to end for this iteration
   }
   
-  auto avg = [](const std::vector<double>& v){ double s=0; for(double x:v) s+=x; return v.empty()?0.0:s/v.size(); };
-  const double ms_gpu_avg  = avg(ms_gpu);
-  const double ms_cpu_avg  = avg(ms_cpu);
-  const double ms_olap_avg = avg(ms_overlap);
-  const double ms_d2h_avg  = avg(ms_d2h);
+   
 
   //UM migrate back for CPU read timing
-  double ms_um_to_cpu = 0.0;
+  /*double ms_um_to_cpu = 0.0;
   if (mode == Mode::UM_MIGRATE) {
     cudaMemLocation dst_cpu{}; dst_cpu.type = cudaMemLocationTypeHost; dst_cpu.id = 0;
     double t0 = wtime();
     CHECK_CUDA(cudaMemPrefetchAsync(buf.dB, buf.nbytes, dst_cpu, 0));
     CHECK_CUDA(cudaDeviceSynchronize());
     ms_um_to_cpu = (wtime() - t0) * 1e3;
-  }
+  }*/
 
   //host checksum read (captures migration costs for no-prefetch/HMM)
-  double t_chk0 = wtime();
-  double sumB = checksum_host(buf.hB, elems);
-  double ms_host_read = (wtime() - t_chk0) * 1e3;
-
-  
-  //END OF FULL END TO END RUN
-  const double ms_compute_all = (wtime() - t_compute_all_start) * 1e3; //includes loop overhead
-
-  double t_verify0 = wtime();
+  //double sumB = checksum_host(buf.hB, elems);
   double maxerr = max_abs_diff_transpose(buf.hA, buf.hB, N);
-  double ms_verify = (wtime() - t_verify0) * 1e3;
 
-
-  //2: one read and one write
-  const double bytes_gpu = 2.0 * (double)Wgpu * (double)H * sizeof(double);
-  const double bytes_cpu = 2.0 * (double)Wcpu * (double)H * sizeof(double);
-  const double bytes_all = 2.0 * (double)N    * (double)N * sizeof(double);
-
-  const double bw_gpu   = (bytes_gpu>0 && ms_gpu_avg>0) ? bytes_gpu/(ms_gpu_avg/1e3)/1e9 : 0.0;
-  const double bw_cpu   = (bytes_cpu>0 && ms_cpu_avg>0) ? bytes_cpu/(ms_cpu_avg/1e3)/1e9 : 0.0;
-  const double bw_olap  = (bytes_all>0 && ms_olap_avg>0) ? bytes_all/(ms_olap_avg/1e3)/1e9 : 0.0;  
-  const double ms_full_e2e = pre_kernel_ms + ms_compute_all; 
-  const double bw_full_e2e = (bytes_all>0 && ms_full_e2e>0) ? bytes_all/(ms_full_e2e/1e3)/1e9 : 0.0;
-
-  //prints
-  printf("Pre Kernel Costs: %.3f ms \n", pre_kernel_ms);
-
-  if (mode == Mode::UM_MIGRATE && args.prefetch)
-    printf("UM prefetch-to-GPU: %.3f ms\n", ms_prefetch_to_dev);
-  if (mode == Mode::EXPLICIT)
-    printf("H2D once: %.3f ms\n", ms_h2d_once);
-  if (mode == Mode::EXPLICIT && Wgpu>0)
-    printf("D2H avg per-iter: %.3f ms\n", ms_d2h_avg);
-  if (mode == Mode::UM_MIGRATE && Wgpu>0)
-    printf("UM prefetch-to-CPU (post): %.3f ms\n",ms_um_to_cpu);
-
-
-  double total_gpu = std::accumulate(ms_gpu.begin(), ms_gpu.end(), 0.0);
-  double total_cpu = std::accumulate(ms_cpu.begin(), ms_cpu.end(), 0.0);
-  if (Wgpu>0) printf("GPU Kernel avg: %.3f ms\n", ms_gpu_avg);
-  else        printf("GPU Kernel avg: N/A (no GPU work)\n");
-  if (Wcpu>0) printf("CPU compute:    %.3f ms\n", ms_cpu_avg);
-  else        printf("CPU compute:    N/A (no CPU work)\n");
-  if (Wgpu>0) printf("GPU Kernel total: %.3f ms\n", total_gpu);
-  if (Wcpu>0) printf("CPU compute total:    %.3f ms\n", total_cpu);
-
-
-  printf("Compute E2E (avg per-iter): %.3f ms\n", ms_olap_avg);
-  printf("Compute E2E (whole loop):   %.3f ms\n", ms_compute_all);
-  printf("Full    E2E:                %.3f ms\n", ms_full_e2e);
-
-  printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms\n", sumB, ms_host_read);
+  //printf("CPU checksum(B)=%.6e\n", sumB);
   printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
 
+
+  double t1, t_dealloc_cpu = 0.0, t_dealloc_gpu=0.0, t_dealloc_managed = 0.0, t_dealloc_malloc = 0.0;
   switch (mode) {
+    case Mode::EXPLICIT:
+      t1 = wtime();
+      CHECK_CUDA(cudaFree(buf.dA)); 
+      CHECK_CUDA(cudaFree(buf.dB));
+      t_dealloc_gpu += wtime() - t1;
+      printf("t_dealloc_gpu: %.3f ms\n", t_dealloc_gpu);
+      t1 = wtime();
+      CHECK_CUDA(cudaFreeHost(buf.hA)); 
+      CHECK_CUDA(cudaFreeHost(buf.hB));
+      t_dealloc_cpu += wtime() - t1;
+      printf("t_dealloc_cpu: %.3f ms\n", t_dealloc_cpu);
+      break;
+    case Mode::UM_MIGRATE:
+    case Mode::GH_HBM_SHARED:
+    case Mode::UM_MIGRATE_NO_PREFETCH:
+    case Mode::GH_HBM_SHARED_NO_PREFETCH:
+      t1 = wtime();
+      CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
+      t_dealloc_managed += wtime() - t1;
+      printf("t_dealloc_managed: %.3f ms\n", t_dealloc_managed);
+      break;
+    case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
+    case Mode::GH_HMM_PAGEABLE:
+      t1 = wtime();
+      std::free(buf.hA); std::free(buf.hB); 
+      t_dealloc_malloc += wtime() - t1;
+      printf("t_dealloc_malloc: %.3f ms\n", t_dealloc_malloc);
+      break;
+  }
+
+
+  //END OF FULL END TO END RUN
+  const double ms_full_e2e = (wtime() - t_end2end) * 1e3; 
+
+  // double t_verify0 = wtime();
+  //double maxerr = max_abs_diff_transpose(buf.hA, buf.hB, N);
+  // double ms_verify = (wtime() - t_verify0) * 1e3;
+
+  //prints
+  //printf("Pre Kernel Costs: %.3f ms \n", pre_kernel_ms);
+
+
+  double total_d2h = std::accumulate(ms_d2h.begin(), ms_d2h.end(), 0.0);
+  double total_gpu = std::accumulate(ms_gpu.begin(), ms_gpu.end(), 0.0);
+  double total_cpu = std::accumulate(ms_cpu.begin(), ms_cpu.end(), 0.0);
+
+  if (mode == Mode::UM_MIGRATE || mode == Mode::GH_HBM_SHARED && args.prefetch)
+    printf("t_managed_prefetch: %.3f ms\n", ms_prefetch_to_dev);
+
+  if (mode == Mode::GH_HBM_SHARED)
+    printf("t_managed_memadvise: %.3f ms\n", ms_prefetch_to_dev);
+
+  if (mode == Mode::EXPLICIT)
+    printf("t_transfers: %.3f ms\n", ms_h2d_once);
+  if (mode == Mode::EXPLICIT && Wgpu>0)
+    printf("t_transfers: %.3f ms\n", total_d2h + ms_h2d_once);
+
+  //if (Wgpu>0) printf("GPU Kernel avg: %.3f ms\n", ms_gpu_avg);
+  //else        printf("GPU Kernel avg: N/A (no GPU work)\n");
+  //if (Wcpu>0) printf("CPU compute:    %.3f ms\n", ms_cpu_avg);
+  //else        printf("CPU compute:    N/A (no CPU work)\n");
+  if (Wgpu>0) printf("t_gpu_computation: %.3f ms\n", total_gpu);
+  if (Wcpu>0) printf("t_cpu_computation:    %.3f ms\n", total_cpu);
+
+  printf("t_end_2_end:  %.3f ms\n", ms_full_e2e);
+  printf("t_other:  %.3f ms\n", (ms_full_e2e - total_gpu - total_cpu - total_d2h - ms_h2d_once - ms_prefetch_to_dev - t_dealloc_cpu - t_dealloc_gpu - t_dealloc_managed - t_dealloc_malloc - t_alloc_cpu - t_alloc_gpu - t_alloc_managed - t_malloc - t_managed_memadvise));
+
+
+  /*printf("CPU checksum(B)=%.6e, CPU read time: %.3f ms\n", sumB, ms_host_read);
+  printf("Max |B - A^T| = %.3e  => %s\n", maxerr, (maxerr < 1e-9 ? "OK" : "MISMATCH"));
+  */
+  /*switch (mode) {
     case Mode::EXPLICIT:
       CHECK_CUDA(cudaFree(buf.dA)); CHECK_CUDA(cudaFree(buf.dB));
       CHECK_CUDA(cudaFreeHost(buf.hA)); CHECK_CUDA(cudaFreeHost(buf.hB));
@@ -526,7 +536,9 @@ int main(int argc, char** argv) {
     case Mode::GH_HMM_PAGEABLE_CUDA_INIT:
     case Mode::GH_HMM_PAGEABLE:
       std::free(buf.hA); std::free(buf.hB); break;
-  }
+  }*/
+
+
   return 0;
 }
 

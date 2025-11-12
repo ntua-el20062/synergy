@@ -18,8 +18,6 @@ MODES=(
   um_migrate
   um_migrate_no_prefetch
   gh_hbm_shared
-  gh_hbm_shared_no_prefetch
-  gh_cpu_shared
   gh_hmm_pageable
   gh_hmm_pageable_cuda_init 
 )
