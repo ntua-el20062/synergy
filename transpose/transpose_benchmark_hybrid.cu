@@ -432,7 +432,7 @@ int main(int argc, char** argv) {
   if (mode == Mode::EXPLICIT && Wgpu>0)
     printf("t_transfers: %.3f ms\n", total_d2h + ms_h2d_once);
 
-  if (Wgpu>0) printf("t_gpu_computation: %.3f ms\n", total_gpu);
+  printf("t_gpu_computation: %.3f ms\n", total_gpu);
   if (Wcpu>0) printf("t_cpu_computation:    %.3f ms\n", total_cpu);
 
   printf("t_end_2_end:  %.3f ms\n", ms_full_e2e );

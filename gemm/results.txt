@@ -1,0 +1,234 @@
+Config: m=5000, n=5000, k=5000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 107.393 ms
+t_end2end = 1186.597 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=5000
+t_compute = 16.941 ms 
+t_end2end = 1078.810 ms 
+ ================== 
+
+Config: m=5000, n=5000, k=9000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 161.162 ms
+t_end2end = 1740.786 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=9000
+t_compute = 17.168 ms 
+t_end2end = 1677.685 ms 
+ ================== 
+
+Config: m=5000, n=5000, k=15000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 301.239 ms
+t_end2end = 2698.681 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=15000
+t_compute = 16.931 ms 
+t_end2end = 2597.190 ms 
+ ================== 
+
+Config: m=5000, n=5000, k=25000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 479.212 ms
+t_end2end = 4438.829 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=25000
+t_compute = 17.127 ms 
+t_end2end = 4051.476 ms 
+ ================== 
+
+Config: m=5000, n=5000, k=55000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 922.359 ms
+t_end2end = 9285.985 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=55000
+t_compute = 17.015 ms 
+t_end2end = 8507.756 ms 
+ ================== 
+
+Config: m=5000, n=10000, k=5000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 158.014 ms
+t_end2end = 1499.916 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=10000, k=5000
+t_compute = 16.923 ms 
+t_end2end = 1486.681 ms 
+ ================== 
+
+Config: m=5000, n=10000, k=9000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 228.376 ms
+t_end2end = 2402.133 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=10000, k=9000
+t_compute = 17.123 ms 
+t_end2end = 2407.356 ms 
+ ================== 
+
+Config: m=5000, n=10000, k=15000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 407.498 ms
+t_end2end = 3992.648 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=10000, k=15000
+t_compute = 16.992 ms 
+t_end2end = 3721.216 ms 
+ ================== 
+
+Config: m=5000, n=10000, k=25000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 672.654 ms
+t_end2end = 6466.324 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=10000, k=25000
+t_compute = 17.192 ms 
+t_end2end = 6028.363 ms 
+ ================== 
+
+Config: m=5000, n=10000, k=55000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 1489.988 ms
+t_end2end = 13459.721 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=10000, k=55000
+t_compute = 16.946 ms 
+t_end2end = 12444.819 ms 
+ ================== 
+
+Config: m=5000, n=25000, k=5000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 311.164 ms
+t_end2end = 2797.726 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=25000, k=5000
+t_compute = 17.219 ms 
+t_end2end = 2751.986 ms 
+ ================== 
+
+Config: m=5000, n=25000, k=9000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 453.064 ms
+t_end2end = 4581.290 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=25000, k=9000
+t_compute = 17.185 ms 
+t_end2end = 4568.446 ms 
+ ================== 
+
+Config: m=5000, n=25000, k=15000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 749.345 ms
+t_end2end = 7333.161 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=25000, k=15000
+t_compute = 17.161 ms 
+t_end2end = 7221.671 ms 
+ ================== 
+
+Config: m=5000, n=25000, k=25000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 1265.103 ms
+t_end2end = 12195.501 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=25000, k=25000
+t_compute = 16.836 ms 
+t_end2end = 11462.002 ms 
+ ================== 
+
+Config: m=5000, n=25000, k=55000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 2858.964 ms
+t_end2end = 26877.158 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=25000, k=55000
+t_compute = 17.254 ms 
+t_end2end = 24841.496 ms 
+ ================== 
+
+Config: m=5000, n=55000, k=5000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 593.000 ms
+t_end2end = 5349.421 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=55000, k=5000
+t_compute = 17.242 ms 
+t_end2end = 5028.280 ms 
+ ================== 
+
+Config: m=5000, n=55000, k=9000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 842.620 ms
+t_end2end = 8745.902 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=55000, k=9000
+t_compute = 17.132 ms 
+t_end2end = 8881.227 ms 
+ ================== 
+
+Config: m=5000, n=55000, k=15000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 1435.834 ms
+t_end2end = 14554.450 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=55000, k=15000
+t_compute = 17.225 ms 
+t_end2end = 14338.647 ms 
+ ================== 
+
+Config: m=5000, n=55000, k=25000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 2435.385 ms
+t_end2end = 24960.489 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=55000, k=25000
+t_compute = 17.133 ms 
+t_end2end = 23457.175 ms 
+ ================== 
+
+Config: m=5000, n=55000, k=55000
+----------------------------------------------
+MANAGED VERSION
+t_compute = 5564.236 ms
+t_end2end = 53350.673 ms 
+ ================== 

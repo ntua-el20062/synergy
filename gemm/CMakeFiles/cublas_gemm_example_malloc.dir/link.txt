@@ -1,0 +1,1 @@
+/usr/bin/g++ @CMakeFiles/cublas_gemm_example_malloc.dir/objects1.rsp -o cublas_gemm_example_malloc @CMakeFiles/cublas_gemm_example_malloc.dir/linkLibs.rsp -L"/usr/local/cuda-13/targets/sbsa-linux/lib/stubs" -L"/usr/local/cuda-13/targets/sbsa-linux/lib"

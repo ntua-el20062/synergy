@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/amei/second_part_diploma/gemm/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
