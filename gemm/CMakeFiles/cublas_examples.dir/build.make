@@ -53,10 +53,10 @@ RM = /home/amei/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_BINARY_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 # Utility rule file for cublas_examples.
 
@@ -81,6 +81,6 @@ CMakeFiles/cublas_examples.dir/clean:
 .PHONY : CMakeFiles/cublas_examples.dir/clean
 
 CMakeFiles/cublas_examples.dir/depend:
-	cd /home/amei/second_part_diploma/gemm && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/amei/second_part_diploma/gemm /home/amei/second_part_diploma/gemm /home/amei/second_part_diploma/gemm /home/amei/second_part_diploma/gemm /home/amei/second_part_diploma/gemm/CMakeFiles/cublas_examples.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/amei/second_part_diploma/synergy/gemm && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/amei/second_part_diploma/synergy/gemm /home/amei/second_part_diploma/synergy/gemm /home/amei/second_part_diploma/synergy/gemm /home/amei/second_part_diploma/synergy/gemm /home/amei/second_part_diploma/synergy/gemm/CMakeFiles/cublas_examples.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/cublas_examples.dir/depend
 

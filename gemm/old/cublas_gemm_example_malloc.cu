@@ -28,31 +28,27 @@ int main(int argc, char *argv[]) {
     printf("MALLOC VERSION\n");
     cublasHandle_t cublasH = NULL;
     cudaStream_t   stream  = NULL;
-    int iters = 10;
+
     int m   = 2;
     int n   = 2;
     int k   = 2;
 
-    if (argc == 4 || argc == 5) {
+    if (argc == 4) {
         m = std::atoi(argv[1]);
         n = std::atoi(argv[2]);
         k = std::atoi(argv[3]);
-        if (argc == 5) {
-            iters = std::atoi(argv[4]);
-            if (iters < 1) iters = 1;
-        }
     } else {
-        std::printf("Usage: %s M N K [ITERS]\n", argv[0]);
-        std::printf("No valid sizes given, using default M=N=K=2, ITERS=1\n");
+        std::printf("Usage: %s m n k\n", argv[0]);
+        std::printf("No valid sizes given, using default m=n=k=2\n");
     }
 
-    const size_t lda = m;
-    const size_t ldb = k;
-    const size_t ldc = m;
+    const int lda = m;
+    const int ldb = k;
+    const int ldc = m;
 
-    const size_t sizeA = (size_t)m * (size_t)k;
-    const size_t sizeB = (size_t)k * (size_t)n;
-    const size_t sizeC = (size_t)m * (size_t)n;
+    const int sizeA = m * k;
+    const int sizeB = k * n;
+    const int sizeC = m * n;
 
     std::printf("Running GEMM with m=%d, n=%d, k=%d\n", m, n, k);
 
@@ -62,19 +58,18 @@ int main(int argc, char *argv[]) {
     data_type alpha = 1.0;
     data_type beta  = 0.0;
 
-    double t_alloc = wtime();
-   
+    // ----- Host pointers (malloc) -----
     data_type *A = (data_type*)malloc(sizeA * sizeof(data_type));
     data_type *B = (data_type*)malloc(sizeB * sizeof(data_type));
     data_type *C = (data_type*)malloc(sizeC * sizeof(data_type));
 
-    t_alloc = (wtime() - t_alloc)*1000;
     if (!A || !B || !C) {
         fprintf(stderr, "malloc failed\n");
         return EXIT_FAILURE;
     }
 
-   std::srand((unsigned)std::time(nullptr));
+    // Initialize host matrices in column-major order
+    std::srand((unsigned)std::time(nullptr));
 
     for (int i = 0; i < sizeA; ++i) {
         A[i] = (data_type)std::rand() / (data_type)RAND_MAX; 
@@ -88,16 +83,23 @@ int main(int argc, char *argv[]) {
         C[i] = 0.0;
     }
 
-    double t_compute_total = 0.0;
+    /*printf("A (host)\n");
+    print_matrix(m, k, A, lda);
+    printf("=====\n");
+
+    printf("B (host)\n");
+    print_matrix(k, n, B, ldb);
+    printf("=====\n");
+    */
     CUBLAS_CHECK(cublasCreate(&cublasH));
     CUDA_CHECK(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));
     CUBLAS_CHECK(cublasSetStream(cublasH, stream));
 
     cublasOperation_t transa = CUBLAS_OP_N;
     cublasOperation_t transb = CUBLAS_OP_N;
-    for(int i=0; i < iters; i++) {
-      double t0 = wtime();
-      CUBLAS_CHECK(
+
+    double t_compute = wtime();
+    CUBLAS_CHECK(
         cublasDgemm(
             cublasH,
             transa, transb,
@@ -108,12 +110,15 @@ int main(int argc, char *argv[]) {
             &beta,
             C, ldc
         )
-      );
-      CUDA_CHECK(cudaStreamSynchronize(stream));
-      double t_iter = 1e3*(wtime() - t0);
-      std::cout << "iter:" << i << ", t_iter: " << t_iter << "ms" << std::endl;
-      t_compute_total += t_iter;
-    }
+    );
+    CUDA_CHECK(cudaStreamSynchronize(stream));
+    t_compute = wtime() - t_compute;
+
+    //printf("C (host)\n");
+    //print_matrix(m, n, C, ldc);
+    //printf("=====\n");
+
+    // Cleanup
 
     free(A);
     free(B);
@@ -124,14 +129,8 @@ int main(int argc, char *argv[]) {
     CUDA_CHECK(cudaDeviceReset());
 
     t_end2end = wtime() - t_end2end;
-
-    double t_compute_avg = t_compute_total / iters;
-
-    printf("t_compute_total = %.3f ms\n", t_compute_total);
-    printf("t_compute_avg   = %.3f ms\n", t_compute_avg);
-    printf("t_alloc   = %.3f ms\n", t_alloc);
-    //printf("t_transfers   = %.3f ms\n", t_transfers);
-    printf("t_end2end       = %.3f ms \n ============================================= \n", 1e3 * t_end2end);
+    printf("t_compute = %.3f ms\n", 1e3*t_compute);
+    printf("t_end2end = %.3f ms \n ================== \n", 1e3 * t_end2end);
 
     return EXIT_SUCCESS;
 }

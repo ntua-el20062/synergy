@@ -54,10 +54,10 @@ RM = /home/amei/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_BINARY_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -94,14 +94,14 @@ CMakeFiles/cublas_examples.dir/all: CMakeFiles/cublas_gemm_example_managed.dir/a
 CMakeFiles/cublas_examples.dir/all: CMakeFiles/cublas_gemm_example_malloc.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_examples.dir/build.make CMakeFiles/cublas_examples.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_examples.dir/build.make CMakeFiles/cublas_examples.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num= "Built target cublas_examples"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num= "Built target cublas_examples"
 .PHONY : CMakeFiles/cublas_examples.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cublas_examples.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cublas_examples.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 0
 .PHONY : CMakeFiles/cublas_examples.dir/rule
 
 # Convenience name for target.
@@ -113,7 +113,7 @@ CMakeFiles/cublas_examples.dir/codegen: CMakeFiles/cublas_gemm_example.dir/all
 CMakeFiles/cublas_examples.dir/codegen: CMakeFiles/cublas_gemm_example_managed.dir/all
 CMakeFiles/cublas_examples.dir/codegen: CMakeFiles/cublas_gemm_example_malloc.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_examples.dir/build.make CMakeFiles/cublas_examples.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num= "Finished codegen for target cublas_examples"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num= "Finished codegen for target cublas_examples"
 .PHONY : CMakeFiles/cublas_examples.dir/codegen
 
 # clean rule for target.
@@ -128,14 +128,14 @@ CMakeFiles/cublas_examples.dir/clean:
 CMakeFiles/cublas_gemm_example.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example.dir/build.make CMakeFiles/cublas_gemm_example.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example.dir/build.make CMakeFiles/cublas_gemm_example.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=1,2 "Built target cublas_gemm_example"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=1,2 "Built target cublas_gemm_example"
 .PHONY : CMakeFiles/cublas_gemm_example.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cublas_gemm_example.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cublas_gemm_example.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 0
 .PHONY : CMakeFiles/cublas_gemm_example.dir/rule
 
 # Convenience name for target.
@@ -145,7 +145,7 @@ cublas_gemm_example: CMakeFiles/cublas_gemm_example.dir/rule
 # codegen rule for target.
 CMakeFiles/cublas_gemm_example.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example.dir/build.make CMakeFiles/cublas_gemm_example.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=1,2 "Finished codegen for target cublas_gemm_example"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=1,2 "Finished codegen for target cublas_gemm_example"
 .PHONY : CMakeFiles/cublas_gemm_example.dir/codegen
 
 # clean rule for target.
@@ -160,14 +160,14 @@ CMakeFiles/cublas_gemm_example.dir/clean:
 CMakeFiles/cublas_gemm_example_managed.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_managed.dir/build.make CMakeFiles/cublas_gemm_example_managed.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_managed.dir/build.make CMakeFiles/cublas_gemm_example_managed.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=5,6 "Built target cublas_gemm_example_managed"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=5,6 "Built target cublas_gemm_example_managed"
 .PHONY : CMakeFiles/cublas_gemm_example_managed.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cublas_gemm_example_managed.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cublas_gemm_example_managed.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 0
 .PHONY : CMakeFiles/cublas_gemm_example_managed.dir/rule
 
 # Convenience name for target.
@@ -177,7 +177,7 @@ cublas_gemm_example_managed: CMakeFiles/cublas_gemm_example_managed.dir/rule
 # codegen rule for target.
 CMakeFiles/cublas_gemm_example_managed.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_managed.dir/build.make CMakeFiles/cublas_gemm_example_managed.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=5,6 "Finished codegen for target cublas_gemm_example_managed"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=5,6 "Finished codegen for target cublas_gemm_example_managed"
 .PHONY : CMakeFiles/cublas_gemm_example_managed.dir/codegen
 
 # clean rule for target.
@@ -192,14 +192,14 @@ CMakeFiles/cublas_gemm_example_managed.dir/clean:
 CMakeFiles/cublas_gemm_example_malloc.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_malloc.dir/build.make CMakeFiles/cublas_gemm_example_malloc.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_malloc.dir/build.make CMakeFiles/cublas_gemm_example_malloc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=3,4 "Built target cublas_gemm_example_malloc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=3,4 "Built target cublas_gemm_example_malloc"
 .PHONY : CMakeFiles/cublas_gemm_example_malloc.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cublas_gemm_example_malloc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cublas_gemm_example_malloc.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 0
 .PHONY : CMakeFiles/cublas_gemm_example_malloc.dir/rule
 
 # Convenience name for target.
@@ -209,7 +209,7 @@ cublas_gemm_example_malloc: CMakeFiles/cublas_gemm_example_malloc.dir/rule
 # codegen rule for target.
 CMakeFiles/cublas_gemm_example_malloc.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cublas_gemm_example_malloc.dir/build.make CMakeFiles/cublas_gemm_example_malloc.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/gemm/CMakeFiles --progress-num=3,4 "Finished codegen for target cublas_gemm_example_malloc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/amei/second_part_diploma/synergy/gemm/CMakeFiles --progress-num=3,4 "Finished codegen for target cublas_gemm_example_malloc"
 .PHONY : CMakeFiles/cublas_gemm_example_malloc.dir/codegen
 
 # clean rule for target.

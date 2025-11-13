@@ -47,24 +47,19 @@ int main(int argc, char *argv[]) {
     printf("EXPLICIT VERSION\n");	
     cublasHandle_t cublasH = NULL;
     cudaStream_t stream = NULL;
-    int iters = 10;
+
     int m = 2;
     int n = 2;
     int k = 2;
 
-    if (argc == 4 || argc == 5) {
+    if (argc == 4) {
         m = std::atoi(argv[1]);
         n = std::atoi(argv[2]);
         k = std::atoi(argv[3]);
-        if (argc == 5) {
-            iters = std::atoi(argv[4]);
-            if (iters < 1) iters = 1;
-        }
     } else {
-        std::printf("Usage: %s M N K [ITERS]\n", argv[0]);
-        std::printf("No valid sizes given, using default M=N=K=2, ITERS=1\n");
+        std::printf("Usage: %s m n k\n", argv[0]);
+        std::printf("No valid sizes given, using default m=n=k=2\n");
     }
-    
     const size_t lda = m;
     const size_t ldb = k;
     const size_t ldc = m;
@@ -76,22 +71,14 @@ int main(int argc, char *argv[]) {
     std::printf("Running GEMM with m=%d, n=%d, k=%d\n", m, n, k);
 
     double t_end2end = wtime();
-    double t_h2d=0.0, t_d2h = 0.0;
 
 
-    //host pointers
-    double t_malloc = wtime();
-     
-    data_type *h_A = nullptr;
-    data_type *h_B = nullptr;
-    data_type *h_C = nullptr;
-
-    CUDA_CHECK(cudaMallocHost(&h_A, sizeA * sizeof(data_type)));   // pinned memory
-    CUDA_CHECK(cudaMallocHost(&h_B, sizeB * sizeof(data_type)));   // pinned memory
-    CUDA_CHECK(cudaMallocHost(&h_C, sizeC * sizeof(data_type)));   // pinned memory
+    // ----- Host pointers (malloc) -----
     
-    t_malloc = 1e3*(wtime() - t_malloc);
-
+    data_type *h_A = (data_type*)std::malloc(sizeA * sizeof(data_type));
+    data_type *h_B = (data_type*)std::malloc(sizeB * sizeof(data_type));
+    data_type *h_C = (data_type*)std::malloc(sizeC * sizeof(data_type));
+     
     std::srand((unsigned)std::time(nullptr));
 
     for (int i = 0; i < sizeA; ++i) {
@@ -116,59 +103,51 @@ int main(int argc, char *argv[]) {
 
     cublasOperation_t transa = CUBLAS_OP_N;
     cublasOperation_t transb = CUBLAS_OP_N;
+
+
+    /*printf("A\n");
+    print_matrix(m, k, h_A, lda);
+    printf("=====\n");
+
+    printf("B\n");
+    print_matrix(k, n, h_B, ldb);
+    printf("=====\n");
+    */
+
+    /* step 1: create cublas handle, bind a stream */
     CUBLAS_CHECK(cublasCreate(&cublasH));
 
     CUDA_CHECK(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));
     CUBLAS_CHECK(cublasSetStream(cublasH, stream));
 
-    double t_cuda_alloc = wtime();
+    /* step 2: copy data to device */
     CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_A), sizeof(data_type) * m*k));
     CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_B), sizeof(data_type) * k*n));
     CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_C), sizeof(data_type) * n*m));
-    t_cuda_alloc = 1e3*(wtime() - t_cuda_alloc);
 
-    
-    double t1 = wtime(); 
-
+   
     CUDA_CHECK(cudaMemcpyAsync(d_A, h_A, sizeof(data_type) * m*k, cudaMemcpyHostToDevice,
                                stream));
     CUDA_CHECK(cudaMemcpyAsync(d_B, h_B, sizeof(data_type) * k*n, cudaMemcpyHostToDevice,
                                stream));
     
-    CUDA_CHECK(cudaStreamSynchronize(stream));
+    /* step 3: compute */
+    double t_compute = wtime();
+    CUBLAS_CHECK(
+        cublasDgemm(cublasH, transa, transb, m, n, k, &alpha, d_A, lda, d_B, ldb, &beta, d_C, ldc));
 
-    t_h2d += 1e3 * (wtime() - t1);
-    
-    double t_compute_total = 0.0;   
-    for (int it = 0; it < iters; ++it) {
-        double t0 = wtime();
-        CUBLAS_CHECK(
-            cublasDgemm(
-                cublasH,
-                transa, transb,
-                m, n, k,
-                &alpha,
-                d_A, lda,
-                d_B, ldb,
-                &beta,
-                d_C, ldc
-            )
-        );
-        CUDA_CHECK(cudaStreamSynchronize(stream));
-        double t_iter = 1e3*(wtime() - t0);
-        std::cout << "iter:" << it << ", t_iter: " << t_iter << "ms" << std::endl;
-        t_compute_total += t_iter;
-    }
-    
-    printf("---------------------------------\n");
-    
-    t1 = wtime();
+    t_compute = wtime() - t_compute;
+    /* step 4: copy data to host */
     CUDA_CHECK(cudaMemcpyAsync(h_C, d_C, sizeof(data_type) * sizeC, cudaMemcpyDeviceToHost,
                                stream));
 
     CUDA_CHECK(cudaStreamSynchronize(stream));
-    t_d2h += 1e3*(wtime() - t1);
 
+    //printf("C\n");
+    //print_matrix(m, n, h_C, ldc);
+    //printf("=====\n");
+
+    /* free resources */
     CUDA_CHECK(cudaFree(d_A));
     CUDA_CHECK(cudaFree(d_B));
     CUDA_CHECK(cudaFree(d_C));
@@ -180,16 +159,7 @@ int main(int argc, char *argv[]) {
     CUDA_CHECK(cudaDeviceReset());
 
     t_end2end = wtime() - t_end2end;
-    
-    double t_compute_avg = t_compute_total / iters;
-
-    printf("t_compute_total = %.3f ms\n", t_compute_total);
-    printf("t_compute_avg   = %.3f ms\n", t_compute_avg);
-    printf("t_cuda_alloc   = %.3f ms\n", t_cuda_alloc);
-    printf("t_malloc   = %.3f ms\n", t_malloc);
-    printf("t_h2d   = %.3f ms, t_d2h   = %.3f ms\n", t_h2d, t_d2h);
-    printf("t_end2end       = %.3f ms \n ============================================= \n", 1e3 * t_end2end);
-
-    
+    printf("t_compute = %.3f ms \n", 1e3 * t_compute);
+    printf("t_end2end = %.3f ms \n ================== \n", 1e3 * t_end2end);
     return EXIT_SUCCESS;
 }

@@ -1,4 +1,4 @@
-CMakeFiles/cublas_gemm_example_malloc.dir/cublas_gemm_example_malloc.cu.o : /home/amei/second_part_diploma/gemm/cublas_gemm_example_malloc.cu \
+CMakeFiles/cublas_gemm_example_malloc.dir/cublas_gemm_example_malloc.cu.o : /home/amei/second_part_diploma/synergy/gemm/cublas_gemm_example_malloc.cu \
     /usr/include/stdc-predef.h \
     /usr/local/cuda-13/bin/../targets/sbsa-linux/include/cuda_runtime.h \
     /usr/local/cuda-13/bin/../targets/sbsa-linux/include/crt/host_config.h \
@@ -179,7 +179,7 @@ CMakeFiles/cublas_gemm_example_malloc.dir/cublas_gemm_example_malloc.cu.o : /hom
     /usr/local/cuda-13/bin/../targets/sbsa-linux/include/cuda_fp16.hpp \
     /usr/local/cuda-13/bin/../targets/sbsa-linux/include/cuda_bf16.h \
     /usr/local/cuda-13/bin/../targets/sbsa-linux/include/cuda_bf16.hpp \
-    /home/amei/second_part_diploma/gemm/utils/cublas_utils.h \
+    /home/amei/second_part_diploma/synergy/gemm/utils/cublas_utils.h \
     /usr/include/c++/11/functional \
     /usr/include/c++/11/bits/stl_function.h \
     /usr/include/c++/11/backward/binders.h \

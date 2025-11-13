@@ -68,6 +68,7 @@ add_cublas_example(cublas_examples "cublas_${ROUTINE}_example_managed" cublas_${
 add_cublas_example(cublas_examples "cublas_${ROUTINE}_example_malloc" cublas_${ROUTINE}_example_malloc.cu)
 
 
+
 # ##########################################
 # cublas_examples directories
 # ##########################################

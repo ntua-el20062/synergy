@@ -57,10 +57,10 @@ RM = /home/amei/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_SOURCE_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/amei/second_part_diploma/gemm
+CMAKE_BINARY_DIR = /home/amei/second_part_diploma/synergy/gemm
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles /home/amei/second_part_diploma/gemm//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles /home/amei/second_part_diploma/synergy/gemm//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/gemm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/amei/second_part_diploma/synergy/gemm/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
