@@ -1,0 +1,363 @@
+Config: m=1000, n=1000, k=1000
+MANAGED VERSION
+Running GEMM with m=1000, n=1000, k=1000, iters=10
+iter:0, t_iter: 21.9719ms
+iter:1, t_iter: 0.0720024ms
+iter:2, t_iter: 0.0600815ms
+iter:3, t_iter: 0.056982ms
+iter:4, t_iter: 0.0560284ms
+iter:5, t_iter: 0.0548363ms
+iter:6, t_iter: 0.0548363ms
+iter:7, t_iter: 0.0550747ms
+iter:8, t_iter: 0.0560284ms
+iter:9, t_iter: 0.056982ms
+t_compute_total = 22.495 ms
+t_compute_avg   = 2.249 ms
+t_end2end       = 418.394 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=1000, n=1000, k=1000
+iter:0, t_iter: 16.7761ms
+iter:1, t_iter: 0.068903ms
+iter:2, t_iter: 0.0619888ms
+iter:3, t_iter: 0.0588894ms
+iter:4, t_iter: 0.0588894ms
+iter:5, t_iter: 0.056982ms
+iter:6, t_iter: 0.056982ms
+iter:7, t_iter: 0.056982ms
+iter:8, t_iter: 0.0579357ms
+iter:9, t_iter: 0.0560284ms
+---------------------------------
+t_compute_total = 17.310 ms
+t_compute_avg   = 1.731 ms
+t_cuda_alloc   = 2.000 ms
+t_malloc   = 222.230 ms
+t_h2d   = 0.113 ms, t_d2h   = 0.057 ms
+t_end2end       = 326.971 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=5000, n=5000, k=5000
+MANAGED VERSION
+Running GEMM with m=5000, n=5000, k=5000, iters=10
+iter:0, t_iter: 107.662ms
+iter:1, t_iter: 4.1759ms
+iter:2, t_iter: 4.1461ms
+iter:3, t_iter: 4.11701ms
+iter:4, t_iter: 4.13609ms
+iter:5, t_iter: 4.11797ms
+iter:6, t_iter: 4.11606ms
+iter:7, t_iter: 4.11797ms
+iter:8, t_iter: 4.09985ms
+iter:9, t_iter: 4.09913ms
+t_compute_total = 144.788 ms
+t_compute_avg   = 14.479 ms
+t_end2end       = 1138.233 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=5000
+iter:0, t_iter: 21.2169ms
+iter:1, t_iter: 4.1399ms
+iter:2, t_iter: 4.1039ms
+iter:3, t_iter: 4.09913ms
+iter:4, t_iter: 4.09198ms
+iter:5, t_iter: 4.09889ms
+iter:6, t_iter: 4.08506ms
+iter:7, t_iter: 4.08292ms
+iter:8, t_iter: 4.10795ms
+iter:9, t_iter: 4.107ms
+---------------------------------
+t_compute_total = 58.134 ms
+t_compute_avg   = 5.813 ms
+t_cuda_alloc   = 42.232 ms
+t_malloc   = 249.493 ms
+t_h2d   = 1.162 ms, t_d2h   = 0.688 ms
+t_end2end       = 1115.532 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=10000, n=10000, k=10000
+MANAGED VERSION
+Running GEMM with m=10000, n=10000, k=10000, iters=10
+iter:0, t_iter: 377.754ms
+iter:1, t_iter: 31.553ms
+iter:2, t_iter: 32.6829ms
+iter:3, t_iter: 32.8ms
+iter:4, t_iter: 33.489ms
+iter:5, t_iter: 33.421ms
+iter:6, t_iter: 33.323ms
+iter:7, t_iter: 33.061ms
+iter:8, t_iter: 33.062ms
+iter:9, t_iter: 33.052ms
+t_compute_total = 674.198 ms
+t_compute_avg   = 67.420 ms
+t_end2end       = 3909.140 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=10000, n=10000, k=10000
+iter:0, t_iter: 48.2152ms
+iter:1, t_iter: 31.384ms
+iter:2, t_iter: 32.053ms
+iter:3, t_iter: 33.38ms
+iter:4, t_iter: 33.426ms
+iter:5, t_iter: 33.1581ms
+iter:6, t_iter: 33.0942ms
+iter:7, t_iter: 32.99ms
+iter:8, t_iter: 32.8422ms
+iter:9, t_iter: 32.881ms
+---------------------------------
+t_compute_total = 343.424 ms
+t_compute_avg   = 34.342 ms
+t_cuda_alloc   = 166.187 ms
+t_malloc   = 328.266 ms
+t_h2d   = 4.430 ms, t_d2h   = 2.699 ms
+t_end2end       = 3844.931 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=10000, n=1000, k=10000
+MANAGED VERSION
+Running GEMM with m=10000, n=1000, k=10000, iters=10
+iter:0, t_iter: 153.914ms
+iter:1, t_iter: 3.41201ms
+iter:2, t_iter: 3.37982ms
+iter:3, t_iter: 3.38316ms
+iter:4, t_iter: 3.37386ms
+iter:5, t_iter: 3.37815ms
+iter:6, t_iter: 3.36885ms
+iter:7, t_iter: 3.37291ms
+iter:8, t_iter: 3.36504ms
+iter:9, t_iter: 3.36289ms
+t_compute_total = 184.311 ms
+t_compute_avg   = 18.431 ms
+t_end2end       = 2085.390 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=10000, n=1000, k=10000
+iter:0, t_iter: 20.6208ms
+iter:1, t_iter: 3.40509ms
+iter:2, t_iter: 3.38411ms
+iter:3, t_iter: 3.38387ms
+iter:4, t_iter: 3.37982ms
+iter:5, t_iter: 3.37291ms
+iter:6, t_iter: 3.37291ms
+iter:7, t_iter: 3.37696ms
+iter:8, t_iter: 3.37505ms
+iter:9, t_iter: 3.36885ms
+---------------------------------
+t_compute_total = 51.040 ms
+t_compute_avg   = 5.104 ms
+t_cuda_alloc   = 67.223 ms
+t_malloc   = 265.133 ms
+t_h2d   = 2.450 ms, t_d2h   = 0.287 ms
+t_end2end       = 2056.525 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=1000, n=10000, k=10000
+MANAGED VERSION
+Running GEMM with m=1000, n=10000, k=10000, iters=10
+iter:0, t_iter: 145.254ms
+iter:1, t_iter: 3.40295ms
+iter:2, t_iter: 3.39508ms
+iter:3, t_iter: 3.38197ms
+iter:4, t_iter: 3.38411ms
+iter:5, t_iter: 3.38292ms
+iter:6, t_iter: 3.37386ms
+iter:7, t_iter: 3.36695ms
+iter:8, t_iter: 3.37696ms
+iter:9, t_iter: 3.38411ms
+t_compute_total = 175.703 ms
+t_compute_avg   = 17.570 ms
+t_end2end       = 2043.151 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=1000, n=10000, k=10000
+iter:0, t_iter: 20.566ms
+iter:1, t_iter: 3.39508ms
+iter:2, t_iter: 3.38197ms
+iter:3, t_iter: 3.37195ms
+iter:4, t_iter: 3.37505ms
+iter:5, t_iter: 3.37005ms
+iter:6, t_iter: 3.36218ms
+iter:7, t_iter: 3.35884ms
+iter:8, t_iter: 3.35884ms
+iter:9, t_iter: 3.35717ms
+---------------------------------
+t_compute_total = 50.897 ms
+t_compute_avg   = 5.090 ms
+t_cuda_alloc   = 67.280 ms
+t_malloc   = 278.796 ms
+t_h2d   = 2.446 ms, t_d2h   = 0.286 ms
+t_end2end       = 2016.098 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=20000, n=20000, k=20000
+MANAGED VERSION
+Running GEMM with m=20000, n=20000, k=20000, iters=10
+iter:0, t_iter: 2083.45ms
+iter:1, t_iter: 272.543ms
+iter:2, t_iter: 267.57ms
+iter:3, t_iter: 267.931ms
+iter:4, t_iter: 264.433ms
+iter:5, t_iter: 268.393ms
+iter:6, t_iter: 268.72ms
+iter:7, t_iter: 266.532ms
+iter:8, t_iter: 265.597ms
+iter:9, t_iter: 268.186ms
+t_compute_total = 4493.359 ms
+t_compute_avg   = 449.336 ms
+t_end2end       = 16563.682 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=20000, n=20000, k=20000
+iter:0, t_iter: 279.333ms
+iter:1, t_iter: 262.871ms
+iter:2, t_iter: 264.689ms
+iter:3, t_iter: 266.44ms
+iter:4, t_iter: 265.381ms
+iter:5, t_iter: 268.014ms
+iter:6, t_iter: 266.756ms
+iter:7, t_iter: 268.127ms
+iter:8, t_iter: 266.34ms
+iter:9, t_iter: 266.163ms
+---------------------------------
+t_compute_total = 2674.115 ms
+t_compute_avg   = 267.411 ms
+t_cuda_alloc   = 664.538 ms
+t_malloc   = 629.016 ms
+t_h2d   = 17.348 ms, t_d2h   = 10.768 ms
+t_end2end       = 15772.438 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=45000, n=45000, k=45000
+MANAGED VERSION
+Running GEMM with m=45000, n=45000, k=45000, iters=10
+iter:0, t_iter: 18529.8ms
+iter:1, t_iter: 3145.33ms
+iter:2, t_iter: 3103.75ms
+iter:3, t_iter: 3111.11ms
+iter:4, t_iter: 3149.26ms
+iter:5, t_iter: 3124.48ms
+iter:6, t_iter: 3153.5ms
+iter:7, t_iter: 3183.43ms
+iter:8, t_iter: 3146.7ms
+iter:9, t_iter: 3154.5ms
+t_compute_total = 46801.877 ms
+t_compute_avg   = 4680.188 ms
+t_end2end       = 104799.423 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=45000, n=45000, k=45000
+iter:0, t_iter: 3151.28ms
+iter:1, t_iter: 3101.26ms
+iter:2, t_iter: 3106.59ms
+iter:3, t_iter: 3117.34ms
+iter:4, t_iter: 3112.05ms
+iter:5, t_iter: 3154.44ms
+iter:6, t_iter: 3144.89ms
+iter:7, t_iter: 3191.07ms
+iter:8, t_iter: 3150.73ms
+iter:9, t_iter: 3152.76ms
+---------------------------------
+t_compute_total = 31382.396 ms
+t_compute_avg   = 3138.240 ms
+t_cuda_alloc   = 3359.518 ms
+t_malloc   = 2097.519 ms
+t_h2d   = 84.843 ms, t_d2h   = 54.791 ms
+t_end2end       = 96951.478 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=55000, n=45000, k=55000
+MANAGED VERSION
+Running GEMM with m=55000, n=45000, k=55000, iters=10
+iter:0, t_iter: 28894.4ms
+iter:1, t_iter: 4743.11ms
+iter:2, t_iter: 4657.03ms
+iter:3, t_iter: 4771.68ms
+iter:4, t_iter: 4742.75ms
+iter:5, t_iter: 4739.71ms
+iter:6, t_iter: 4767.22ms
+iter:7, t_iter: 4738.13ms
+iter:8, t_iter: 4743ms
+iter:9, t_iter: 4742.54ms
+t_compute_total = 71539.549 ms
+t_compute_avg   = 7153.955 ms
+t_end2end       = 152907.677 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=55000, n=45000, k=55000
+iter:0, t_iter: 4667.54ms
+iter:1, t_iter: 4620.02ms
+iter:2, t_iter: 4632.46ms
+iter:3, t_iter: 4669.91ms
+iter:4, t_iter: 4715.27ms
+iter:5, t_iter: 4732.72ms
+iter:6, t_iter: 4738.52ms
+iter:7, t_iter: 4742.72ms
+iter:8, t_iter: 4745.2ms
+iter:9, t_iter: 4747.77ms
+---------------------------------
+t_compute_total = 47012.130 ms
+t_compute_avg   = 4701.213 ms
+t_cuda_alloc   = 4417.736 ms
+t_malloc   = 2692.915 ms
+t_h2d   = 113.917 ms, t_d2h   = 66.985 ms
+t_end2end       = 132381.870 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=55000, n=55000, k=55000
+MANAGED VERSION
+Running GEMM with m=55000, n=55000, k=55000, iters=10
+iter:0, t_iter: 33843.2ms
+iter:1, t_iter: 5783.15ms
+iter:2, t_iter: 5788.23ms
+iter:3, t_iter: 5786.18ms
+iter:4, t_iter: 5779.34ms
+iter:5, t_iter: 5857ms
+iter:6, t_iter: 5788.35ms
+iter:7, t_iter: 5865.61ms
+iter:8, t_iter: 5884.89ms
+iter:9, t_iter: 5897.33ms
+t_compute_total = 86273.277 ms
+t_compute_avg   = 8627.328 ms
+t_end2end       = 171817.900 ms 
+ ================== 
+EXPLICIT VERSION
+Running GEMM with m=55000, n=55000, k=55000
+iter:0, t_iter: 5734.57ms
+iter:1, t_iter: 5703.63ms
+iter:2, t_iter: 5729.31ms
+iter:3, t_iter: 5782.63ms
+iter:4, t_iter: 5785.18ms
+iter:5, t_iter: 5776.33ms
+iter:6, t_iter: 5801.92ms
+iter:7, t_iter: 5864.38ms
+iter:8, t_iter: 5868.74ms
+iter:9, t_iter: 5881.89ms
+---------------------------------
+t_compute_total = 57928.579 ms
+t_compute_avg   = 5792.858 ms
+t_cuda_alloc   = 5045.357 ms
+t_malloc   = 3041.441 ms
+t_h2d   = 124.838 ms, t_d2h   = 81.906 ms
+t_end2end       = 151377.364 ms 
+ ============================================= 
+-------------------------------------------------
+Config: m=65000, n=65000, k=65000
+MANAGED VERSION
+Running GEMM with m=65000, n=65000, k=65000, iters=10
+iter:0, t_iter: 188819ms
+iter:1, t_iter: 56776.9ms
+iter:2, t_iter: 68391.2ms
+iter:3, t_iter: 50205.4ms
+iter:4, t_iter: 57047.7ms
+iter:5, t_iter: 53098.3ms
+iter:6, t_iter: 47641.6ms
+iter:7, t_iter: 56730.9ms
+iter:8, t_iter: 52313.7ms
+iter:9, t_iter: 53591.1ms
+t_compute_total = 684615.947 ms
+t_compute_avg   = 68461.595 ms
+t_end2end       = 806059.018 ms 
+ ================== 
+EXPLICIT VERSION
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  CUDA error
+./run.sh: line 99: 3907001 Aborted                 (core dumped) $BASELINE 65000 65000 65000
