@@ -1,0 +1,412 @@
+Config: m=1000, n=1000, k=1000
+MANAGED VERSION
+Running GEMM with m=1000, n=1000, k=1000, iters=10
+iter:0, t_iter: 21.9769ms
+iter:1, t_iter: 0.0698566ms
+iter:2, t_iter: 0.0610352ms
+iter:3, t_iter: 0.0600815ms
+iter:4, t_iter: 0.0588894ms
+iter:5, t_iter: 0.0579357ms
+iter:6, t_iter: 0.056982ms
+iter:7, t_iter: 0.0588894ms
+iter:8, t_iter: 0.0588894ms
+iter:9, t_iter: 0.0619888ms
+t_compute_total = 22.521 ms
+t_compute_avg   = 2.252 ms
+t_end2end       = 420.121 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=1000, n=1000, k=1000
+iter:0, t_iter: 22.3072ms
+iter:1, t_iter: 0.253201ms
+iter:2, t_iter: 0.0729561ms
+iter:3, t_iter: 0.0710487ms
+iter:4, t_iter: 0.068903ms
+iter:5, t_iter: 0.0700951ms
+iter:6, t_iter: 0.0720024ms
+iter:7, t_iter: 0.0708103ms
+iter:8, t_iter: 0.0698566ms
+iter:9, t_iter: 0.068903ms
+t_compute_total = 23.125 ms
+t_compute_avg   = 2.312 ms
+t_alloc   = 0.016 ms
+t_end2end       = 334.872 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=1000, n=1000, k=1000
+iter:0, t_iter: 16.8099ms
+iter:1, t_iter: 0.0669956ms
+iter:2, t_iter: 0.0619888ms
+iter:3, t_iter: 0.056982ms
+iter:4, t_iter: 0.0572205ms
+iter:5, t_iter: 0.0591278ms
+iter:6, t_iter: 0.0600815ms
+iter:7, t_iter: 0.0579357ms
+iter:8, t_iter: 0.0579357ms
+iter:9, t_iter: 0.0598431ms
+---------------------------------
+t_compute_total = 17.348 ms
+t_compute_avg   = 1.735 ms
+t_cuda_alloc   = 1.980 ms
+t_malloc   = 225.671 ms
+t_h2d   = 0.111 ms, t_d2h   = 0.056 ms
+t_end2end       = 328.863 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=5000, n=5000, k=5000
+MANAGED VERSION
+Running GEMM with m=5000, n=5000, k=5000, iters=10
+iter:0, t_iter: 106.693ms
+iter:1, t_iter: 4.16613ms
+iter:2, t_iter: 4.1461ms
+iter:3, t_iter: 4.13394ms
+iter:4, t_iter: 4.11797ms
+iter:5, t_iter: 4.12011ms
+iter:6, t_iter: 4.12679ms
+iter:7, t_iter: 4.11916ms
+iter:8, t_iter: 4.12416ms
+iter:9, t_iter: 4.11701ms
+t_compute_total = 143.864 ms
+t_compute_avg   = 14.386 ms
+t_end2end       = 1151.585 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=5000, n=5000, k=5000
+iter:0, t_iter: 209.869ms
+iter:1, t_iter: 179.198ms
+iter:2, t_iter: 131.796ms
+iter:3, t_iter: 85.7179ms
+iter:4, t_iter: 43.6389ms
+iter:5, t_iter: 11.5941ms
+iter:6, t_iter: 5.31411ms
+iter:7, t_iter: 5.27287ms
+iter:8, t_iter: 5.28908ms
+iter:9, t_iter: 5.28717ms
+t_compute_total = 682.977 ms
+t_compute_avg   = 68.298 ms
+t_alloc   = 0.020 ms
+t_end2end       = 1703.744 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=5000, n=5000, k=5000
+iter:0, t_iter: 21.3201ms
+iter:1, t_iter: 4.14181ms
+iter:2, t_iter: 4.10604ms
+iter:3, t_iter: 4.08602ms
+iter:4, t_iter: 4.08292ms
+iter:5, t_iter: 4.07696ms
+iter:6, t_iter: 4.06218ms
+iter:7, t_iter: 4.06504ms
+iter:8, t_iter: 4.05908ms
+iter:9, t_iter: 4.05908ms
+---------------------------------
+t_compute_total = 58.059 ms
+t_compute_avg   = 5.806 ms
+t_cuda_alloc   = 42.544 ms
+t_malloc   = 249.689 ms
+t_h2d   = 1.144 ms, t_d2h   = 0.688 ms
+t_end2end       = 1110.343 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=10000, n=10000, k=10000
+MANAGED VERSION
+Running GEMM with m=10000, n=10000, k=10000, iters=10
+iter:0, t_iter: 378.411ms
+iter:1, t_iter: 33.215ms
+iter:2, t_iter: 33.051ms
+iter:3, t_iter: 32.841ms
+iter:4, t_iter: 32.9192ms
+iter:5, t_iter: 32.937ms
+iter:6, t_iter: 33.1531ms
+iter:7, t_iter: 33.1171ms
+iter:8, t_iter: 33.1521ms
+iter:9, t_iter: 33.134ms
+t_compute_total = 675.931 ms
+t_compute_avg   = 67.593 ms
+t_end2end       = 3828.334 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=10000, n=10000, k=10000
+iter:0, t_iter: 1786.16ms
+iter:1, t_iter: 1425.21ms
+iter:2, t_iter: 1201.43ms
+iter:3, t_iter: 503.312ms
+iter:4, t_iter: 67.8542ms
+iter:5, t_iter: 78.068ms
+iter:6, t_iter: 76.8652ms
+iter:7, t_iter: 70.9779ms
+iter:8, t_iter: 90.6909ms
+iter:9, t_iter: 98.119ms
+t_compute_total = 5398.680 ms
+t_compute_avg   = 539.868 ms
+t_alloc   = 0.021 ms
+t_end2end       = 8590.709 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=10000, n=10000, k=10000
+iter:0, t_iter: 48.3818ms
+iter:1, t_iter: 31.8749ms
+iter:2, t_iter: 32.887ms
+iter:3, t_iter: 33.04ms
+iter:4, t_iter: 33.103ms
+iter:5, t_iter: 32.9049ms
+iter:6, t_iter: 32.825ms
+iter:7, t_iter: 32.8379ms
+iter:8, t_iter: 32.8441ms
+iter:9, t_iter: 32.84ms
+---------------------------------
+t_compute_total = 343.539 ms
+t_compute_avg   = 34.354 ms
+t_cuda_alloc   = 167.003 ms
+t_malloc   = 353.003 ms
+t_h2d   = 4.402 ms, t_d2h   = 2.702 ms
+t_end2end       = 3780.887 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=10000, n=1000, k=10000
+MANAGED VERSION
+Running GEMM with m=10000, n=1000, k=10000, iters=10
+iter:0, t_iter: 152.628ms
+iter:1, t_iter: 3.40819ms
+iter:2, t_iter: 3.37696ms
+iter:3, t_iter: 3.36814ms
+iter:4, t_iter: 3.37505ms
+iter:5, t_iter: 3.37005ms
+iter:6, t_iter: 3.38006ms
+iter:7, t_iter: 3.36599ms
+iter:8, t_iter: 3.35979ms
+iter:9, t_iter: 3.36218ms
+t_compute_total = 182.994 ms
+t_compute_avg   = 18.299 ms
+t_end2end       = 1996.282 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=10000, n=1000, k=10000
+iter:0, t_iter: 163.186ms
+iter:1, t_iter: 139.578ms
+iter:2, t_iter: 139.458ms
+iter:3, t_iter: 139.461ms
+iter:4, t_iter: 139.513ms
+iter:5, t_iter: 139.282ms
+iter:6, t_iter: 265.361ms
+iter:7, t_iter: 103.218ms
+iter:8, t_iter: 257.499ms
+iter:9, t_iter: 83.9272ms
+t_compute_total = 1570.483 ms
+t_compute_avg   = 157.048 ms
+t_alloc   = 0.017 ms
+t_end2end       = 3378.328 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=10000, n=1000, k=10000
+iter:0, t_iter: 20.767ms
+iter:1, t_iter: 3.39389ms
+iter:2, t_iter: 3.37386ms
+iter:3, t_iter: 3.37815ms
+iter:4, t_iter: 3.36289ms
+iter:5, t_iter: 3.36218ms
+iter:6, t_iter: 3.35908ms
+iter:7, t_iter: 3.36003ms
+iter:8, t_iter: 3.35479ms
+iter:9, t_iter: 3.35717ms
+---------------------------------
+t_compute_total = 51.069 ms
+t_compute_avg   = 5.107 ms
+t_cuda_alloc   = 67.831 ms
+t_malloc   = 269.398 ms
+t_h2d   = 2.441 ms, t_d2h   = 0.285 ms
+t_end2end       = 2073.332 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=1000, n=10000, k=10000
+MANAGED VERSION
+Running GEMM with m=1000, n=10000, k=10000, iters=10
+iter:0, t_iter: 143.718ms
+iter:1, t_iter: 3.39699ms
+iter:2, t_iter: 3.38793ms
+iter:3, t_iter: 3.37315ms
+iter:4, t_iter: 3.371ms
+iter:5, t_iter: 3.371ms
+iter:6, t_iter: 3.37291ms
+iter:7, t_iter: 3.36599ms
+iter:8, t_iter: 3.37195ms
+iter:9, t_iter: 3.36719ms
+t_compute_total = 174.096 ms
+t_compute_avg   = 17.410 ms
+t_end2end       = 2014.947 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=1000, n=10000, k=10000
+iter:0, t_iter: 145.334ms
+iter:1, t_iter: 94.7251ms
+iter:2, t_iter: 104.093ms
+iter:3, t_iter: 95.202ms
+iter:4, t_iter: 88.6881ms
+iter:5, t_iter: 89.4961ms
+iter:6, t_iter: 84.8219ms
+iter:7, t_iter: 82.7508ms
+iter:8, t_iter: 82.814ms
+iter:9, t_iter: 189.838ms
+t_compute_total = 1057.763 ms
+t_compute_avg   = 105.776 ms
+t_alloc   = 0.021 ms
+t_end2end       = 2922.515 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=1000, n=10000, k=10000
+iter:0, t_iter: 20.6439ms
+iter:1, t_iter: 3.39794ms
+iter:2, t_iter: 3.3772ms
+iter:3, t_iter: 3.37386ms
+iter:4, t_iter: 3.36194ms
+iter:5, t_iter: 3.35908ms
+iter:6, t_iter: 3.37696ms
+iter:7, t_iter: 3.36289ms
+iter:8, t_iter: 3.35908ms
+iter:9, t_iter: 3.35789ms
+---------------------------------
+t_compute_total = 50.971 ms
+t_compute_avg   = 5.097 ms
+t_cuda_alloc   = 67.208 ms
+t_malloc   = 267.207 ms
+t_h2d   = 2.453 ms, t_d2h   = 0.287 ms
+t_end2end       = 1978.760 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=20000, n=20000, k=20000
+MANAGED VERSION
+Running GEMM with m=20000, n=20000, k=20000, iters=10
+iter:0, t_iter: 2085.47ms
+iter:1, t_iter: 274.631ms
+iter:2, t_iter: 266.085ms
+iter:3, t_iter: 266.009ms
+iter:4, t_iter: 263.592ms
+iter:5, t_iter: 269.891ms
+iter:6, t_iter: 264.115ms
+iter:7, t_iter: 265.969ms
+iter:8, t_iter: 263.207ms
+iter:9, t_iter: 267.811ms
+t_compute_total = 4486.781 ms
+t_compute_avg   = 448.678 ms
+t_end2end       = 16058.731 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=20000, n=20000, k=20000
+iter:0, t_iter: 20285ms
+iter:1, t_iter: 6124.62ms
+iter:2, t_iter: 6418.06ms
+iter:3, t_iter: 13032.1ms
+iter:4, t_iter: 8845.49ms
+iter:5, t_iter: 5276.18ms
+iter:6, t_iter: 3380.03ms
+iter:7, t_iter: 7685.11ms
+iter:8, t_iter: 7954.15ms
+iter:9, t_iter: 3528.67ms
+t_compute_total = 82529.429 ms
+t_compute_avg   = 8252.943 ms
+t_alloc   = 0.031 ms
+t_end2end       = 94138.750 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=20000, n=20000, k=20000
+iter:0, t_iter: 278.426ms
+iter:1, t_iter: 265.549ms
+iter:2, t_iter: 266.826ms
+iter:3, t_iter: 270.714ms
+iter:4, t_iter: 265.003ms
+iter:5, t_iter: 266.823ms
+iter:6, t_iter: 267.453ms
+iter:7, t_iter: 269.041ms
+iter:8, t_iter: 264.429ms
+iter:9, t_iter: 267.508ms
+---------------------------------
+t_compute_total = 2681.772 ms
+t_compute_avg   = 268.177 ms
+t_cuda_alloc   = 666.348 ms
+t_malloc   = 632.057 ms
+t_h2d   = 17.372 ms, t_d2h   = 10.769 ms
+t_end2end       = 15892.271 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=45000, n=45000, k=45000
+MANAGED VERSION
+Running GEMM with m=45000, n=45000, k=45000, iters=10
+iter:0, t_iter: 17594.4ms
+iter:1, t_iter: 3180.97ms
+iter:2, t_iter: 3165.37ms
+iter:3, t_iter: 3111.09ms
+iter:4, t_iter: 3114.88ms
+iter:5, t_iter: 3147.16ms
+iter:6, t_iter: 3149.32ms
+iter:7, t_iter: 3185.78ms
+iter:8, t_iter: 3138.06ms
+iter:9, t_iter: 3181.73ms
+t_compute_total = 45968.717 ms
+t_compute_avg   = 4596.872 ms
+t_end2end       = 105902.375 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=45000, n=45000, k=45000
+iter:0, t_iter: 1.24354e+06ms
+iter:1, t_iter: 1.38063e+06ms
+iter:2, t_iter: 1.2463e+06ms
+iter:3, t_iter: 1.32499e+06ms
+iter:4, t_iter: 1.26314e+06ms
+iter:5, t_iter: 1.24249e+06ms
+iter:6, t_iter: 1.24709e+06ms
+iter:7, t_iter: 1.32455e+06ms
+iter:8, t_iter: 1.17828e+06ms
+iter:9, t_iter: 1.22439e+06ms
+t_compute_total = 12675415.421 ms
+t_compute_avg   = 1267541.542 ms
+t_alloc   = 0.022 ms
+t_end2end       = 12734289.054 ms 
+ ============================================= 
+EXPLICIT VERSION
+Running GEMM with m=45000, n=45000, k=45000
+iter:0, t_iter: 3146.51ms
+iter:1, t_iter: 3121.19ms
+iter:2, t_iter: 3105.08ms
+iter:3, t_iter: 3132.7ms
+iter:4, t_iter: 3098.31ms
+iter:5, t_iter: 3106.57ms
+iter:6, t_iter: 3127.73ms
+iter:7, t_iter: 3134.01ms
+iter:8, t_iter: 3169.76ms
+iter:9, t_iter: 3185.01ms
+---------------------------------
+t_compute_total = 31326.870 ms
+t_compute_avg   = 3132.687 ms
+t_cuda_alloc   = 3369.364 ms
+t_malloc   = 2138.663 ms
+t_h2d   = 85.015 ms, t_d2h   = 54.786 ms
+t_end2end       = 97037.303 ms 
+ ============================================= 
+------------------------------------------------
+Config: m=55000, n=45000, k=55000
+MANAGED VERSION
+Running GEMM with m=55000, n=45000, k=55000, iters=10
+iter:0, t_iter: 29386ms
+iter:1, t_iter: 4708.96ms
+iter:2, t_iter: 4664.77ms
+iter:3, t_iter: 4688.51ms
+iter:4, t_iter: 4712.7ms
+iter:5, t_iter: 4726.84ms
+iter:6, t_iter: 4738.5ms
+iter:7, t_iter: 4740.98ms
+iter:8, t_iter: 4742.95ms
+iter:9, t_iter: 4732.62ms
+t_compute_total = 71842.854 ms
+t_compute_avg   = 7184.285 ms
+t_end2end       = 153735.215 ms 
+ ================== 
+MALLOC VERSION
+Running GEMM with m=55000, n=45000, k=55000
+iter:0, t_iter: 2.18507e+06ms
+iter:1, t_iter: 2.05297e+06ms
+iter:2, t_iter: 2.19968e+06ms
+iter:3, t_iter: 2.08144e+06ms
+iter:4, t_iter: 2.0836e+06ms
+iter:5, t_iter: 2.12644e+06ms
+iter:6, t_iter: 2.19909e+06ms
+iter:7, t_iter: 2.14403e+06ms
