@@ -43,7 +43,6 @@ double wtime(void)
 using data_type = double;
 
 int main(int argc, char *argv[]) {
- 
     printf("EXPLICIT VERSION\n");	
     cublasHandle_t cublasH = NULL;
     cudaStream_t stream = NULL;
@@ -85,26 +84,25 @@ int main(int argc, char *argv[]) {
     data_type *h_A = nullptr;
     data_type *h_B = nullptr;
     data_type *h_C = nullptr;
-
     CUDA_CHECK(cudaMallocHost(&h_A, sizeA * sizeof(data_type)));   // pinned memory
     CUDA_CHECK(cudaMallocHost(&h_B, sizeB * sizeof(data_type)));   // pinned memory
     CUDA_CHECK(cudaMallocHost(&h_C, sizeC * sizeof(data_type)));   // pinned memory
     
     t_malloc = 1e3*(wtime() - t_malloc);
 
-    std::srand((unsigned)std::time(nullptr));
-
-    for (int i = 0; i < sizeA; ++i) {
+   
+    /*std::srand((unsigned)std::time(nullptr));
+    for (size_t i = 0; i < sizeA; ++i) {
         h_A[i] = (data_type)std::rand() / (data_type)RAND_MAX;  // [0,1)
     }
 
-    for (int i = 0; i < sizeB; ++i) {
+    for (size_t i = 0; i < sizeB; ++i) {
         h_B[i] = (data_type)std::rand() / (data_type)RAND_MAX;  // [0,1)
     }
 
-    for (int i = 0; i < sizeC; ++i) {
+    for (size_t i = 0; i < sizeC; ++i) {
         h_C[i] = 0.0;
-    }
+    }*/
 
 
     const data_type alpha = 1.0;
@@ -121,13 +119,27 @@ int main(int argc, char *argv[]) {
     CUDA_CHECK(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));
     CUBLAS_CHECK(cublasSetStream(cublasH, stream));
 
+    printf("cudamalloc starting\n");
     double t_cuda_alloc = wtime();
-    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_A), sizeof(data_type) * m*k));
-    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_B), sizeof(data_type) * k*n));
-    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_C), sizeof(data_type) * n*m));
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_A), sizeof(data_type) * sizeA));
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_B), sizeof(data_type) * sizeB));
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void **>(&d_C), sizeof(data_type) * sizeC));
     t_cuda_alloc = 1e3*(wtime() - t_cuda_alloc);
+    printf("cudamalloc end\n");
 
-    
+        std::srand((unsigned)std::time(nullptr));
+    for (size_t i = 0; i < sizeA; ++i) {
+        h_A[i] = (data_type)std::rand() / (data_type)RAND_MAX;  // [0,1)
+    }
+
+    for (size_t i = 0; i < sizeB; ++i) {
+        h_B[i] = (data_type)std::rand() / (data_type)RAND_MAX;  // [0,1)
+    }
+
+    for (size_t i = 0; i < sizeC; ++i) {
+        h_C[i] = 0.0;
+    }
+
     double t1 = wtime(); 
 
     CUDA_CHECK(cudaMemcpyAsync(d_A, h_A, sizeof(data_type) * m*k, cudaMemcpyHostToDevice,
