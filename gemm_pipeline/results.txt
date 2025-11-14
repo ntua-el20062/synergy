@@ -1,0 +1,115 @@
+batch size = 5, num steps = 10
+Using batch_size = 5 (num_steps = 10)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 5 (num_steps = 10)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 5 (num_steps = 10)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+===============================================
+batch size = 10, num steps = 20
+Using batch_size = 10 (num_steps = 20)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 10 (num_steps = 20)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 10 (num_steps = 20)
+number of batches= 2
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+===============================================
+batch size = 5, num steps = 15
+Using batch_size = 5 (num_steps = 15)
+number of batches= 3
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 5 (num_steps = 15)
+number of batches= 3
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+-----------------------
+Using batch_size = 5 (num_steps = 15)
+number of batches= 3
+h_X_final[0] = 0.000050
+h_X_final[1] = 0.000050
+h_X_final[2] = 0.000050
+h_X_final[3] = 0.000050
+h_X_final[4] = 0.000050
+===============================================
+batch size = 50, num steps = 100
+Using batch_size = 50 (num_steps = 100)
+number of batches= 2
+-----------------------
+Using batch_size = 50 (num_steps = 100)
+number of batches= 2
+-----------------------
+Using batch_size = 50 (num_steps = 100)
+number of batches= 2
+===============================================
+batch size = 20, num steps = 100
+Using batch_size = 20 (num_steps = 100)
+number of batches= 5
+-----------------------
+Using batch_size = 20 (num_steps = 100)
+number of batches= 5
+-----------------------
+Using batch_size = 20 (num_steps = 100)
+number of batches= 5
+===============================================
+batch size = 75, num steps = 150
+Using batch_size = 75 (num_steps = 150)
+number of batches= 2
+-----------------------
+Using batch_size = 75 (num_steps = 150)
+number of batches= 2
+-----------------------
+Using batch_size = 75 (num_steps = 150)
+number of batches= 2
+===============================================
+batch size = 50, num steps = 150
+Using batch_size = 50 (num_steps = 150)
+number of batches= 3
+-----------------------
+Using batch_size = 50 (num_steps = 150)
+number of batches= 3
+-----------------------
+Using batch_size = 50 (num_steps = 150)
+number of batches= 3
+===============================================
