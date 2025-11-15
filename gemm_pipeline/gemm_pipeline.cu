@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cublas_v2.h>
 #include <cuda_runtime.h>
+#include <sys/time.h>
+#include <ctime>
 
 #include "utils.h"
 
@@ -16,6 +18,21 @@
      then I normilize with 2-norm: ||X||2 = (sum from 1 to m*n of (xi)^2)^1/2 
      so I end up with scaling by X*2-norm = 1/(n*m)^1/2
  */
+
+double wtime(void)
+{
+    double now_time;
+    struct timeval  etstart;
+    struct timezone tzp;
+
+    if (gettimeofday(&etstart, &tzp) == -1)
+        perror("Error: calling gettimeofday() not successful.\n");
+
+    now_time = ((double)etstart.tv_sec) +              // in seconds
+               ((double)etstart.tv_usec) / 1000000.0;  // in microseconds
+    return now_time;
+}
+
 
 using data_type = double;
 
@@ -36,7 +53,7 @@ int main(int argc, char** argv) {
         if (tmp > 0) {
             batch_size = tmp;
         }
-	int s = std::atoi(argv[2]);
+	int s = std::atoi(argv[3]);
         if (s > 0) {
             num_steps = s;
         }
@@ -50,6 +67,7 @@ int main(int argc, char** argv) {
     std::printf("Using batch_size = %d (num_steps = %d)\n",
                 batch_size, num_steps);
 
+    double t_e2e = wtime();
     //column-major layout
     int lda_X = m;
     int ldb   = k;
@@ -239,6 +257,9 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaStreamDestroy(stream_h2d));
 
     CUDA_CHECK(cudaDeviceReset());
+
+    t_e2e = 1e3*(wtime() - t_e2e);
+    printf("t_end_2_end = %f\n", t_e2e);
     return 0;
 }
 
